@@ -5,6 +5,8 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
+import java.nio.file.Path;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,6 +60,14 @@ public class OverviewPresenterTest {
 		reset(m,v);
 		cut.show();
 		verify(v).show();
+		verifyNoMoreInteractions(m,v);
+	}
+	
+	@Test
+	public void loadFromFile_delegatesToModel() {
+		Path mock = mock(Path.class);
+		cut.loadFile(mock);
+		verify(m).loadFromFile(mock);
 		verifyNoMoreInteractions(m,v);
 	}
 }
