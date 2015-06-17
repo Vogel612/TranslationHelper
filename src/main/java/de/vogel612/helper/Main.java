@@ -34,6 +34,7 @@ public class Main {
 		OverviewView v = null;
 
 		OverviewPresenter p = new OverviewPresenterImpl(m, v);
+		p.initialize();
 		p.loadFile(resxFile);
 		p.show();
 	}
