@@ -6,12 +6,14 @@ import java.nio.file.Paths;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.impl.NoOpModel;
 import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
+import de.vogel612.helper.ui.impl.OverviewViewImpl;
 
 public class Main {
-	private static final String FILE_ENDING = "resx";
+	private static final String RUBBERDUCK_PATH = "RetailCoder.VBE/UI";
 	private static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
-	private static final String ILLEGAL_FILE = "The file provided is not a .resx File. I doubt this is a Rubberduck translation";
+	private static final String ILLEGAL_FILE = "Rubberduck .resx files can be found under RetailCoder.VBE/UI";
 
 	public static void main(String[] args) {
 		// parsing the first argument given into a proper path to load the resx
@@ -24,14 +26,15 @@ public class Main {
 		Path resxFile = Paths.get(args[0]);
 		resxFile = resxFile.normalize();
 		
+		// FIXME: this relies on the path to be given, not the file
 		// Don't judge me... I know I shouldn't rely on extensions.
-		if (!resxFile.endsWith(FILE_ENDING)) {
-			System.out.println(ILLEGAL_FILE);
-			System.exit(-1);
-		}
+		// if (!resxFile.endsWith(RUBBERDUCK_PATH)) {
+		// System.out.println(ILLEGAL_FILE);
+		// System.exit(-1);
+		// }
 
-		OverviewModel m = null;
-		OverviewView v = null;
+		OverviewModel m = new NoOpModel();
+		OverviewView v = new OverviewViewImpl();
 
 		OverviewPresenter p = new OverviewPresenterImpl(m, v);
 		p.initialize();
