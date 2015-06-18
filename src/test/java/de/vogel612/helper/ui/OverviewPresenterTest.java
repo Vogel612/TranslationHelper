@@ -1,15 +1,14 @@
 package de.vogel612.helper.ui;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 
 public class OverviewPresenterTest {
@@ -66,8 +65,14 @@ public class OverviewPresenterTest {
 	@Test
 	public void loadFromFile_delegatesToModel() {
 		Path mock = mock(Path.class);
+		List<Translation> list = mock(List.class);
+		doReturn(list).when(m).getTranslations();
+		
+		
 		cut.loadFile(mock);
 		verify(m).loadFromFile(mock);
+		verify(m).getTranslations();
+		verify(v).rebuildWith(list);
 		verifyNoMoreInteractions(m,v);
 	}
 }
