@@ -14,4 +14,6 @@ public interface OverviewView {
 
 	void rebuildWith(List<Translation> translations);
 
+	void showError(String title, String errorMessage);
+
 }

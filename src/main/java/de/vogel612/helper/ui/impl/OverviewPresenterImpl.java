@@ -41,6 +41,15 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void loadFile(Path resxFile) {
 		model.loadFromFile(resxFile);
+	}
+
+	@Override
+	public void onException(Exception e, String message) {
+		view.showError(message, e.getMessage());
+	}
+
+	@Override
+	public void onParseCompletion() {
 		view.rebuildWith(model.getTranslations());
 	}
 	

@@ -65,14 +65,37 @@ public class OverviewPresenterTest {
 	@Test
 	public void loadFromFile_delegatesToModel() {
 		Path mock = mock(Path.class);
-		List<Translation> list = mock(List.class);
-		doReturn(list).when(m).getTranslations();
-		
 		
 		cut.loadFile(mock);
 		verify(m).loadFromFile(mock);
+		verifyNoMoreInteractions(m,v);
+	}
+	
+	@Test
+	public void onException_delegatesToView() {
+		final Exception e = mock(Exception.class);
+		final String message = "testingmessage";
+		final String errorMessage = "alsdkj";
+		doReturn(errorMessage).when(e).getMessage();
+		
+		cut.onException(e, message);
+		
+		verify(v).showError(message, errorMessage);
+		verify(e).getMessage();
+		verifyNoMoreInteractions(m,v);
+	}
+	
+	@Test
+	public void onParseCompletion_rebuildsView() {
+		List<Translation> list = mock(List.class);
+		doReturn(list).when(m).getTranslations();
+		
+		cut.onParseCompletion();
+		
 		verify(m).getTranslations();
 		verify(v).rebuildWith(list);
 		verifyNoMoreInteractions(m,v);
 	}
+	
+	
 }

@@ -9,4 +9,8 @@ public interface OverviewPresenter {
 	void initialize();
 
 	void loadFile(Path resxFile);
+
+	void onException(Exception e, String message);
+
+	void onParseCompletion();
 }
