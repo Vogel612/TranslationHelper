@@ -91,4 +91,10 @@ public class OverviewViewImpl implements OverviewView {
 		// TODO: get the translations into the JTable
 	}
 
+	@Override
+	public void showError(String title, String errorMessage) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

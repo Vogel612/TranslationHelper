@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
-import de.vogel612.helper.ui.impl.NoOpModel;
+import de.vogel612.helper.ui.impl.OverviewModelImpl;
 import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 import de.vogel612.helper.ui.impl.OverviewViewImpl;
 
@@ -33,7 +33,7 @@ public class Main {
 		// System.exit(-1);
 		// }
 
-		OverviewModel m = new NoOpModel();
+		OverviewModel m = new OverviewModelImpl();
 		OverviewView v = new OverviewViewImpl();
 
 		OverviewPresenter p = new OverviewPresenterImpl(m, v);
