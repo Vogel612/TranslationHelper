@@ -10,8 +10,6 @@ public interface OverviewModel {
 
 	void register(OverviewPresenter p);
 	
-	void readFromPath(Path p);
-
 	void loadFromFile(Path resxFile);
 
 	List<Translation> getTranslations();
