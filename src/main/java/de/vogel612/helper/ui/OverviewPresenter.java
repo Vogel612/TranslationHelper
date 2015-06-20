@@ -8,7 +8,9 @@ public interface OverviewPresenter {
 
 	void initialize();
 
-	void loadFile(Path resxFile);
+	void loadFiles(Path resxFile);
+	
+	void loadFiles(Path resxFolder, String rootLocale, String targetLocale);
 
 	void onException(Exception e, String message);
 

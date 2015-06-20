@@ -66,8 +66,8 @@ public class OverviewPresenterTest {
 	public void loadFromFile_delegatesToModel() {
 		Path mock = mock(Path.class);
 		
-		cut.loadFile(mock);
-		verify(m).loadFromFile(mock);
+		cut.loadFiles(mock);
+		verify(m).loadFromDirectory(mock, "", "de");
 		verifyNoMoreInteractions(m,v);
 	}
 	

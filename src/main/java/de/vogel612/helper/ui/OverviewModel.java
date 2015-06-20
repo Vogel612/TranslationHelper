@@ -10,7 +10,7 @@ public interface OverviewModel {
 
 	void register(OverviewPresenter p);
 	
-	void loadFromFile(Path resxFile);
+	void loadFromDirectory(Path resxFolder, String rootLocale, String targetLocale);
 
 	List<Translation> getTranslations();
 }

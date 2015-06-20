@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
@@ -58,8 +59,6 @@ public class OverviewViewImpl implements OverviewView {
 	}
 
 	private void addTranslationContainer() {
-		translationContainer.setMinimumSize(new Dimension(800, 400));
-		translationContainer.setSize(new Dimension(800, 400));
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(15, 15, 15, 15);
 		constraints.weightx = 1.0;
@@ -67,7 +66,11 @@ public class OverviewViewImpl implements OverviewView {
 		constraints.fill = BOTH;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		window.add(translationContainer, constraints);
+		
+		JScrollPane scroller = new JScrollPane(translationContainer);
+		scroller.setMinimumSize(new Dimension(800, 400));
+		scroller.setSize(new Dimension(800, 400));
+		window.add(scroller, constraints);
 	}
 
 	private void addMenuBar() {
