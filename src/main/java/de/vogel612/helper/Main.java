@@ -15,30 +15,28 @@ public class Main {
 	private static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
 	private static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		// parsing the first argument given into a proper path to load the resx
 		// from
 		if (args.length != 1) {
 			// don't even bother!
 			System.out.println(ARGUMENT_MISMATCH);
-			System.exit(-1);
+			return;
 		}
-		Path resxFile = Paths.get(args[0]);
-		resxFile = resxFile.normalize();
-		
-		// FIXME: this relies on the path to be given, not the file
-		// Don't judge me... I know I shouldn't rely on extensions.
-		 if (!resxFile.endsWith(RUBBERDUCK_PATH)) {
-			 System.out.println(ILLEGAL_FOLDER);
-			 System.exit(-1);
-		 }
+		Path resxFolder = Paths.get(args[0]);
+		resxFolder = resxFolder.normalize();
+
+		if (!resxFolder.endsWith(RUBBERDUCK_PATH)) {
+			System.out.println(ILLEGAL_FOLDER);
+			return;
+		}
 
 		OverviewModel m = new OverviewModelImpl();
 		OverviewView v = new OverviewViewImpl();
 
 		OverviewPresenter p = new OverviewPresenterImpl(m, v);
 		p.initialize();
-		p.loadFiles(resxFile);
+		p.loadFiles(resxFolder);
 		p.show();
 	}
 

@@ -35,7 +35,7 @@ public class OverviewModelImpl implements OverviewModel {
 	private final Map<String, String> originalLocale = new HashMap<String, String>();
 	private final ExecutorService fileOperationService = Executors
 			.newSingleThreadExecutor();
-	
+
 	private final BiConsumer<Path, Boolean> loadResxFile = (path, isTarget) -> {
 		SAXBuilder documentBuilder = new SAXBuilder();
 		try {
@@ -45,11 +45,11 @@ public class OverviewModelImpl implements OverviewModel {
 				Document doc = documentBuilder.build(path.toFile());
 				List<Element> translationElements = doc.getRootElement()
 						.getChildren(ELEMENT_NAME);
-				
+
 				translationElements.stream()
 				.forEach(element -> {
 					originalLocale.put(
-							element.getAttribute(KEY_NAME).getValue(), 
+							element.getAttribute(KEY_NAME).getValue(),
 							element.getChildText(VALUE_NAME));
 				});
 			}
@@ -61,24 +61,24 @@ public class OverviewModelImpl implements OverviewModel {
 			this.presenter.onException(e, "Something went really wrong");
 		}
 	};
-	
+
 	private OverviewPresenter presenter;
 	private Document translationDocument;
-	private Path currentPath;
-	
+	private Path currentPath; // we'll need this for saving
+
 
 	@Override
-	public void register(OverviewPresenter p) {
+	public void register(final OverviewPresenter p) {
 		presenter = p;
 	}
 
 	@Override
-	public void loadFromDirectory(Path resxFolder, String targetLocale) {
+	public void loadFromDirectory(final Path resxFolder, final String targetLocale) {
 		this.currentPath = resxFolder;
 		// for now there's only en-US root-Files
 		final Path rootFile = resxFolder.resolve(fileNameString(""));
 		final Path targetFile = resxFolder.resolve(fileNameString(targetLocale));
-		
+
 		Runnable buildDocument = () -> {
 			originalLocale.clear();
 			loadResxFile.accept(rootFile, false);
@@ -94,7 +94,7 @@ public class OverviewModelImpl implements OverviewModel {
 				.getRootElement().getChildren(ELEMENT_NAME);
 		Set<String> passedKeys = new HashSet<String>();
 		Iterator<Element> it = translationElements.iterator();
-		
+
 		while (it.hasNext()) {
 			Element el = it.next();
 			String key = el.getAttribute(KEY_NAME).getValue();
@@ -105,19 +105,19 @@ public class OverviewModelImpl implements OverviewModel {
 			}
 			passedKeys.add(key);
 		}
-		
+
 		// build new elements for newly created keys in root
 		originalLocale.keySet().stream()
-			.filter(k -> !passedKeys.contains(k))
-			.forEach(k -> {
-				Element newElement = new Element(ELEMENT_NAME);
-				Element valueContainer = new Element(VALUE_NAME);
-				valueContainer.setText(originalLocale.get(k));
+		.filter(k -> !passedKeys.contains(k))
+		.forEach(k -> {
+			Element newElement = new Element(ELEMENT_NAME);
+			Element valueContainer = new Element(VALUE_NAME);
+			valueContainer.setText(originalLocale.get(k));
 
-				newElement.setAttribute(KEY_NAME, k);
-				newElement.addContent(valueContainer);
-				translationDocument.getRootElement().addContent(newElement);
-			});
+			newElement.setAttribute(KEY_NAME, k);
+			newElement.addContent(valueContainer);
+			translationDocument.getRootElement().addContent(newElement);
+		});
 	}
 
 	private String fileNameString(final String localeIdent) {
