@@ -48,8 +48,8 @@ public class OverviewModelImpl implements OverviewModel {
 
 	@Override
 	public List<Translation> getTranslations() {
-		List<Element> translationElements = translationDocument
-				.getContent(new ElementFilter("data"));
+		List<Element> translationElements = translationDocument.getRootElement()
+				.getChildren("data");
 		
 		return translationElements.stream().map(el -> {
 			final String key = el.getAttribute("name").getValue();
