@@ -52,4 +52,51 @@ public class Translation {
 	public void setTranslation(String translation) {
 		this.translation = translation;
 	}
+
+	@Override
+	public String toString() {
+		return "Translation [key=" + key + ", rootValue=" + rootValue
+				+ ", translation=" + translation + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((key == null) ? 0 : key.hashCode());
+		result = prime * result
+				+ ((rootValue == null) ? 0 : rootValue.hashCode());
+		result = prime * result
+				+ ((translation == null) ? 0 : translation.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Translation other = (Translation) obj;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
+		if (rootValue == null) {
+			if (other.rootValue != null)
+				return false;
+		} else if (!rootValue.equals(other.rootValue))
+			return false;
+		if (translation == null) {
+			if (other.translation != null)
+				return false;
+		} else if (!translation.equals(other.translation))
+			return false;
+		return true;
+	}
+	
+	
 }
