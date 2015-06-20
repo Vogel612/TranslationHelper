@@ -39,8 +39,7 @@ public class OverviewModelTest {
 		try {
 			testFile = Paths.get(getClass().getResource("TestFile.resx").toURI());
 		} catch (URISyntaxException e) {
-			assertTrue("Testfile could not be found in resources", false);
-			throw new AssertionError(); // just to shut eclipse up
+			throw new AssertionError("Testfile could not be found in resources", e);
 		}
 		cut.loadFromFile(testFile);
 		try {

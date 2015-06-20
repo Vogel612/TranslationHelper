@@ -13,8 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
 
@@ -89,7 +91,8 @@ public class OverviewViewImpl implements OverviewView {
 
 	@Override
 	public void rebuildWith(List<Translation> translations) {
-		// TODO: get the translations into the JTable
+		TableModel model = TranslationTable.fromTranslations(translations);
+		translationContainer.setModel(model);
 	}
 
 	@Override
