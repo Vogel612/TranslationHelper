@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -93,8 +94,7 @@ public class OverviewViewImpl implements OverviewView {
 
 	@Override
 	public void showError(String title, String errorMessage) {
-		// TODO Auto-generated method stub
-		
+		JOptionPane.showMessageDialog(window, errorMessage, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 }
