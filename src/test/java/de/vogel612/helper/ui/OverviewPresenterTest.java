@@ -67,7 +67,7 @@ public class OverviewPresenterTest {
 		Path mock = mock(Path.class);
 		
 		cut.loadFiles(mock);
-		verify(m).loadFromDirectory(mock, "", "de");
+		verify(m).loadFromDirectory(mock, "de");
 		verifyNoMoreInteractions(m,v);
 	}
 	

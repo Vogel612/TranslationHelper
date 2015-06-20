@@ -59,7 +59,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void loadFiles(Path resxFolder, String rootLocale,
 			String targetLocale) {
-		model.loadFromDirectory(resxFolder, rootLocale, targetLocale);
+		model.loadFromDirectory(resxFolder, targetLocale);
 	}
 	
 }

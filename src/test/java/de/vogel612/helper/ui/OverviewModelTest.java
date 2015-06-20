@@ -1,7 +1,12 @@
 package de.vogel612.helper.ui;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -9,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.vogel612.helper.data.Translation;
@@ -31,7 +35,6 @@ public class OverviewModelTest {
 		cut.register(p);
 	}
 	
-	@Ignore // temporarily ignore... need to clear up the Resource naming
 	@Test
 	public void loadFromFile_andSuccessiveGet_returnCorrectInformation() {
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -39,11 +42,11 @@ public class OverviewModelTest {
 		doThrow(new AssertionError("Exception when parsing testfile")).when(p).onException(any(Exception.class), any(String.class));
 		Path testFile;
 		try {
-			testFile = Paths.get(getClass().getResource("TestFile.resx").toURI());
+			testFile = Paths.get(getClass().getResource("RubberduckUI.resx").toURI()).getParent(); 
 		} catch (URISyntaxException e) {
 			throw new AssertionError("Testfile could not be found in resources", e);
 		}
-//		cut.loadFromDirectory(testFile, "", "de");
+		cut.loadFromDirectory(testFile, "");
 		try {
 			latch.await();
 		} catch (InterruptedException e) {

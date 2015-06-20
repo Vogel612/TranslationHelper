@@ -3,8 +3,11 @@ package de.vogel612.helper.ui.impl;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
@@ -29,12 +32,10 @@ public class OverviewModelImpl implements OverviewModel {
 
 	private static final String FILE_NAME_FORMAT = "RubberduckUI%s.resx";
 
-	private OverviewPresenter presenter;
-	private Document translationDocument;
 	private final Map<String, String> originalLocale = new HashMap<String, String>();
 	private final ExecutorService fileOperationService = Executors
 			.newSingleThreadExecutor();
-
+	
 	private final BiConsumer<Path, Boolean> loadResxFile = (path, isTarget) -> {
 		SAXBuilder documentBuilder = new SAXBuilder();
 		try {
@@ -44,22 +45,27 @@ public class OverviewModelImpl implements OverviewModel {
 				Document doc = documentBuilder.build(path.toFile());
 				List<Element> translationElements = doc.getRootElement()
 						.getChildren(ELEMENT_NAME);
-
+				
 				translationElements.stream()
-					.forEach(element -> {
-								originalLocale.put(
-										element.getAttribute(KEY_NAME).getValue(), 
-										element.getChildText(VALUE_NAME));
-							});
+				.forEach(element -> {
+					originalLocale.put(
+							element.getAttribute(KEY_NAME).getValue(), 
+							element.getChildText(VALUE_NAME));
+				});
 			}
 		} catch (JDOMException e) {
-			presenter.onException(e, "Unspecified Parsing error");
+			this.presenter.onException(e, "Unspecified Parsing error");
 		} catch (IOException e) {
-			presenter.onException(e, "Unspecified I/O Error");
+			this.presenter.onException(e, "Unspecified I/O Error");
 		} catch (Exception e) {
-			presenter.onException(e, "Something went really wrong");
+			this.presenter.onException(e, "Something went really wrong");
 		}
 	};
+	
+	private OverviewPresenter presenter;
+	private Document translationDocument;
+	private Path currentPath;
+	
 
 	@Override
 	public void register(OverviewPresenter p) {
@@ -67,18 +73,51 @@ public class OverviewModelImpl implements OverviewModel {
 	}
 
 	@Override
-	public void loadFromDirectory(Path resxFolder, String rootLocale,
-			String targetLocale) {
-		final Path rootFile = resxFolder.resolve(fileNameString(rootLocale));
-		final Path targetFile = resxFolder
-				.resolve(fileNameString(targetLocale));
+	public void loadFromDirectory(Path resxFolder, String targetLocale) {
+		this.currentPath = resxFolder;
+		// for now there's only en-US root-Files
+		final Path rootFile = resxFolder.resolve(fileNameString(""));
+		final Path targetFile = resxFolder.resolve(fileNameString(targetLocale));
+		
 		Runnable buildDocument = () -> {
 			originalLocale.clear();
 			loadResxFile.accept(rootFile, false);
 			loadResxFile.accept(targetFile, true);
+			normalizeTargetLocale();
 			presenter.onParseCompletion();
 		};
 		fileOperationService.submit(buildDocument);
+	}
+
+	private void normalizeTargetLocale() {
+		List<Element> translationElements = translationDocument
+				.getRootElement().getChildren(ELEMENT_NAME);
+		Set<String> passedKeys = new HashSet<String>();
+		Iterator<Element> it = translationElements.iterator();
+		
+		while (it.hasNext()) {
+			Element el = it.next();
+			String key = el.getAttribute(KEY_NAME).getValue();
+			if (!originalLocale.containsKey(key)) {
+				// LIVE COLLECTION!!
+				it.remove();
+				continue;
+			}
+			passedKeys.add(key);
+		}
+		
+		// build new elements for newly created keys in root
+		originalLocale.keySet().stream()
+			.filter(k -> !passedKeys.contains(k))
+			.forEach(k -> {
+				Element newElement = new Element(ELEMENT_NAME);
+				Element valueContainer = new Element(VALUE_NAME);
+				valueContainer.setText(originalLocale.get(k));
+
+				newElement.setAttribute(KEY_NAME, k);
+				newElement.addContent(valueContainer);
+				translationDocument.getRootElement().addContent(newElement);
+			});
 	}
 
 	private String fileNameString(final String localeIdent) {
@@ -91,6 +130,7 @@ public class OverviewModelImpl implements OverviewModel {
 		List<Element> translationElements = translationDocument
 				.getRootElement().getChildren(ELEMENT_NAME);
 
+		// FIXME: need to make originalLocale the source of single truth!
 		return translationElements.stream().map(el -> {
 			final String key = el.getAttribute(KEY_NAME).getValue();
 			final String currentValue = el.getChildText(VALUE_NAME);
