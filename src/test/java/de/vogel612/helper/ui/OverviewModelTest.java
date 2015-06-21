@@ -25,26 +25,39 @@ public class OverviewModelTest {
 		new Translation("TestKey1", "TestValue", "TestValue"),
 		new Translation("TestKey2", "Another Test Value", "Another Test Value")
 	};
+	private static final Translation[] expected2 = {
+		new Translation("TestKey1", "TestValue", "Second Test"),
+		new Translation("TestKey2", "Another Test Value", "Another Test Value")
+	};
+
 	private OverviewModelImpl cut;
 	private OverviewPresenter p;
-	
+
 	@Before
 	public void setup() {
 		cut = new OverviewModelImpl();
 		p = mock(OverviewPresenter.class);
 		cut.register(p);
 	}
-	
+
 	@Test
 	public void loadFromFile_andSuccessiveGet_returnCorrectInformation() {
 		final CountDownLatch latch = new CountDownLatch(1);
-		doAnswer((invocationOnMock) ->  {latch.countDown(); System.out.println("TestFile was parsed"); return null;}).when(p).onParseCompletion();
-		doThrow(new AssertionError("Exception when parsing testfile")).when(p).onException(any(Exception.class), any(String.class));
+		doAnswer((invocationOnMock) -> {
+			latch.countDown();
+			System.out.println("TestFile was parsed");
+			return null;
+		}).when(p).onParseCompletion();
+		doThrow(new AssertionError("Exception when parsing testfile")).when(p)
+		.onException(any(Exception.class), any(String.class));
 		Path testFile;
 		try {
-			testFile = Paths.get(getClass().getResource("RubberduckUI.resx").toURI()).getParent(); 
+			testFile = Paths.get(
+					getClass().getResource("RubberduckUI.resx").toURI())
+					.getParent();
 		} catch (URISyntaxException e) {
-			throw new AssertionError("Testfile could not be found in resources", e);
+			throw new AssertionError(
+					"Testfile could not be found in resources", e);
 		}
 		cut.loadFromDirectory(testFile, "");
 		try {
@@ -53,14 +66,52 @@ public class OverviewModelTest {
 			// we shouldn't get interrupted, but if we do, eh well.
 			Thread.currentThread().interrupt();
 		}
-		
+
 		verify(p).onParseCompletion();
 		verifyNoMoreInteractions(p);
-		
+
 		Translation[] translations;
 		translations = cut.getTranslations().toArray(new Translation[0]);
-		
+
 		assertArrayEquals(expected, translations);
 	}
-	
+
+	// FIXME: Test normalization!
+	@Test
+	public void loadFromFile_normalizationWorksAsExpected() {
+		final CountDownLatch latch = new CountDownLatch(1);
+		doAnswer((invocationOnMock) -> {
+			latch.countDown();
+			System.out.println("TestFile was parsed");
+			return null;
+		}).when(p).onParseCompletion();
+		doThrow(new AssertionError("Exception when parsing testfile")).when(p)
+		.onException(any(Exception.class), any(String.class));
+
+		Path testFolder;
+		try {
+			testFolder = Paths.get(
+					getClass().getResource("RubberduckUI.resx").toURI())
+					.getParent();
+		} catch (URISyntaxException e) {
+			throw new AssertionError(
+					"Testfile could not be found in resources", e);
+		}
+
+		cut.loadFromDirectory(testFolder, "test");
+		try {
+			latch.await();
+		} catch (InterruptedException e) {
+			// we shouldn't get interrupted, but if we do, eh well.
+			Thread.currentThread().interrupt();
+		}
+
+		verify(p).onParseCompletion();
+		verifyNoMoreInteractions(p);
+
+		Translation[] translations;
+		translations = cut.getTranslations().toArray(new Translation[0]);
+
+		assertArrayEquals(expected2, translations);
+	}
 }

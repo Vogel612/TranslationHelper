@@ -41,7 +41,7 @@ public class OverviewViewImpl implements OverviewView {
 	}
 
 	@Override
-	public void register(OverviewPresenter p) {
+	public void register(final OverviewPresenter p) {
 		presenter = p;
 	}
 
@@ -87,7 +87,6 @@ public class OverviewViewImpl implements OverviewView {
 		constraints.fill = BOTH;
 		
 		window.add(menuBar, constraints);
-		menuBar.setSize(menuBarDimensions);
 	}
 
 	@Override
@@ -96,13 +95,13 @@ public class OverviewViewImpl implements OverviewView {
 	}
 
 	@Override
-	public void rebuildWith(List<Translation> translations) {
+	public void rebuildWith(final List<Translation> translations) {
 		TableModel model = TranslationTable.fromTranslations(translations);
 		translationContainer.setModel(model);
 	}
 
 	@Override
-	public void showError(String title, String errorMessage) {
+	public void showError(final String title, final String errorMessage) {
 		JOptionPane.showMessageDialog(window, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
