@@ -13,14 +13,14 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	final OverviewModel model;
 	final OverviewView view;
 	private boolean initialized = false;
-	
+
 	public OverviewPresenterImpl(OverviewModel m, OverviewView v) {
 		model = m;
 		view = v;
 
 		view.initialize();
 	}
-	
+
 	@Override
 	public void initialize() {
 		// initialization shall only happen once!
@@ -35,7 +35,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void show() {
 		if (!initialized) {
-			initialize(); 
+			initialize();
 		}
 		view.show();
 	}
@@ -61,5 +61,5 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 			String targetLocale) {
 		model.loadFromDirectory(resxFolder, targetLocale);
 	}
-	
+
 }

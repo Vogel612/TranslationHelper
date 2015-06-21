@@ -10,12 +10,12 @@ import de.vogel612.helper.data.Translation;
 public class TranslationTable extends AbstractTableModel {
 
 	final List<Translation> translations;
-	
+
 	private TranslationTable(List<Translation> translations) {
 		super();
 		this.translations = translations;
 	}
-	
+
 	@Override
 	public int getColumnCount() {
 		return 2;
@@ -29,9 +29,12 @@ public class TranslationTable extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int row, int column) {
 		if (row < 0 || column < 0 || column > 2) {
-			throw new IllegalArgumentException("Negative Row / Column values or Column values greater than 2 are not allowed");
+			throw new IllegalArgumentException(
+					"Negative Row / Column values or Column values greater than 2 are not allowed");
 		}
-		return column == 0 ? translations.get(row).getRootValue() : translations.get(row).getTranslation();
+		return column == 0
+				? translations.get(row).getRootValue()
+				: translations.get(row).getTranslation();
 	}
 
 	public static TableModel fromTranslations(List<Translation> translations) {

@@ -24,78 +24,77 @@ public class OverviewPresenterTest {
 		m = mock(OverviewModel.class);
 
 		cut = new OverviewPresenterImpl(m, v);
-		reset(v,m);
+		reset(v, m);
 	}
 
 	@Test
 	public void initialize_registersPresenter() {
 		cut.initialize();
-		
+
 		verify(v).register(cut);
 		verify(m).register(cut);
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
+
 	@Test
 	public void initialize_registersPresenter_onlyOnce() {
 		cut.initialize();
 		reset(m, v);
 		cut.initialize();
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
+
 	@Test
 	public void show_callsInitialize_ifNotInitialized() {
 		cut.show();
 		verify(v).show();
 		verify(v).register(cut);
 		verify(m).register(cut);
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
+
 	@Test
 	public void show_callsShow_onView() {
 		cut.initialize();
-		reset(m,v);
+		reset(m, v);
 		cut.show();
 		verify(v).show();
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
+
 	@Test
 	public void loadFromFile_delegatesToModel() {
 		Path mock = mock(Path.class);
-		
+
 		cut.loadFiles(mock);
 		verify(m).loadFromDirectory(mock, "de");
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
+
 	@Test
 	public void onException_delegatesToView() {
 		final Exception e = mock(Exception.class);
 		final String message = "testingmessage";
 		final String errorMessage = "alsdkj";
 		doReturn(errorMessage).when(e).getMessage();
-		
+
 		cut.onException(e, message);
-		
+
 		verify(v).showError(message, errorMessage);
 		verify(e).getMessage();
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
+
 	@Test
 	public void onParseCompletion_rebuildsView() {
 		List<Translation> list = mock(List.class);
 		doReturn(list).when(m).getTranslations();
-		
+
 		cut.onParseCompletion();
-		
+
 		verify(m).getTranslations();
 		verify(v).rebuildWith(list);
-		verifyNoMoreInteractions(m,v);
+		verifyNoMoreInteractions(m, v);
 	}
-	
-	
+
 }

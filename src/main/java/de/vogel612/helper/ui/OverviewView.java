@@ -7,7 +7,7 @@ import de.vogel612.helper.data.Translation;
 public interface OverviewView {
 
 	void register(OverviewPresenter p);
-	
+
 	void initialize();
 
 	void show();

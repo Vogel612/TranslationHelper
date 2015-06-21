@@ -109,20 +109,20 @@ public class OverviewModelImpl implements OverviewModel {
 
 		// build new elements for newly created keys in root
 		originalLocale
-		.keySet()
-		.stream()
-		.filter(k -> !passedKeys.contains(k))
-		.forEach(
-				k -> {
-					Element newElement = new Element(ELEMENT_NAME);
-					Element valueContainer = new Element(VALUE_NAME);
-					valueContainer.setText(originalLocale.get(k));
+				.keySet()
+				.stream()
+				.filter(k -> !passedKeys.contains(k))
+				.forEach(
+						k -> {
+							Element newElement = new Element(ELEMENT_NAME);
+							Element valueContainer = new Element(VALUE_NAME);
+							valueContainer.setText(originalLocale.get(k));
 
-					newElement.setAttribute(KEY_NAME, k);
-					newElement.addContent(valueContainer);
-					translationDocument.getRootElement().addContent(
-							newElement);
-				});
+							newElement.setAttribute(KEY_NAME, k);
+							newElement.addContent(valueContainer);
+							translationDocument.getRootElement().addContent(
+									newElement);
+						});
 	}
 
 	private String fileNameString(final String localeIdent) {

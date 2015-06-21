@@ -76,7 +76,7 @@ public class OverviewViewImpl implements OverviewView {
 		Dimension menuBarDimensions = new Dimension(800, 100);
 		menuBar.setMinimumSize(menuBarDimensions);
 		menuBar.setPreferredSize(menuBarDimensions);
-		
+
 		menuBar.setBackground(new Color(0.4f, 0.2f, 0.4f, 0.2f));
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(15, 15, 15, 15);
@@ -85,7 +85,7 @@ public class OverviewViewImpl implements OverviewView {
 		constraints.weightx = 1.0;
 		constraints.weighty = 0.0;
 		constraints.fill = BOTH;
-		
+
 		window.add(menuBar, constraints);
 	}
 

@@ -49,7 +49,7 @@ public class OverviewModelTest {
 			return null;
 		}).when(p).onParseCompletion();
 		doThrow(new AssertionError("Exception when parsing testfile")).when(p)
-		.onException(any(Exception.class), any(String.class));
+				.onException(any(Exception.class), any(String.class));
 		Path testFile;
 		try {
 			testFile = Paths.get(
@@ -86,7 +86,7 @@ public class OverviewModelTest {
 			return null;
 		}).when(p).onParseCompletion();
 		doThrow(new AssertionError("Exception when parsing testfile")).when(p)
-		.onException(any(Exception.class), any(String.class));
+				.onException(any(Exception.class), any(String.class));
 
 		Path testFolder;
 		try {

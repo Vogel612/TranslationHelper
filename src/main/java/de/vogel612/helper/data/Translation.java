@@ -27,10 +27,14 @@ public class Translation {
 	private String translation;
 
 	/**
-	 * Creates a new translation, where the translation is equal to the "root value"
+	 * Creates a new translation, where the translation is equal to the
+	 * "root value"
 	 * 
-	 * @param key the key to use for the translation
-	 * @param rootValue the "root value", which is at the same time the preliminary translation
+	 * @param key
+	 *            the key to use for the translation
+	 * @param rootValue
+	 *            the "root value", which is at the same time the preliminary
+	 *            translation
 	 */
 	public Translation(final String key, final String rootValue) {
 		this(key, rootValue, rootValue);
@@ -103,6 +107,5 @@ public class Translation {
 			return false;
 		return true;
 	}
-	
-	
+
 }
