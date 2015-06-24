@@ -5,6 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -27,6 +28,10 @@ public class OverviewModelTest {
 	};
 	private static final Translation[] expected2 = {
 		new Translation("TestKey1", "TestValue", "Second Test"),
+		new Translation("TestKey2", "Another Test Value", "Another Test Value")
+	};
+	private static final Translation[] expectedAfterEdit = {
+		new Translation("TestKey1", "TestValue", "New Translation"),
 		new Translation("TestKey2", "Another Test Value", "Another Test Value")
 	};
 
@@ -76,7 +81,6 @@ public class OverviewModelTest {
 		assertArrayEquals(expected, translations);
 	}
 
-	// FIXME: Test normalization!
 	@Test
 	public void loadFromFile_normalizationWorksAsExpected() {
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -113,5 +117,19 @@ public class OverviewModelTest {
 		translations = cut.getTranslations().toArray(new Translation[0]);
 
 		assertArrayEquals(expected2, translations);
+	}
+
+	@Test
+	public void editTranslation_updatesDocument() {
+		// abusing the loading test as a setup...
+		loadFromFile_andSuccessiveGet_returnCorrectInformation();
+		reset(p); // just to be sure
+
+		cut.updateTranslation("TestKey1", "New Translation");
+
+		Translation[] translations;
+		translations = cut.getTranslations().toArray(new Translation[0]);
+
+		assertArrayEquals(expectedAfterEdit, translations);
 	}
 }

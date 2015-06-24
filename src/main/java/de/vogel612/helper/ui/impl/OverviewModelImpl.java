@@ -16,7 +16,10 @@ import java.util.stream.Collectors;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewModel;
@@ -61,6 +64,7 @@ public class OverviewModelImpl implements OverviewModel {
 			this.presenter.onException(e, "Something went really wrong");
 		}
 	};
+	private final XPathFactory xPathFactory = XPathFactory.instance();
 
 	private OverviewPresenter presenter;
 	private Document translationDocument;
@@ -140,6 +144,28 @@ public class OverviewModelImpl implements OverviewModel {
 			final String currentValue = el.getChildText(VALUE_NAME);
 			return new Translation(key, originalLocale.get(key), currentValue);
 		}).collect(Collectors.toList());
+	}
+
+	@Override
+	public void updateTranslation(final String key, final String newTranslation) {
+		// XPathExpression<Element> expression =
+		// xPathFactory.compile("/parent::"
+		// + ELEMENT_NAME + "/@" + KEY_NAME + "='" + key + "'",
+		// Filters.element());
+
+		XPathExpression<Element> expression = xPathFactory.compile("/*/"
+				+ ELEMENT_NAME + "[@" + KEY_NAME + "='" + key + "']/"
+				+ VALUE_NAME, Filters.element());
+		// ohh damn that's so many assumptions
+		Element translationToUpdate = expression.evaluate(translationDocument)
+				.get(0);
+		translationToUpdate.setText(newTranslation);
+	}
+
+	@Override
+	public void saveTranslation() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

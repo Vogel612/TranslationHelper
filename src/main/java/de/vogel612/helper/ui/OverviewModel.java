@@ -12,4 +12,8 @@ public interface OverviewModel {
 	void loadFromDirectory(Path resxFolder, String targetLocale);
 
 	List<Translation> getTranslations();
+
+	void updateTranslation(String key, String newTranslation);
+
+	void saveTranslation();
 }
