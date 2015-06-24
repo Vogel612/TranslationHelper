@@ -1,6 +1,10 @@
 package de.vogel612.helper.ui;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -66,7 +70,8 @@ public class OverviewPresenterTest {
 	public void loadFromFile_delegatesToModel() {
 		Path mock = mock(Path.class);
 
-		cut.loadFiles(mock);
+		cut.loadFiles(mock, OverviewPresenter.DEFAULT_ROOT_LOCALE,
+				OverviewPresenter.DEFAULT_TARGET_LOCALE);
 		verify(m).loadFromDirectory(mock, "de");
 		verifyNoMoreInteractions(m, v);
 	}

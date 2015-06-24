@@ -36,7 +36,8 @@ public class Main {
 
 		OverviewPresenter p = new OverviewPresenterImpl(m, v);
 		p.initialize();
-		p.loadFiles(resxFolder);
+		p.loadFiles(resxFolder, OverviewPresenter.DEFAULT_ROOT_LOCALE,
+				OverviewPresenter.DEFAULT_TARGET_LOCALE);
 		p.show();
 	}
 

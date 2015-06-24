@@ -4,11 +4,12 @@ import java.nio.file.Path;
 
 public interface OverviewPresenter {
 
+	public static final String DEFAULT_TARGET_LOCALE = "de";
+	public static final String DEFAULT_ROOT_LOCALE = "";
+
 	void show();
 
 	void initialize();
-
-	void loadFiles(Path resxFile);
 
 	void loadFiles(Path resxFolder, String rootLocale, String targetLocale);
 
