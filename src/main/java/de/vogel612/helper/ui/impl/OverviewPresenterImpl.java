@@ -2,6 +2,7 @@ package de.vogel612.helper.ui.impl;
 
 import java.nio.file.Path;
 
+import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
@@ -53,6 +54,17 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	public void loadFiles(final Path resxFolder, final String rootLocale,
 			final String targetLocale) {
 		model.loadFromDirectory(resxFolder, targetLocale);
+	}
+
+	@Override
+	public void onTranslationSubmit(final Translation t) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onTranslateRequest(final String key) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

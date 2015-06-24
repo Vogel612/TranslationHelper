@@ -2,6 +2,8 @@ package de.vogel612.helper.ui;
 
 import java.nio.file.Path;
 
+import de.vogel612.helper.data.Translation;
+
 public interface OverviewPresenter {
 
 	public static final String DEFAULT_TARGET_LOCALE = "de";
@@ -16,4 +18,8 @@ public interface OverviewPresenter {
 	void onException(Exception e, String message);
 
 	void onParseCompletion();
+
+	void onTranslationSubmit(Translation t);
+
+	void onTranslateRequest(String key);
 }
