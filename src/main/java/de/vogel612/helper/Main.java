@@ -4,10 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import de.vogel612.helper.ui.OverviewModel;
-import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.impl.OverviewModelImpl;
-import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 import de.vogel612.helper.ui.impl.OverviewViewImpl;
 
 public class Main {
@@ -34,11 +32,12 @@ public class Main {
 		OverviewModel m = new OverviewModelImpl();
 		OverviewView v = new OverviewViewImpl();
 
-		OverviewPresenter p = new OverviewPresenterImpl(m, v);
-		p.initialize();
-		p.loadFiles(resxFolder, OverviewPresenter.DEFAULT_ROOT_LOCALE,
-				OverviewPresenter.DEFAULT_TARGET_LOCALE);
-		p.show();
+		// FIXME: uncomment!!
+		// OverviewPresenter p = new OverviewPresenterImpl(m, v);
+		// p.initialize();
+		// p.loadFiles(resxFolder, OverviewPresenter.DEFAULT_ROOT_LOCALE,
+		// OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		// p.show();
 	}
 
 }

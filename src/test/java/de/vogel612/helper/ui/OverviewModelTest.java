@@ -1,6 +1,7 @@
 package de.vogel612.helper.ui;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
@@ -131,5 +132,16 @@ public class OverviewModelTest {
 		translations = cut.getTranslations().toArray(new Translation[0]);
 
 		assertArrayEquals(expectedAfterEdit, translations);
+	}
+
+	@Test
+	public void getSingleTranslation_returnsExpectedValues() {
+		// abusing the loading test as setup
+		loadFromFile_andSuccessiveGet_returnCorrectInformation();
+		reset(p);
+
+		Translation actual = cut.getSingleTranslation("TestKey2");
+
+		assertEquals(expected[1], actual);
 	}
 }

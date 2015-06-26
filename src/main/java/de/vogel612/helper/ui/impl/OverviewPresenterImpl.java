@@ -6,16 +6,21 @@ import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.TranslationPresenter;
 
 public class OverviewPresenterImpl implements OverviewPresenter {
 
 	final OverviewModel model;
 	final OverviewView view;
+	final TranslationPresenter translationPresenter;
+
 	private boolean initialized = false;
 
-	public OverviewPresenterImpl(final OverviewModel m, final OverviewView v) {
+	public OverviewPresenterImpl(final OverviewModel m, final OverviewView v,
+			final TranslationPresenter p) {
 		model = m;
 		view = v;
+		translationPresenter = p;
 
 		view.initialize();
 	}
@@ -28,6 +33,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 		}
 		view.register(this);
 		model.register(this);
+		translationPresenter.register(this);
 		initialized = true;
 	}
 
@@ -63,8 +69,9 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
 	@Override
 	public void onTranslateRequest(final String key) {
-		// TODO Auto-generated method stub
-
+		translationPresenter.setRequestedTranslation(model
+				.getSingleTranslation(key));
+		translationPresenter.show();
 	}
 
 }

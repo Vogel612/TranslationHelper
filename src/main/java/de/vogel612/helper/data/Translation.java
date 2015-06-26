@@ -1,5 +1,6 @@
 package de.vogel612.helper.data;
 
+
 /**
  * <p>
  * A simple data holder class to organize Translations. This class exposes an
@@ -7,7 +8,7 @@ package de.vogel612.helper.data;
  * {@link #translation} for simplicity it allows changing the translation, which
  * may be removed later, depending on how it works out.
  * </p>
- * 
+ *
  * @author vogel612<<a href="mailto:vogel612@gmx.de">vogel612@gmx.de</a>>
  */
 public class Translation {
@@ -25,11 +26,14 @@ public class Translation {
 	 * The actual Translation "Value".
 	 */
 	private String translation;
+	public static final String ELEMENT_NAME = "data";
+	public static final String KEY_NAME = "name";
+	public static final String VALUE_NAME = "value";
 
 	/**
 	 * Creates a new translation, where the translation is equal to the
 	 * "root value"
-	 * 
+	 *
 	 * @param key
 	 *            the key to use for the translation
 	 * @param rootValue
@@ -59,7 +63,7 @@ public class Translation {
 		return translation;
 	}
 
-	public void setTranslation(String translation) {
+	public void setTranslation(final String translation) {
 		this.translation = translation;
 	}
 
@@ -82,7 +86,7 @@ public class Translation {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)

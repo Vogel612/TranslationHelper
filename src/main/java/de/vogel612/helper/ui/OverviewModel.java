@@ -13,7 +13,9 @@ public interface OverviewModel {
 
 	List<Translation> getTranslations();
 
+	Translation getSingleTranslation(String key);
+
 	void updateTranslation(String key, String newTranslation);
 
-	void saveTranslation();
+	void save();
 }

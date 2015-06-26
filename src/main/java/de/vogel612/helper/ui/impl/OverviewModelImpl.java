@@ -148,24 +148,29 @@ public class OverviewModelImpl implements OverviewModel {
 
 	@Override
 	public void updateTranslation(final String key, final String newTranslation) {
-		// XPathExpression<Element> expression =
-		// xPathFactory.compile("/parent::"
-		// + ELEMENT_NAME + "/@" + KEY_NAME + "='" + key + "'",
-		// Filters.element());
+		Element translationToUpdate = getValueElement(key);
+		translationToUpdate.setText(newTranslation);
+	}
 
+	private Element getValueElement(final String key) {
 		XPathExpression<Element> expression = xPathFactory.compile("/*/"
 				+ ELEMENT_NAME + "[@" + KEY_NAME + "='" + key + "']/"
 				+ VALUE_NAME, Filters.element());
 		// ohh damn that's so many assumptions
-		Element translationToUpdate = expression.evaluate(translationDocument)
-				.get(0);
-		translationToUpdate.setText(newTranslation);
+		Element element = expression.evaluate(translationDocument).get(0);
+		return element;
 	}
 
 	@Override
-	public void saveTranslation() {
+	public void save() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public Translation getSingleTranslation(final String key) {
+		final String currentValue = getValueElement(key).getText();
+		return new Translation(key, originalLocale.get(key), currentValue);
 	}
 
 }
