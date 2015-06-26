@@ -4,9 +4,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import de.vogel612.helper.ui.OverviewModel;
+import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.TranslationPresenter;
 import de.vogel612.helper.ui.impl.OverviewModelImpl;
+import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 import de.vogel612.helper.ui.impl.OverviewViewImpl;
+import de.vogel612.helper.ui.impl.TranslationPresenterImpl;
 
 public class Main {
 	public static final String RUBBERDUCK_PATH = "RetailCoder.VBE/UI";
@@ -22,6 +26,7 @@ public class Main {
 			return;
 		}
 		Path resxFolder = Paths.get(args[0]);
+		// normalize path to allow checking
 		resxFolder = resxFolder.normalize();
 
 		if (!resxFolder.endsWith(RUBBERDUCK_PATH)) {
@@ -29,15 +34,15 @@ public class Main {
 			return;
 		}
 
+		TranslationPresenter tp = new TranslationPresenterImpl();
 		OverviewModel m = new OverviewModelImpl();
 		OverviewView v = new OverviewViewImpl();
 
-		// FIXME: uncomment!!
-		// OverviewPresenter p = new OverviewPresenterImpl(m, v);
-		// p.initialize();
-		// p.loadFiles(resxFolder, OverviewPresenter.DEFAULT_ROOT_LOCALE,
-		// OverviewPresenter.DEFAULT_TARGET_LOCALE);
-		// p.show();
+		OverviewPresenter p = new OverviewPresenterImpl(m, v, tp);
+		p.initialize();
+		p.loadFiles(resxFolder, OverviewPresenter.DEFAULT_ROOT_LOCALE,
+				OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		p.show();
 	}
 
 }
