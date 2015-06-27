@@ -64,7 +64,9 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
 	@Override
 	public void onTranslationSubmit(final Translation t) {
-		// TODO Auto-generated method stub
+		translationPresenter.hide();
+		model.updateTranslation(t.getKey(), t.getTranslation());
+		onParseCompletion();
 	}
 
 	@Override

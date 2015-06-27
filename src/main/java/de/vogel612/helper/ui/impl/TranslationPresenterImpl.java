@@ -1,5 +1,8 @@
 package de.vogel612.helper.ui.impl;
 
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,20 +30,22 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 		submit = new JButton("okay");
 		cancel = new JButton("cancel");
 
-		submit.addActionListener(event -> {
-			overview.onTranslationSubmit(translation);
-		});
-		cancel.addActionListener(event -> {
-			hide();
-			// TODO: notifiy overview instead??
-		});
 		rootValueLabel = new JLabel();
+		doLayout();
+
+	}
+	private void doLayout() {
+		window.setMinimumSize(new Dimension(800, 400));
+		window.setPreferredSize(new Dimension(800, 400));
+		window.setSize(new Dimension(800, 400));
+		window.setLayout(new FlowLayout());
 
 		window.add(rootValueLabel);
 		window.add(input);
 		window.add(cancel);
 		window.add(submit);
 
+		// TODO Set control sizes ...
 	}
 	@Override
 	public void register(final OverviewPresenter p) {
@@ -60,6 +65,18 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 	@Override
 	public void setRequestedTranslation(final Translation t) {
 		translation = t;
+		bindControls();
 	}
 
+	private void bindControls() {
+		rootValueLabel.setText(translation.getRootValue());
+		input.setText(translation.getTranslation());
+		submit.addActionListener(event -> {
+			translation.setTranslation(input.getText());
+			overview.onTranslationSubmit(translation);
+		});
+		cancel.addActionListener(event -> {
+			overview.onTranslationAbort();
+		});
+	}
 }
