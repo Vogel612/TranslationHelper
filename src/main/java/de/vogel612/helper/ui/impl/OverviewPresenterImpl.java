@@ -68,6 +68,11 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	}
 
 	@Override
+	public void onTranslationAbort() {
+		translationPresenter.hide();
+	}
+
+	@Override
 	public void onTranslateRequest(final String key) {
 		translationPresenter.setRequestedTranslation(model
 				.getSingleTranslation(key));

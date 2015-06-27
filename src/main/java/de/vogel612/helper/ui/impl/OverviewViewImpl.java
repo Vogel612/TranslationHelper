@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -14,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.TableModel;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
@@ -96,8 +97,46 @@ public class OverviewViewImpl implements OverviewView {
 
 	@Override
 	public void rebuildWith(final List<Translation> translations) {
-		TableModel model = TranslationTable.fromTranslations(translations);
+		TranslationTable model = TranslationTable
+				.fromTranslations(translations);
 		translationContainer.setModel(model);
+		bindEventListener(model);
+	}
+
+	private void bindEventListener(final TranslationTable model) {
+		translationContainer.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(final MouseEvent event) {
+				if (event.getClickCount() != 2) { // only react to doubleclicks!
+					return;
+				}
+				final int row = translationContainer.rowAtPoint(event
+						.getPoint());
+				presenter.onTranslateRequest(model.getKeyAt(row));
+			}
+
+			@Override
+			public void mouseEntered(final MouseEvent arg0) {
+				// IGNORE
+			}
+
+			@Override
+			public void mouseExited(final MouseEvent arg0) {
+				// IGNORE
+			}
+
+			@Override
+			public void mousePressed(final MouseEvent arg0) {
+				// IGNORE
+			}
+
+			@Override
+			public void mouseReleased(final MouseEvent arg0) {
+				// IGNORE
+			}
+
+		});
 	}
 
 	@Override
