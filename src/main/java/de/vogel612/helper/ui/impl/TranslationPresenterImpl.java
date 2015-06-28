@@ -1,7 +1,9 @@
 package de.vogel612.helper.ui.impl;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +16,7 @@ import de.vogel612.helper.ui.TranslationPresenter;
 
 public class TranslationPresenterImpl implements TranslationPresenter {
 
+	private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
 	private final JFrame window;
 	private final JTextField input;
 	private final JButton submit;
@@ -35,17 +38,59 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 
 	}
 	private void doLayout() {
-		window.setMinimumSize(new Dimension(800, 400));
-		window.setPreferredSize(new Dimension(800, 400));
-		window.setSize(new Dimension(800, 400));
-		window.setLayout(new FlowLayout());
+		window.setMinimumSize(WINDOW_SIZE);
+		window.setPreferredSize(WINDOW_SIZE);
+		window.setSize(WINDOW_SIZE);
+		window.setLayout(new GridBagLayout());
 
-		window.add(rootValueLabel);
-		window.add(input);
-		window.add(cancel);
-		window.add(submit);
+		addRootValueLabel();
+		addInputText();
+		addCancel();
+		addSubmit();
+	}
+	private void addSubmit() {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.weightx = 1.0;
+		constraints.insets = new Insets(15, 15, 15, 15);
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridx = 1;
+		constraints.gridy = 2;
+		constraints.weighty = 0.33;
+		window.add(submit, constraints);
+	}
+	private void addCancel() {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.weightx = 1.0;
+		constraints.insets = new Insets(15, 15, 15, 15);
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		constraints.weighty = 0.33;
+		constraints.gridwidth = 1;
+		window.add(cancel, constraints);
+	}
+	private void addInputText() {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.weightx = 1.0;
+		constraints.insets = new Insets(15, 15, 15, 15);
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.weighty = 0.33;
+		window.add(input, constraints);
+	}
+	private void addRootValueLabel() {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.weightx = 1.0;
+		constraints.insets = new Insets(15, 15, 15, 15);
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = GridBagConstraints.REMAINDER;
+		constraints.weighty = 0.33;
 
-		// TODO Set control sizes ...
+		window.add(rootValueLabel, constraints);
 	}
 	@Override
 	public void register(final OverviewPresenter p) {
