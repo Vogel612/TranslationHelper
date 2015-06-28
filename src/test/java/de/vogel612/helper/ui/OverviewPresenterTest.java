@@ -120,4 +120,27 @@ public class OverviewPresenterTest {
 		verifyNoMoreInteractions(m, v, p);
 	}
 
+	@Test
+	public void onTranslationSubmit_hidesTranslationView_propagatesEdit_updatesView() {
+		final Translation t = new Translation("Key", "Value", "Translation");
+		final List<Translation> list = mock(List.class);
+		doReturn(list).when(m).getTranslations();
+
+		cut.onTranslationSubmit(t);
+
+		verify(m).updateTranslation("Key", "Translation");
+		verify(m).getTranslations();
+		verify(v).rebuildWith(list);
+		verify(p).hide();
+		verifyNoMoreInteractions(m, v, p);
+	}
+
+	@Test
+	public void onTranslationAbort_hidesTranslationView() {
+		cut.onTranslationAbort();
+
+		verify(p).hide();
+		verifyNoMoreInteractions(m, v, p);
+	}
+
 }
