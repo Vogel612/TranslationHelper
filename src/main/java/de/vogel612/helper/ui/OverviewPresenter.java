@@ -24,4 +24,6 @@ public interface OverviewPresenter {
 	void onTranslateRequest(String key);
 
 	void onTranslationAbort();
+
+	void onSaveRequest();
 }

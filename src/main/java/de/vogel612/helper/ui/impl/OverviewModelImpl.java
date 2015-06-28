@@ -1,7 +1,10 @@
 package de.vogel612.helper.ui.impl;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +21,8 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
@@ -68,7 +73,8 @@ public class OverviewModelImpl implements OverviewModel {
 
 	private OverviewPresenter presenter;
 	private Document translationDocument;
-	private Path currentPath; // we'll need this for saving
+	private Path currentPath;
+	private String currentTargetLocale;
 
 	@Override
 	public void register(final OverviewPresenter p) {
@@ -79,6 +85,7 @@ public class OverviewModelImpl implements OverviewModel {
 	public void loadFromDirectory(final Path resxFolder,
 			final String targetLocale) {
 		this.currentPath = resxFolder;
+		this.currentTargetLocale = targetLocale;
 		// for now there's only en-US root-Files
 		final Path rootFile = resxFolder.resolve(fileNameString(""));
 		final Path targetFile = resxFolder
@@ -163,10 +170,17 @@ public class OverviewModelImpl implements OverviewModel {
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
+		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Path outFile = currentPath.resolve(fileNameString(currentTargetLocale));
 
+		try (OutputStream outStream = Files.newOutputStream(outFile,
+				StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE)) {
+			outputter.output(translationDocument, outStream);
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+			presenter.onException(e, "Could not save File");
+		}
 	}
-
 	@Override
 	public Translation getSingleTranslation(final String key) {
 		final String currentValue = getValueElement(key).getText();

@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,9 +28,12 @@ public class OverviewViewImpl implements OverviewView {
 	private static final int DEFAULT_WIDTH = 1000;
 	private static final int DEFAULT_HEIGHT = 700;
 
+	private static final Dimension MENU_BAR_DIMENSION = new Dimension(800, 100);
+
 	private final JFrame window;
 	private final JTable translationContainer;
 	private final JPanel menuBar;
+	private final JButton saveButton;
 
 	private OverviewPresenter presenter;
 
@@ -39,11 +43,15 @@ public class OverviewViewImpl implements OverviewView {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		translationContainer = new JTable();
 		menuBar = new JPanel();
+		saveButton = new JButton("save");
 	}
 
 	@Override
 	public void register(final OverviewPresenter p) {
 		presenter = p;
+		saveButton.addActionListener(event -> {
+			presenter.onSaveRequest();
+		});
 	}
 
 	@Override
@@ -74,11 +82,11 @@ public class OverviewViewImpl implements OverviewView {
 	}
 
 	private void addMenuBar() {
-		Dimension menuBarDimensions = new Dimension(800, 100);
-		menuBar.setMinimumSize(menuBarDimensions);
-		menuBar.setPreferredSize(menuBarDimensions);
+		menuBar.setMinimumSize(MENU_BAR_DIMENSION);
+		menuBar.setPreferredSize(MENU_BAR_DIMENSION);
 
 		menuBar.setBackground(new Color(0.4f, 0.2f, 0.4f, 0.2f));
+		menuBar.add(saveButton); // TODO: nicely layout
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(15, 15, 15, 15);
 		constraints.gridx = 0;

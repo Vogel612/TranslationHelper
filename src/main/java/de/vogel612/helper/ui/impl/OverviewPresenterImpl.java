@@ -81,4 +81,8 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 		translationPresenter.show();
 	}
 
+	@Override
+	public void onSaveRequest() {
+		model.save();
+	}
 }

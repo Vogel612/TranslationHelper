@@ -143,4 +143,12 @@ public class OverviewPresenterTest {
 		verifyNoMoreInteractions(m, v, p);
 	}
 
+	@Test
+	public void onSaveRequest_delegatesToModel() {
+		cut.onSaveRequest();
+
+		verify(m).save();
+		verifyNoMoreInteractions(m, v, p);
+	}
+
 }
