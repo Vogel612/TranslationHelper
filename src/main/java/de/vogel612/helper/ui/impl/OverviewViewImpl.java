@@ -79,6 +79,7 @@ public class OverviewViewImpl implements OverviewView {
 		scroller.setMinimumSize(new Dimension(800, 400));
 		scroller.setSize(new Dimension(800, 400));
 		window.add(scroller, constraints);
+		bindEventListener();
 	}
 
 	private void addMenuBar() {
@@ -108,10 +109,9 @@ public class OverviewViewImpl implements OverviewView {
 		TranslationTable model = TranslationTable
 				.fromTranslations(translations);
 		translationContainer.setModel(model);
-		bindEventListener(model);
 	}
 
-	private void bindEventListener(final TranslationTable model) {
+	private void bindEventListener() {
 		translationContainer.addMouseListener(new MouseListener() {
 
 			@Override
@@ -121,7 +121,9 @@ public class OverviewViewImpl implements OverviewView {
 				}
 				final int row = translationContainer.rowAtPoint(event
 						.getPoint());
-				presenter.onTranslateRequest(model.getKeyAt(row));
+				final String key = ((TranslationTable) translationContainer
+						.getModel()).getKeyAt(row);
+				presenter.onTranslateRequest(key);
 			}
 
 			@Override
