@@ -5,8 +5,3 @@ jdk:
 
 after_success:
 - "./gradlew jacocoTestReport coveralls"
-
-env:
-  global:
-    - CI_NAME=travis-ci
-    - secure: DI7O+i3RPeEa/NgKIXsWx+FkRM2YKJNaF1Je/H6/Tt0ulE3iW02jHlQp9I38yIWXr9Ak/yRvwjqmw33sp87krAYDrisju7SJ/8Wk9EuxZ0deYEWAmthIBksJ27gMdOh0tDlyLnWUhwP20UbfIDHdeIFAeL0ptqZroFF2h63sOftR0mdXcxv7+flTrhrKIEM7t1AUDSsk1jw8Esm9OMZcXUKdIPECbmO9/jMMJtJ7iQwNWcCDN1YDDEWCAK/X9ZhCZMSizpXhNwO+G78XIjptCnUFNE7lRnTJ96C7Xw8guoC/RSowkMTebC/LGmZfLfn5BCaxq8tYpFnCnepoZQ/y4Wqujau/nfoMlaqY/WpPl40PoOKkhhIuONMM/Oj/HdsDkO1/TNT5EEgAATpBmmqd5PNpc5BY7ENNPzJeWC1EM5/fxSl6PBM7lrGZxgreS9J0THojVFPDUVdda8QHxGEqJD69NlS6zxcbD8yDC/hi/XFzBmvTZHZYVhKDow6xbExabJyHGMdxQIF6wususIlCsTZAA1Xxuve9wY6E1KpML+B2Le5UkyGYC1VKWVRyf/EHkpiMdZry/ou+XFvK1wLKfzANJ2PObUo5IhZO/EgF7Ork2knh3j8FMt4jFSzryqQfZZhdE66NkSCXwpy3frwatXS+jzsSR7Pp4jVTmNvaiuE=
