@@ -60,3 +60,7 @@ test{
 		exceptionFormat = 'full'
     }
 }
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.5'
+}
