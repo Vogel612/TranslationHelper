@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'cobertura'
+//apply plugin: 'cobertura'
+apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
 version = '1.0'
@@ -33,12 +34,23 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coverage reports :)
+		// classpath 'net.saliman:gradle-cobertura-plugin:2.2.8' // coverage reports :)
  		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
  	}   
 }
 
-cobertura.coverageFormats = ['html' , 'xml']
+jacocoTestReport {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+}
+
+/*cobertura {
+	coverageFormats = ['html' , 'xml']
+	/*coverageDirs = ['build/classes/main', 'build/classes/test']
+	coverageSourceDirs = ['src/main/java']
+}*/
 
 uploadArchives {
     repositories {
