@@ -1,5 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'cobertura'
+apply plugin: 'com.github.kt3k.coveralls'
 
 version = '1.0'
 sourceCompatibility = '1.8'
@@ -22,8 +24,21 @@ dependencies {
     compile group: 'jaxen', name: 'jaxen', version: '1.1.6' 
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
-    
+ 
 }
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // coverage reports :)
+ 		classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+ 	}   
+}
+
+cobertura.coverageFormats = ['html' , 'xml']
 
 uploadArchives {
     repositories {
