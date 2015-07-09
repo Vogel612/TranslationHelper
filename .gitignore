@@ -1,3 +1,4 @@
+#eclipse-crap
 /bin/
 .classpath/
 .gradle/
@@ -5,4 +6,7 @@
 /build/
 .settings
 .classpath
+
+#temp-files
+*~
 *.md.html
