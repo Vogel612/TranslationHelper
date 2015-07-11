@@ -2,14 +2,14 @@
 
 This is a small helper for me to translate Rubberduck. 
 
-[![Coverage Status](https://coveralls.io/repos/Vogel612/TranslationHelper/badge.svg?branch=master&service=github)]
+ [![Build Status](https://travis-ci.org/Vogel612/TranslationHelper.svg?branch=master)](https://travis-ci.org/Vogel612/TranslationHelper?branch=master) [![Coverage Status](https://coveralls.io/repos/Vogel612/TranslationHelper/badge.svg?branch=master&service=github)]
 (https://coveralls.io/github/Vogel612/TranslationHelper?branch=master)
 
 ##Why?
 
 - Manual XML editing is a royal PITA
 - I want to do some XML parsing.. it seems to be hard
-- I wanted to learn some gradle, MVP, maybe use travis
+- I wanted to learn some gradle, MVP
 
 ##What does it do?
 
