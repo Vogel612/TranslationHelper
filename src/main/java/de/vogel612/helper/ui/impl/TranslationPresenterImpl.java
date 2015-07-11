@@ -17,6 +17,7 @@ import de.vogel612.helper.ui.TranslationPresenter;
 public class TranslationPresenterImpl implements TranslationPresenter {
 
 	private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
+	private static final String TITLE_FORMAT = "Translating - %s";
 	private final JFrame window;
 	private final JTextField input;
 	private final JButton submit;
@@ -123,5 +124,6 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 		cancel.addActionListener(event -> {
 			overview.onTranslationAbort();
 		});
+		window.setTitle(String.format(TITLE_FORMAT, translation.getKey()));
 	}
 }
