@@ -20,6 +20,7 @@ import javax.swing.JTable;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
+import de.vogel612.helper.data.TranslationTableRenderer;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
 
@@ -80,8 +81,10 @@ public class OverviewViewImpl implements OverviewView {
 		scroller.setSize(new Dimension(800, 400));
 		window.add(scroller, constraints);
 		bindEventListener();
-	}
 
+		translationContainer.setDefaultRenderer(Object.class,
+				new TranslationTableRenderer());
+	}
 	private void addMenuBar() {
 		menuBar.setMinimumSize(MENU_BAR_DIMENSION);
 		menuBar.setPreferredSize(MENU_BAR_DIMENSION);
