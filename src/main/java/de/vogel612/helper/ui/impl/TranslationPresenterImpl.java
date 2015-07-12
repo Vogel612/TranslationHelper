@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -35,6 +37,7 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 		cancel = new JButton("cancel");
 
 		rootValueLabel = new JLabel();
+
 		doLayout();
 
 	}
@@ -80,6 +83,42 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		constraints.weighty = 0.33;
 		window.add(input, constraints);
+
+		input.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(final KeyEvent event) {
+				switch (event.getKeyCode()) {
+					case KeyEvent.VK_ESCAPE :
+						cancel.doClick();
+						break;
+					case KeyEvent.VK_ENTER :
+						if (event.isShiftDown()) {
+							int caret = input.getCaretPosition();
+							String newValue = input.getText();
+							newValue = newValue.substring(0, caret) + "\r\n"
+									+ newValue.substring(caret);
+							input.setText(newValue);
+						} else {
+							submit.doClick();
+						}
+						break;
+					default :
+						break;
+				}
+			}
+
+			@Override
+			public void keyReleased(final KeyEvent event) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void keyTyped(final KeyEvent event) {
+				// TODO Auto-generated method stub
+			}
+
+		});
 	}
 	private void addRootValueLabel() {
 		GridBagConstraints constraints = new GridBagConstraints();
