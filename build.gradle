@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'sonar-runner'
 
 version = '1.0'
 sourceCompatibility = '1.8'
@@ -63,6 +64,16 @@ test{
 			}
 		}
 		exceptionFormat = 'full'
+    }
+}
+
+sonarRunner {
+    sonarProperties {
+        property "sonar.host.url", "http://localhost:9000/"
+        property "sonar.jdbc.url", "jdbc:postgresql:sonar"
+        property "sonar.jdbc.driverClassName", "org.postgresql.Driver"
+        property "sonar.jdbc.username", System.properties["PG_SONAR_USERNAME"]
+        property "sonar.jdbc.password", System.properties["PG_SONAR_PASSWORD"]
     }
 }
 
