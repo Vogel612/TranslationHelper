@@ -50,9 +50,7 @@ public class OverviewViewImpl implements OverviewView {
 	@Override
 	public void register(final OverviewPresenter p) {
 		presenter = p;
-		saveButton.addActionListener(event -> {
-			presenter.onSaveRequest();
-		});
+		saveButton.addActionListener(event -> presenter.onSaveRequest());
 	}
 
 	@Override

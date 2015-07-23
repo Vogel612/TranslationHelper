@@ -17,6 +17,9 @@ public class Main {
 	public static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
 	public static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
 
+	private Main() {
+	}
+
 	public static void main(final String[] args) {
 		// parsing the first argument given into a proper path to load the resx
 		// from

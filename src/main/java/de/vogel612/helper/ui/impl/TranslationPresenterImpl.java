@@ -93,29 +93,33 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 						cancel.doClick();
 						break;
 					case KeyEvent.VK_ENTER :
-						if (event.isShiftDown()) {
-							int caret = input.getCaretPosition();
-							String newValue = input.getText();
-							newValue = newValue.substring(0, caret) + "\r\n"
-									+ newValue.substring(caret);
-							input.setText(newValue);
-						} else {
-							submit.doClick();
-						}
+						handleEnter(event);
 						break;
 					default :
 						break;
 				}
 			}
 
+			private void handleEnter(final KeyEvent event) {
+				if (event.isShiftDown()) {
+					int caret = input.getCaretPosition();
+					String newValue = input.getText();
+					newValue = newValue.substring(0, caret) + "\r\n"
+							+ newValue.substring(caret);
+					input.setText(newValue);
+				} else {
+					submit.doClick();
+				}
+			}
+
 			@Override
 			public void keyReleased(final KeyEvent event) {
-				// TODO Auto-generated method stub
+				// Ignore, bubbles to default
 			}
 
 			@Override
 			public void keyTyped(final KeyEvent event) {
-				// TODO Auto-generated method stub
+				// Ignore, bubbles to default
 			}
 
 		});
@@ -160,9 +164,7 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 			translation.setTranslation(input.getText());
 			overview.onTranslationSubmit(translation);
 		});
-		cancel.addActionListener(event -> {
-			overview.onTranslationAbort();
-		});
+		cancel.addActionListener(event -> overview.onTranslationAbort());
 		window.setTitle(String.format(TITLE_FORMAT, translation.getKey()));
 	}
 }
