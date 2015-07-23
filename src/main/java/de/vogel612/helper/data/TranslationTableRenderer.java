@@ -18,7 +18,8 @@ public class TranslationTableRenderer extends DefaultTableCellRenderer {
 			return c;
 		}
 
-		if (table.getValueAt(row, 0).equals(table.getValueAt(row, 1))) {
+		if (table.getValueAt(row, 0).equals(table.getValueAt(row, 1))
+				|| table.getValueAt(row, 1).toString().isEmpty()) {
 			c.setBackground(Color.YELLOW);
 		} else {
 			c.setBackground(Color.WHITE);
