@@ -53,19 +53,20 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
 	@Override
 	public void onParseCompletion() {
-		view.rebuildWith(model.getTranslations());
+		view.rebuildWith(model.getTranslations(""));
 	}
 
 	@Override
 	public void loadFiles(final Path resxFolder, final String rootLocale,
 			final String targetLocale) {
-		model.loadFromDirectory(resxFolder, targetLocale);
+		// FIXME: use the root and targetLocale
+		model.loadFromDirectory(resxFolder);
 	}
 
 	@Override
 	public void onTranslationSubmit(final Translation t) {
 		translationPresenter.hide();
-		model.updateTranslation(t.getKey(), t.getTranslation());
+		model.updateTranslation("", t.getKey(), t.getValue());
 		onParseCompletion();
 	}
 
@@ -77,12 +78,12 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void onTranslateRequest(final String key) {
 		translationPresenter.setRequestedTranslation(model
-				.getSingleTranslation(key));
+				.getSingleTranslation("", key));
 		translationPresenter.show();
 	}
 
 	@Override
 	public void onSaveRequest() {
-		model.save();
+		model.saveAll();
 	}
 }

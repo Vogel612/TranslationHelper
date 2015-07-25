@@ -2,9 +2,6 @@ package de.vogel612.helper.ui;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
@@ -13,7 +10,6 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.CountDownLatch;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,16 +20,16 @@ import de.vogel612.helper.ui.impl.OverviewModelImpl;
 public class OverviewModelTest {
 
 	private static final Translation[] expected = {
-		new Translation("TestKey1", "TestValue", "TestValue"),
-		new Translation("TestKey2", "Another Test Value", "Another Test Value")
+		new Translation("TestKey1", "TestValue"),
+		new Translation("TestKey2", "Another Test Value")
 	};
 	private static final Translation[] expected2 = {
-		new Translation("TestKey1", "TestValue", "Second Test"),
-		new Translation("TestKey2", "Another Test Value", "Another Test Value")
+		new Translation("TestKey1", "Second Test"),
+		new Translation("TestKey2", "Another Test Value")
 	};
 	private static final Translation[] expectedAfterEdit = {
-		new Translation("TestKey1", "TestValue", "New Translation"),
-		new Translation("TestKey2", "Another Test Value", "Another Test Value")
+		new Translation("TestKey1", "New Translation"),
+		new Translation("TestKey2", "Another Test Value")
 	};
 
 	private OverviewModelImpl cut;
@@ -48,14 +44,6 @@ public class OverviewModelTest {
 
 	@Test
 	public void loadFromFile_andSuccessiveGet_returnCorrectInformation() {
-		final CountDownLatch latch = new CountDownLatch(1);
-		doAnswer((invocationOnMock) -> {
-			latch.countDown();
-			System.out.println("TestFile was parsed");
-			return null;
-		}).when(p).onParseCompletion();
-		doThrow(new AssertionError("Exception when parsing testfile")).when(p)
-				.onException(any(Exception.class), any(String.class));
 		Path testFile;
 		try {
 			testFile = Paths.get(
@@ -65,34 +53,19 @@ public class OverviewModelTest {
 			throw new AssertionError(
 					"Testfile could not be found in resources", e);
 		}
-		cut.loadFromDirectory(testFile, "");
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			// we shouldn't get interrupted, but if we do, eh well.
-			Thread.currentThread().interrupt();
-		}
+		cut.loadFromDirectory(testFile);
 
 		verify(p).onParseCompletion();
 		verifyNoMoreInteractions(p);
 
 		Translation[] translations;
-		translations = cut.getTranslations().toArray(new Translation[0]);
+		translations = cut.getTranslations("").toArray(new Translation[0]);
 
 		assertArrayEquals(expected, translations);
 	}
 
 	@Test
 	public void loadFromFile_normalizationWorksAsExpected() {
-		final CountDownLatch latch = new CountDownLatch(1);
-		doAnswer((invocationOnMock) -> {
-			latch.countDown();
-			System.out.println("TestFile was parsed");
-			return null;
-		}).when(p).onParseCompletion();
-		doThrow(new AssertionError("Exception when parsing testfile")).when(p)
-				.onException(any(Exception.class), any(String.class));
-
 		Path testFolder;
 		try {
 			testFolder = Paths.get(
@@ -103,21 +76,15 @@ public class OverviewModelTest {
 					"Testfile could not be found in resources", e);
 		}
 
-		cut.loadFromDirectory(testFolder, "test");
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			// we shouldn't get interrupted, but if we do, eh well.
-			Thread.currentThread().interrupt();
-		}
+		cut.loadFromDirectory(testFolder);
 
 		verify(p).onParseCompletion();
 		verifyNoMoreInteractions(p);
 
 		Translation[] translations;
-		translations = cut.getTranslations().toArray(new Translation[0]);
+		translations = cut.getTranslations("").toArray(new Translation[0]);
 
-		assertArrayEquals(expected2, translations);
+		assertArrayEquals(expected, translations);
 	}
 
 	@Test
@@ -126,10 +93,10 @@ public class OverviewModelTest {
 		loadFromFile_andSuccessiveGet_returnCorrectInformation();
 		reset(p); // just to be sure
 
-		cut.updateTranslation("TestKey1", "New Translation");
+		cut.updateTranslation("", "TestKey1", "New Translation");
 
 		Translation[] translations;
-		translations = cut.getTranslations().toArray(new Translation[0]);
+		translations = cut.getTranslations("").toArray(new Translation[0]);
 
 		assertArrayEquals(expectedAfterEdit, translations);
 	}
@@ -139,8 +106,7 @@ public class OverviewModelTest {
 		// abusing the loading test as setup
 		loadFromFile_andSuccessiveGet_returnCorrectInformation();
 		reset(p);
-
-		Translation actual = cut.getSingleTranslation("TestKey2");
+		Translation actual = cut.getSingleTranslation("", "TestKey2");
 
 		assertEquals(expected[1], actual);
 	}

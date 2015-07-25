@@ -30,9 +30,8 @@ public class TranslationTable extends AbstractTableModel {
 			throw new IllegalArgumentException(
 					"Negative Row / Column values or Column values greater than 2 are not allowed");
 		}
-		return column == 0
-			? translations.get(row).getRootValue()
-			: translations.get(row).getTranslation();
+		return column == 0 ? translations.get(row).getValue() : translations
+				.get(row).getValue();
 	}
 
 	public String getKeyAt(final int row) {

@@ -1,10 +1,9 @@
 package de.vogel612.helper.data;
 
-
 /**
  * <p>
  * A simple data holder class to organize Translations. This class exposes an
- * immutable {@link #key}, an immutable {@link #rootValue} and a
+ * immutable {@link #key}, an immutable {@link #value} and a
  * {@link #translation} for simplicity it allows changing the translation, which
  * may be removed later, depending on how it works out.
  * </p>
@@ -18,14 +17,10 @@ public class Translation {
 	 */
 	private final String key;
 	/**
-	 * The RootValue of a Translation, meaning the "original language".
-	 * Immutable since we're not here to change the original UI
+	 * The Value of a Translation.
 	 */
-	private final String rootValue;
-	/**
-	 * The actual Translation "Value".
-	 */
-	private String translation;
+	private String value;
+
 	public static final String ELEMENT_NAME = "data";
 	public static final String KEY_NAME = "name";
 	public static final String VALUE_NAME = "value";
@@ -40,37 +35,26 @@ public class Translation {
 	 *            the "root value", which is at the same time the preliminary
 	 *            translation
 	 */
-	public Translation(final String key, final String rootValue) {
-		this(key, rootValue, rootValue);
-	}
-
-	public Translation(final String key, final String rootValue,
-			final String currentTranslation) {
+	public Translation(final String key, final String value) {
 		this.key = key;
-		this.rootValue = rootValue;
-		this.setTranslation(currentTranslation);
+		this.value = value;
 	}
 
 	public String getKey() {
 		return key;
 	}
 
-	public String getRootValue() {
-		return rootValue;
+	public void setValue(final String newValue) {
+		value = newValue;
 	}
 
-	public String getTranslation() {
-		return translation;
-	}
-
-	public void setTranslation(final String translation) {
-		this.translation = translation;
+	public String getValue() {
+		return value;
 	}
 
 	@Override
 	public String toString() {
-		return "Translation [key=" + key + ", rootValue=" + rootValue
-				+ ", translation=" + translation + "]";
+		return "Translation [key=" + key + ", value=" + value + "]";
 	}
 
 	@Override
@@ -78,10 +62,7 @@ public class Translation {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result
-				+ ((rootValue == null) ? 0 : rootValue.hashCode());
-		result = prime * result
-				+ ((translation == null) ? 0 : translation.hashCode());
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
 
@@ -99,15 +80,10 @@ public class Translation {
 				return false;
 		} else if (!key.equals(other.key))
 			return false;
-		if (rootValue == null) {
-			if (other.rootValue != null)
+		if (value == null) {
+			if (other.value != null)
 				return false;
-		} else if (!rootValue.equals(other.rootValue))
-			return false;
-		if (translation == null) {
-			if (other.translation != null)
-				return false;
-		} else if (!translation.equals(other.translation))
+		} else if (!value.equals(other.value))
 			return false;
 		return true;
 	}

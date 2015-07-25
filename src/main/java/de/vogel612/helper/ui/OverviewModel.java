@@ -9,13 +9,16 @@ public interface OverviewModel {
 
 	void register(OverviewPresenter p);
 
-	void loadFromDirectory(Path resxFolder, String targetLocale);
+	void loadFromDirectory(Path resxFolder);
 
-	List<Translation> getTranslations();
+	List<Translation> getTranslations(String locale);
 
-	Translation getSingleTranslation(String key);
+	List<String> getAvailableLocales();
 
-	void updateTranslation(String key, String newTranslation);
+	Translation getSingleTranslation(String locale, String key);
 
-	void save();
+	void updateTranslation(String locale, String key, String newTranslation);
+
+	void saveAll();
+
 }

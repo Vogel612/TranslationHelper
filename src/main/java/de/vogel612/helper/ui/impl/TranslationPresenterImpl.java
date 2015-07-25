@@ -158,10 +158,10 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 	}
 
 	private void bindControls() {
-		rootValueLabel.setText(translation.getRootValue());
-		input.setText(translation.getTranslation());
+		rootValueLabel.setText(translation.getValue());
+		input.setText(translation.getValue());
 		submit.addActionListener(event -> {
-			translation.setTranslation(input.getText());
+			translation.setValue(input.getText());
 			overview.onTranslationSubmit(translation);
 		});
 		cancel.addActionListener(event -> overview.onTranslationAbort());

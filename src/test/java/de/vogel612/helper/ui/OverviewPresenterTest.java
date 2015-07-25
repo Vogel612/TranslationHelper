@@ -76,7 +76,7 @@ public class OverviewPresenterTest {
 
 		cut.loadFiles(mock, OverviewPresenter.DEFAULT_ROOT_LOCALE,
 				OverviewPresenter.DEFAULT_TARGET_LOCALE);
-		verify(m).loadFromDirectory(mock, "de");
+		verify(m).loadFromDirectory(mock);
 		verifyNoMoreInteractions(m, v, p);
 	}
 
@@ -97,11 +97,11 @@ public class OverviewPresenterTest {
 	@Test
 	public void onParseCompletion_rebuildsView() {
 		List<Translation> list = mock(List.class);
-		doReturn(list).when(m).getTranslations();
+		doReturn(list).when(m).getTranslations("");
 
 		cut.onParseCompletion();
 
-		verify(m).getTranslations();
+		verify(m).getTranslations("");
 		verify(v).rebuildWith(list);
 		verifyNoMoreInteractions(m, v, p);
 	}
@@ -110,11 +110,11 @@ public class OverviewPresenterTest {
 	public void onTranslateRequest_delegatesToTranslationPresenter() {
 		final String key = "Key";
 		Translation fake = mock(Translation.class);
-		doReturn(fake).when(m).getSingleTranslation(key);
+		doReturn(fake).when(m).getSingleTranslation("", key);
 
 		cut.onTranslateRequest(key);
 
-		verify(m).getSingleTranslation(key);
+		verify(m).getSingleTranslation("", key);
 		verify(p).setRequestedTranslation(fake);
 		verify(p).show();
 		verifyNoMoreInteractions(m, v, p);
@@ -122,14 +122,14 @@ public class OverviewPresenterTest {
 
 	@Test
 	public void onTranslationSubmit_hidesTranslationView_propagatesEdit_updatesView() {
-		final Translation t = new Translation("Key", "Value", "Translation");
+		final Translation t = new Translation("Key", "Translation");
 		final List<Translation> list = mock(List.class);
-		doReturn(list).when(m).getTranslations();
+		doReturn(list).when(m).getTranslations("");
 
 		cut.onTranslationSubmit(t);
 
-		verify(m).updateTranslation("Key", "Translation");
-		verify(m).getTranslations();
+		verify(m).updateTranslation("", "Key", "Translation");
+		verify(m).getTranslations("");
 		verify(v).rebuildWith(list);
 		verify(p).hide();
 		verifyNoMoreInteractions(m, v, p);
@@ -147,7 +147,7 @@ public class OverviewPresenterTest {
 	public void onSaveRequest_delegatesToModel() {
 		cut.onSaveRequest();
 
-		verify(m).save();
+		verify(m).saveAll();
 		verifyNoMoreInteractions(m, v, p);
 	}
 
