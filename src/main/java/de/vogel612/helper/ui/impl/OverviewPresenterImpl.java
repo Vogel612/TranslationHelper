@@ -47,7 +47,6 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
 	@Override
 	public void onException(final Exception e, final String message) {
-		e.printStackTrace(System.err);
 		view.showError(message, e.getMessage());
 	}
 
