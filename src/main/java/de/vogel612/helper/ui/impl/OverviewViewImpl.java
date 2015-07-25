@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.data.TranslationTableRenderer;
@@ -106,7 +107,8 @@ public class OverviewViewImpl implements OverviewView {
 	}
 
 	@Override
-	public void rebuildWith(final List<Translation> translations) {
+	public void rebuildWith(final List<Translation> translations,
+			final Side side) {
 		TranslationTable model = TranslationTable
 				.fromTranslations(translations);
 		translationContainer.setModel(model);
@@ -151,9 +153,14 @@ public class OverviewViewImpl implements OverviewView {
 	}
 
 	@Override
-	public void showError(final String title, final String errorMessage) {
+	public void displayError(final String title, final String errorMessage) {
 		JOptionPane.showMessageDialog(window, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
+	}
+
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
 	}
 
 }

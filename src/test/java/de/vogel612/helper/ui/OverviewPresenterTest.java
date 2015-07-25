@@ -12,6 +12,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 
@@ -88,20 +89,26 @@ public class OverviewPresenterTest {
 
 		cut.onException(e, message);
 
-		verify(v).showError(message, errorMessage);
+		verify(v).displayError(message, errorMessage);
 		verify(e).getMessage();
 		verifyNoMoreInteractions(m, v, p);
 	}
 
 	@Test
 	public void onParseCompletion_rebuildsView() {
-		List<Translation> list = mock(List.class);
-		doReturn(list).when(m).getTranslations("");
+		List<Translation> rootList = mock(List.class);
+		doReturn(rootList).when(m).getTranslations(
+				OverviewPresenter.DEFAULT_ROOT_LOCALE);
+		List<Translation> targetList = mock(List.class);
+		doReturn(targetList).when(m).getTranslations(
+				OverviewPresenter.DEFAULT_TARGET_LOCALE);
 
 		cut.onParseCompletion();
 
-		verify(m).getTranslations("");
-		verify(v).rebuildWith(list);
+		verify(m).getTranslations(OverviewPresenter.DEFAULT_ROOT_LOCALE);
+		verify(m).getTranslations(OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		verify(v).rebuildWith(rootList, Side.LEFT);
+		verify(v).rebuildWith(targetList, Side.RIGHT);
 		verifyNoMoreInteractions(m, v, p);
 	}
 
@@ -123,13 +130,15 @@ public class OverviewPresenterTest {
 	public void onTranslationSubmit_hidesTranslationView_propagatesEdit_updatesView() {
 		final Translation t = new Translation("Key", "Translation");
 		final List<Translation> list = mock(List.class);
-		doReturn(list).when(m).getTranslations("");
+		doReturn(list).when(m).getTranslations(
+				OverviewPresenter.DEFAULT_TARGET_LOCALE);
 
 		cut.onTranslationSubmit(t);
 
-		verify(m).updateTranslation("", "Key", "Translation");
-		verify(m).getTranslations("");
-		verify(v).rebuildWith(list);
+		verify(m).updateTranslation(OverviewPresenter.DEFAULT_TARGET_LOCALE,
+				"Key", "Translation");
+		verify(m).getTranslations(OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		verify(v).rebuildWith(list, Side.RIGHT);
 		verify(p).hide();
 		verifyNoMoreInteractions(m, v, p);
 	}

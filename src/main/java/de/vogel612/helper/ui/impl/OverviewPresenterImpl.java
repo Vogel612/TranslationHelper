@@ -2,6 +2,7 @@ package de.vogel612.helper.ui.impl;
 
 import java.nio.file.Path;
 
+import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
@@ -46,13 +47,20 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	}
 
 	@Override
+	public void onTranslationRequest(final String locale, final Side side) {
+		// TODO: implement
+	}
+
+	@Override
 	public void onException(final Exception e, final String message) {
-		view.showError(message, e.getMessage());
+		view.displayError(message, e.getMessage());
 	}
 
 	@Override
 	public void onParseCompletion() {
-		view.rebuildWith(model.getTranslations(""));
+		view.rebuildWith(model.getTranslations(DEFAULT_ROOT_LOCALE), Side.LEFT);
+		view.rebuildWith(model.getTranslations(DEFAULT_TARGET_LOCALE),
+				Side.RIGHT);
 	}
 
 	@Override
@@ -63,8 +71,11 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void onTranslationSubmit(final Translation t) {
 		translationPresenter.hide();
-		model.updateTranslation("", t.getKey(), t.getValue());
-		onParseCompletion();
+		model.updateTranslation(OverviewPresenter.DEFAULT_TARGET_LOCALE,
+				t.getKey(), t.getValue());
+		// TODO clarify locale..
+		view.rebuildWith(model.getTranslations(DEFAULT_TARGET_LOCALE),
+				Side.RIGHT);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package de.vogel612.helper.ui;
 
 import java.nio.file.Path;
 
+import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 
 public interface OverviewPresenter {
@@ -14,6 +15,8 @@ public interface OverviewPresenter {
 	void initialize();
 
 	void loadFiles(Path resxFolder);
+
+	void onTranslationRequest(String locale, Side side);
 
 	void onException(Exception e, String message);
 
