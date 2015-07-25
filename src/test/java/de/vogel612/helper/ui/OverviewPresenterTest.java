@@ -74,8 +74,7 @@ public class OverviewPresenterTest {
 	public void loadFromFile_delegatesToModel() {
 		Path mock = mock(Path.class);
 
-		cut.loadFiles(mock, OverviewPresenter.DEFAULT_ROOT_LOCALE,
-				OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		cut.loadFiles(mock);
 		verify(m).loadFromDirectory(mock);
 		verifyNoMoreInteractions(m, v, p);
 	}

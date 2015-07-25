@@ -57,9 +57,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	}
 
 	@Override
-	public void loadFiles(final Path resxFolder, final String rootLocale,
-			final String targetLocale) {
-		// FIXME: use the root and targetLocale
+	public void loadFiles(final Path resxFolder) {
 		model.loadFromDirectory(resxFolder);
 	}
 

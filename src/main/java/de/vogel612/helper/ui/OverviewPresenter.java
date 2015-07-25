@@ -13,7 +13,7 @@ public interface OverviewPresenter {
 
 	void initialize();
 
-	void loadFiles(Path resxFolder, String rootLocale, String targetLocale);
+	void loadFiles(Path resxFolder);
 
 	void onException(Exception e, String message);
 
