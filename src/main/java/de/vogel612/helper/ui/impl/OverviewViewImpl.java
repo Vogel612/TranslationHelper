@@ -89,7 +89,7 @@ public class OverviewViewImpl implements OverviewView {
 		menuBar.setPreferredSize(MENU_BAR_DIMENSION);
 
 		menuBar.setBackground(new Color(0.4f, 0.2f, 0.4f, 0.2f));
-		menuBar.add(saveButton); // TODO: nicely layout
+		menuBar.add(saveButton);
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(15, 15, 15, 15);
 		constraints.gridx = 0;
@@ -97,6 +97,8 @@ public class OverviewViewImpl implements OverviewView {
 		constraints.weightx = 1.0;
 		constraints.weighty = 0.0;
 		constraints.fill = BOTH;
+
+		// TODO: Add language choice buttons and lay them out
 
 		window.add(menuBar, constraints);
 	}
@@ -109,9 +111,8 @@ public class OverviewViewImpl implements OverviewView {
 	@Override
 	public void rebuildWith(final List<Translation> translations,
 			final Side side) {
-		TranslationTable model = TranslationTable
-				.fromTranslations(translations);
-		translationContainer.setModel(model);
+		((TranslationTable) translationContainer.getModel()).setSide(side,
+				translations);
 	}
 
 	private void bindEventListener() {

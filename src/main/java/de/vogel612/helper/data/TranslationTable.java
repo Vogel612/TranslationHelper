@@ -1,17 +1,21 @@
 package de.vogel612.helper.data;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
 public class TranslationTable extends AbstractTableModel {
 
 	private static final int COLUMN_COUNT = 2;
-	final List<Translation> translations;
+	private final Map<Side, List<Translation>> data = new EnumMap<>(Side.class);
 
 	private TranslationTable(final List<Translation> translations) {
 		super();
-		this.translations = translations;
+		setSide(Side.LEFT, translations);
+		setSide(Side.RIGHT, translations);
 	}
 
 	@Override
@@ -21,7 +25,7 @@ public class TranslationTable extends AbstractTableModel {
 
 	@Override
 	public int getRowCount() {
-		return translations.size();
+		return data.get(Side.LEFT).size();
 	}
 
 	@Override
@@ -30,16 +34,26 @@ public class TranslationTable extends AbstractTableModel {
 			throw new IllegalArgumentException(
 					"Negative Row / Column values or Column values greater than 2 are not allowed");
 		}
-		return column == 0 ? translations.get(row).getValue() : translations
-				.get(row).getValue();
+		return column == 0 ? data.get(Side.LEFT).get(row).getValue() : data
+				.get(Side.RIGHT).get(row).getValue();
 	}
 
+	public void setSide(final Side side, final List<Translation> translations) {
+		List<Translation> currentOrDefault = data.getOrDefault(side,
+				new ArrayList<>());
+		if (currentOrDefault.size() != translations.size()
+				&& currentOrDefault.size() != 0) {
+			throw new IllegalArgumentException(
+					"Cannot change number of Translations!");
+		}
+		data.put(side, translations);
+	}
 	public String getKeyAt(final int row) {
 		if (row < 0) {
 			throw new IllegalArgumentException(
 					"Negative Row values are not allowed");
 		}
-		return translations.get(row).getKey();
+		return data.get(Side.LEFT).get(row).getKey();
 	}
 
 	public static TranslationTable fromTranslations(
