@@ -1,6 +1,7 @@
 package de.vogel612.helper.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -12,10 +13,15 @@ public class TranslationTable extends AbstractTableModel {
 	private static final int COLUMN_COUNT = 2;
 	private final Map<Side, List<Translation>> data = new EnumMap<>(Side.class);
 
-	private TranslationTable(final List<Translation> translations) {
+	public TranslationTable() {
+		this(Collections.emptyList(), Collections.emptyList());
+	}
+
+	public TranslationTable(final List<Translation> left,
+			final List<Translation> right) {
 		super();
-		setSide(Side.LEFT, translations);
-		setSide(Side.RIGHT, translations);
+		setSide(Side.LEFT, left);
+		setSide(Side.RIGHT, right);
 	}
 
 	@Override
@@ -54,11 +60,6 @@ public class TranslationTable extends AbstractTableModel {
 					"Negative Row values are not allowed");
 		}
 		return data.get(Side.LEFT).get(row).getKey();
-	}
-
-	public static TranslationTable fromTranslations(
-			final List<Translation> translations) {
-		return new TranslationTable(translations);
 	}
 
 }

@@ -8,17 +8,24 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+
 public class TranslationTableTests {
 
 	private static final Translation[] testData = new Translation[]{
 		new Translation("key1", "root1"), new Translation("key2", "root2")
 	};
 
+	private static final Translation[] testTranslations = new Translation[]{
+		new Translation("key1", "translation1"),
+		new Translation("key2", "translation2")
+	};
+	
 	private TranslationTable cut;
 
 	@Before
 	public void setup() {
-		cut = TranslationTable.fromTranslations(Arrays.asList(testData));
+		cut = new TranslationTable(Arrays.asList(testData),
+				Arrays.asList(testTranslations));
 	}
 
 	@Test
@@ -33,8 +40,6 @@ public class TranslationTableTests {
 	}
 
 	@Test
-	@Ignore
-	// TODO nope nope nope nope
 	public void columOne_isTranslationValue() {
 		assertEquals("translation1", cut.getValueAt(0, 1));
 		assertEquals("translation2", cut.getValueAt(1, 1));
