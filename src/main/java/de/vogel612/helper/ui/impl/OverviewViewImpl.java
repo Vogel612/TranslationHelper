@@ -44,6 +44,7 @@ public class OverviewViewImpl implements OverviewView {
 		// FIXME: send that to the presenter so we can clean up and close shit!
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		translationContainer = new JTable();
+		translationContainer.setModel(new TranslationTable());
 		menuBar = new JPanel();
 		saveButton = new JButton("save");
 	}
