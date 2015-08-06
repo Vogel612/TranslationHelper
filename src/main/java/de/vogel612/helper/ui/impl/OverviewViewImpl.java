@@ -1,5 +1,6 @@
 package de.vogel612.helper.ui.impl;
 
+import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
 
 import java.awt.Color;
@@ -27,15 +28,18 @@ import de.vogel612.helper.ui.OverviewView;
 
 public class OverviewViewImpl implements OverviewView {
 
-	private static final int DEFAULT_WIDTH = 1000;
-	private static final int DEFAULT_HEIGHT = 700;
+	private static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
+	private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 700);
 
 	private static final Dimension MENU_BAR_DIMENSION = new Dimension(800, 100);
+	private static final Dimension BUTTON_DIMENSION = new Dimension(100, 40);
 
 	private final JFrame window;
 	private final JTable translationContainer;
 	private final JPanel menuBar;
 	private final JButton saveButton;
+	private final JButton chooseLeft;
+	private final JButton chooseRight;
 
 	private OverviewPresenter presenter;
 
@@ -47,19 +51,24 @@ public class OverviewViewImpl implements OverviewView {
 		translationContainer.setModel(new TranslationTable());
 		menuBar = new JPanel();
 		saveButton = new JButton("save");
+		chooseLeft = new JButton("choose left");
+		chooseRight = new JButton("choose right");
 	}
 
 	@Override
 	public void register(final OverviewPresenter p) {
 		presenter = p;
 		saveButton.addActionListener(event -> presenter.onSaveRequest());
+		chooseLeft.addActionListener(event -> System.out.println(event
+				.getSource()));
+		chooseRight.addActionListener(event -> System.out.println(event
+				.getSource()));
 	}
-
 	@Override
 	public void initialize() {
 		window.setLayout(new GridBagLayout());
-		window.setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-		window.setMinimumSize(new Dimension(800, 500));
+		window.setSize(DEFAULT_WINDOW_SIZE);
+		window.setMinimumSize(MINIMUM_WINDOW_SIZE);
 		window.setBackground(new Color(0.2f, 0.3f, 0.7f, 1.0f));
 
 		addMenuBar();
@@ -86,11 +95,6 @@ public class OverviewViewImpl implements OverviewView {
 				new TranslationTableRenderer());
 	}
 	private void addMenuBar() {
-		menuBar.setMinimumSize(MENU_BAR_DIMENSION);
-		menuBar.setPreferredSize(MENU_BAR_DIMENSION);
-
-		menuBar.setBackground(new Color(0.4f, 0.2f, 0.4f, 0.2f));
-		menuBar.add(saveButton);
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.insets = new Insets(15, 15, 15, 15);
 		constraints.gridx = 0;
@@ -98,10 +102,17 @@ public class OverviewViewImpl implements OverviewView {
 		constraints.weightx = 1.0;
 		constraints.weighty = 0.0;
 		constraints.fill = BOTH;
+		menuBar.setLayout(new GridBagLayout());
+		menuBar.setBackground(new Color(0.4f, 0.2f, 0.4f, 0.2f));
 
-		// TODO: Add language choice buttons and lay them out
+		addToGridBag(menuBar, window, MENU_BAR_DIMENSION, constraints);
 
-		window.add(menuBar, constraints);
+		GridBagConstraints buttonConstraints = (GridBagConstraints) constraints
+				.clone();
+		buttonConstraints.gridx = GridBagConstraints.RELATIVE;
+		addToGridBag(chooseLeft, menuBar, BUTTON_DIMENSION, buttonConstraints);
+		addToGridBag(chooseRight, menuBar, BUTTON_DIMENSION, buttonConstraints);
+		addToGridBag(saveButton, menuBar, BUTTON_DIMENSION, buttonConstraints);
 	}
 
 	@Override
