@@ -4,16 +4,28 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.util.Objects;
 
 public final class UiBuilder {
 
 	public static void addToGridBag(final Component component,
 			final Container container, final Dimension dimensions,
 			final GridBagConstraints constraints) {
-		component.setMinimumSize(dimensions);
-		component.setPreferredSize(dimensions);
+		Objects.requireNonNull(component,
+				"It's kinda hard to add a component without having one");
+		Objects.requireNonNull(container,
+				"It's kinda hard to add a component without something to add it to");
 
-		container.add(component, constraints);
+		if (dimensions != null) {
+			component.setMinimumSize(dimensions);
+			component.setPreferredSize(dimensions);
+		}
+
+		if (constraints != null) {
+			container.add(component, constraints);
+		} else {
+			container.add(component);
+		}
 	}
 
 }
