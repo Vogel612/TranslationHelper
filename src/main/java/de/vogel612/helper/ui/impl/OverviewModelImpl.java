@@ -37,7 +37,7 @@ public class OverviewModelImpl implements OverviewModel {
 
 	private static final Pattern localeFinder = Pattern.compile(FILENAME_REGEX);
 
-	private final Map<String, Document> translations = new HashMap<String, Document>();
+	private final Map<String, Document> translations = new HashMap<>();
 	private final XPathFactory xPathFactory = XPathFactory.instance();
 
 	private OverviewPresenter presenter;
@@ -90,7 +90,7 @@ public class OverviewModelImpl implements OverviewModel {
 		final List<Element> translationElements = translations
 				.get(SINGLE_TRUTH_LOCALE).getRootElement()
 				.getChildren(ELEMENT_NAME);
-		final Set<String> singleTruth = new HashSet<String>();
+		final Set<String> singleTruth = new HashSet<>();
 		Iterator<Element> it = translationElements.iterator();
 
 		while (it.hasNext()) {
@@ -144,7 +144,7 @@ public class OverviewModelImpl implements OverviewModel {
 		return getTranslations(document);
 	}
 
-	private final List<Translation> getTranslations(final Document document) {
+	private List<Translation> getTranslations(final Document document) {
 		final List<Element> translationElements = document.getRootElement()
 				.getChildren(ELEMENT_NAME);
 
@@ -188,7 +188,7 @@ public class OverviewModelImpl implements OverviewModel {
 	@Override
 	public Translation getSingleTranslation(final String locale,
 			final String key) {
-		final String currentValue = getValueElement("", key).getText();
+		final String currentValue = getValueElement(locale, key).getText();
 		return new Translation(key, currentValue);
 	}
 

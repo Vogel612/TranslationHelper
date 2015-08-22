@@ -6,12 +6,16 @@ apply plugin: 'sonar-runner'
 
 version = '1.0'
 sourceCompatibility = '1.8'
-jar {
+task fatJar(type: Jar) {
+    archiveName 'TranslationHelper-all.jar'
+    destinationDir project.rootDir.toPath().resolve("dist").toFile()
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     manifest {
         attributes 'Implementation-Title': 'Translation Helper',
-                   'Implementation-Version': version,
-                   'main-class': 'de.vogel612.helper.Main'
+                'Implementation-Version': version,
+                'main-class': 'de.vogel612.helper.Main'
     }
+    with jar
 }
 
 repositories {

@@ -11,9 +11,9 @@ import de.vogel612.helper.ui.TranslationPresenter;
 
 public class OverviewPresenterImpl implements OverviewPresenter {
 
-	final OverviewModel model;
-	final OverviewView view;
-	final TranslationPresenter translationPresenter;
+	private final OverviewModel model;
+	private final OverviewView view;
+	private final TranslationPresenter translationPresenter;
 
 	private boolean initialized = false;
 

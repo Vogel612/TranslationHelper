@@ -1,11 +1,18 @@
-#eclipse-crap
+#derived resources / settings
 /bin/
-.classpath/
-.gradle/
-.project
+/dist/
 /build/
+.gradle/
+
+#eclipse-crap
+.classpath/
+.project
 .settings
 .classpath
+
+#Intelli-J crap
+*.iml
+.idea/
 
 #temp-files
 *~

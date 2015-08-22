@@ -13,7 +13,7 @@ import org.junit.Test;
 
 public class MainTests {
 
-	PrintStream outMock;
+	private PrintStream outMock;
 
 	@Before
 	public void setup() {

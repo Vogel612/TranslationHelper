@@ -16,7 +16,7 @@ public class TranslationTableRendererTests {
 
 	private final TranslationTableRenderer cut = new TranslationTableRenderer();
 
-	JTable table;
+	private JTable table;
 
 	@Before
 	public void setup() {

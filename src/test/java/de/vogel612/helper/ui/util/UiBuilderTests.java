@@ -15,10 +15,10 @@ import org.junit.Test;
 public class UiBuilderTests {
 
 	// no cut since static stuff...
-	Container container = mock(Container.class);
-	Component component = mock(Component.class);
-	Dimension dimension = mock(Dimension.class);
-	GridBagConstraints constraints = mock(GridBagConstraints.class);
+	private final Container container = mock(Container.class);
+	private final Component component = mock(Component.class);
+	private final Dimension dimension = mock(Dimension.class);
+	private final GridBagConstraints constraints = mock(GridBagConstraints.class);
 
 	@Test(expected = NullPointerException.class)
 	public void addToGridBag_nullContainer_blowsUp() {

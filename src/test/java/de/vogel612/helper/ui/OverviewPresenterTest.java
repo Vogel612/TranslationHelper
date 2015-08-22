@@ -18,11 +18,11 @@ import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 
 public class OverviewPresenterTest {
 
-	OverviewView v;
-	OverviewModel m;
-	TranslationPresenter p;
+	private OverviewView v;
+	private OverviewModel m;
+	private TranslationPresenter p;
 
-	OverviewPresenter cut;
+	private OverviewPresenter cut;
 
 	@Before
 	public void beforeTest() {
