@@ -48,7 +48,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
 	@Override
 	public void onTranslationRequest(final String locale, final Side side) {
-		// TODO: implement
+		view.rebuildWith(model.getTranslations(locale), side);
 	}
 
 	@Override
@@ -66,6 +66,11 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void loadFiles(final Path resxFolder) {
 		model.loadFromDirectory(resxFolder);
+	}
+
+	@Override
+	public String[] getLocaleOptions() {
+		return model.getAvailableLocales().toArray(new String[]{});
 	}
 
 	@Override

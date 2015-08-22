@@ -26,15 +26,12 @@ import de.vogel612.helper.data.Translation;
  * @implNote Implementation will not happen with an additional separated View
  *           interface, since there is in no way enough View-Logic to justify it
  *
- * @author vogel612<<a href="mailto:vogel612@gmx.de">vogel612@gmx.de</a>>
+ * @author vogel612
  */
 public interface TranslationPresenter {
 
-	public void register(OverviewPresenter p);
-
-	public void show();
-
-	public void hide();
-
-	public void setRequestedTranslation(Translation t);
+	void register(OverviewPresenter p);
+	void show();
+	void hide();
+	void setRequestedTranslation(Translation t);
 }

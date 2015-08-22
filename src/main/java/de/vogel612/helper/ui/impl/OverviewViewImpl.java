@@ -59,11 +59,22 @@ public class OverviewViewImpl implements OverviewView {
 	public void register(final OverviewPresenter p) {
 		presenter = p;
 		saveButton.addActionListener(event -> presenter.onSaveRequest());
-		chooseLeft.addActionListener(event -> System.out.println(event
-				.getSource()));
-		chooseRight.addActionListener(event -> System.out.println(event
-				.getSource()));
+		chooseLeft.addActionListener(event -> chooseAndLoadLanguage(Side.LEFT));
+		chooseRight.addActionListener(event -> chooseAndLoadLanguage(Side.RIGHT));
 	}
+
+	private void chooseAndLoadLanguage(Side side) {
+		String locale = chooseLocale();
+		presenter.onTranslationRequest(locale, side);
+	}
+
+	private String chooseLocale() {
+		String[] localeOptions = presenter.getLocaleOptions();
+		int selectedOption = JOptionPane.showOptionDialog(window, "Please choose the Locale out of following options:", "Choose Locale",
+				JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, localeOptions, null);
+		return localeOptions[selectedOption];
+	}
+
 	@Override
 	public void initialize() {
 		window.setLayout(new GridBagLayout());
