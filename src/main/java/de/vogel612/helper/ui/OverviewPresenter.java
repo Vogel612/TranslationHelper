@@ -19,7 +19,7 @@ public interface OverviewPresenter {
 	void onException(Exception e, String message);
 	void onParseCompletion();
 	void onTranslationSubmit(Translation t);
-	void onTranslateRequest(String key);
+	void onTranslateRequest(String key, String locale);
 	void onTranslationAbort();
 	void onSaveRequest();
 

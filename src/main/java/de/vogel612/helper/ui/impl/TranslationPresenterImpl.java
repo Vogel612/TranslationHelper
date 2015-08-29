@@ -19,7 +19,7 @@ import de.vogel612.helper.ui.TranslationPresenter;
 public class TranslationPresenterImpl implements TranslationPresenter {
 
 	private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
-	private static final String TITLE_FORMAT = "Translating - %s";
+	private static final String TITLE_FORMAT = "Translating - %s to %s";
 	private final JFrame window;
 	private final JTextField input;
 	private final JButton submit;
@@ -152,19 +152,15 @@ public class TranslationPresenterImpl implements TranslationPresenter {
 	}
 
 	@Override
-	public void setRequestedTranslation(final Translation t) {
-		translation = t;
-		bindControls();
-	}
-
-	private void bindControls() {
-		rootValueLabel.setText(translation.getValue());
+	public void setRequestedTranslation(final Translation t, final String original) {
+		this.translation = t;
+		this.rootValueLabel.setText(original);
 		input.setText(translation.getValue());
 		submit.addActionListener(event -> {
 			translation.setValue(input.getText());
 			overview.onTranslationSubmit(translation);
 		});
 		cancel.addActionListener(event -> overview.onTranslationAbort());
-		window.setTitle(String.format(TITLE_FORMAT, translation.getKey()));
+		window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
 	}
 }

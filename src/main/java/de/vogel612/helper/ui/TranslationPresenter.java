@@ -33,5 +33,5 @@ public interface TranslationPresenter {
 	void register(OverviewPresenter p);
 	void show();
 	void hide();
-	void setRequestedTranslation(Translation t);
+	void setRequestedTranslation(Translation t, String locale);
 }

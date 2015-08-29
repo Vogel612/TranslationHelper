@@ -8,12 +8,9 @@
 .classpath/
 .project
 .settings
-.classpath
-
 #Intelli-J crap
 *.iml
 .idea/
 
 #temp-files
 *~
-*.md.html

@@ -1,5 +1,6 @@
 package de.vogel612.helper.ui;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -118,26 +120,25 @@ public class OverviewPresenterTest {
 		Translation fake = mock(Translation.class);
 		doReturn(fake).when(m).getSingleTranslation("", key);
 
-		cut.onTranslateRequest(key);
+		cut.onTranslateRequest(key, "");
 
 		verify(m).getSingleTranslation("", key);
-		verify(p).setRequestedTranslation(fake);
+		verify(p).setRequestedTranslation(fake, "");
 		verify(p).show();
 		verifyNoMoreInteractions(m, v, p);
 	}
 
 	@Test
 	public void onTranslationSubmit_hidesTranslationView_propagatesEdit_updatesView() {
-		final Translation t = new Translation("Key", "Translation");
+		final Translation t = new Translation("", "Key", "Translation");
 		final List<Translation> list = mock(List.class);
-		doReturn(list).when(m).getTranslations(
-				OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		doReturn(list).when(m).getTranslations("");
 
 		cut.onTranslationSubmit(t);
 
-		verify(m).updateTranslation(OverviewPresenter.DEFAULT_TARGET_LOCALE,
+		verify(m).updateTranslation("",
 				"Key", "Translation");
-		verify(m).getTranslations(OverviewPresenter.DEFAULT_TARGET_LOCALE);
+		verify(m).getTranslations("");
 		verify(v).rebuildWith(list, Side.RIGHT);
 		verify(p).hide();
 		verifyNoMoreInteractions(m, v, p);
@@ -159,4 +160,15 @@ public class OverviewPresenterTest {
 		verifyNoMoreInteractions(m, v, p);
 	}
 
+	@Test
+	public void getLocaleOptions_delegatesToModel() {
+		final String[] expected = {"de", "en", "fr"};
+		doReturn(Arrays.asList(expected)).when(m).getAvailableLocales();
+
+		String[] actual = cut.getLocaleOptions();
+		assertArrayEquals(expected, actual);
+
+		verify(m).getAvailableLocales();
+		verifyNoMoreInteractions(m, v, p);
+	}
 }

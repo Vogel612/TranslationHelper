@@ -20,16 +20,16 @@ import de.vogel612.helper.ui.impl.OverviewModelImpl;
 public class OverviewModelTest {
 
 	private static final Translation[] expected = {
-		new Translation("TestKey1", "TestValue"),
-		new Translation("TestKey2", "Another Test Value")
+		new Translation("", "TestKey1", "TestValue"),
+		new Translation("", "TestKey2", "Another Test Value")
 	};
 	private static final Translation[] expected2 = {
-		new Translation("TestKey1", "Second Test"),
-		new Translation("TestKey2", "Another Test Value")
+		new Translation("", "TestKey1", "Second Test"),
+		new Translation("", "TestKey2", "Another Test Value")
 	};
 	private static final Translation[] expectedAfterEdit = {
-		new Translation("TestKey1", "New Translation"),
-		new Translation("TestKey2", "Another Test Value")
+		new Translation("", "TestKey1", "New Translation"),
+		new Translation("", "TestKey2", "Another Test Value")
 	};
 
 	private OverviewModelImpl cut;

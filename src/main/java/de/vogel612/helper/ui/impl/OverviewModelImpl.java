@@ -91,12 +91,10 @@ public class OverviewModelImpl implements OverviewModel {
 				.get(SINGLE_TRUTH_LOCALE).getRootElement()
 				.getChildren(ELEMENT_NAME);
 		final Set<String> singleTruth = new HashSet<>();
-		Iterator<Element> it = translationElements.iterator();
 
-		while (it.hasNext()) {
-			Element el = it.next();
-			singleTruth.add(el.getAttribute(KEY_NAME).getValue());
-		}
+		translationElements.stream()
+				.map(el -> el.getAttribute(KEY_NAME).getValue())
+				.forEach(singleTruth::add);
 
 		translations.values().forEach(
 				doc -> normalizeDocument(doc, singleTruth));
@@ -141,17 +139,13 @@ public class OverviewModelImpl implements OverviewModel {
 	@Override
 	public List<Translation> getTranslations(final String locale) {
 		Document document = translations.get(locale);
-		return getTranslations(document);
-	}
-
-	private List<Translation> getTranslations(final Document document) {
 		final List<Element> translationElements = document.getRootElement()
 				.getChildren(ELEMENT_NAME);
 
 		return translationElements.stream().map(el -> {
 			final String key = el.getAttribute(KEY_NAME).getValue();
 			final String currentValue = el.getChildText(VALUE_NAME);
-			return new Translation(key, currentValue);
+			return new Translation(locale, key, currentValue);
 		}).collect(Collectors.toList());
 	}
 
@@ -189,7 +183,7 @@ public class OverviewModelImpl implements OverviewModel {
 	public Translation getSingleTranslation(final String locale,
 			final String key) {
 		final String currentValue = getValueElement(locale, key).getText();
-		return new Translation(key, currentValue);
+		return new Translation(locale, key, currentValue);
 	}
 
 	@Override

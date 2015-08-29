@@ -1,8 +1,9 @@
 package de.vogel612.helper.data;
 
 /**
- * <p> A simple data holder class to organize Translations. This class exposes an immutable {@link #key} and  an
- * immutable {@link #value}. For simplicity it allows changing the translation, instead of requiring the creation of a
+ * <p> A simple data holder class to organize Translations. This class exposes an immutable {@link #key},
+ * an immutable {@link #locale} and  a
+ * {@link #value}. For simplicity it allows changing the translation, instead of requiring the creation of a
  * new instance </p>
  *
  * @author vogel612
@@ -13,21 +14,23 @@ public class Translation {
      */
     private final String key;
     /**
+     * The locale, which basically identifies the .resx file the Translation represents.
+     */
+    private final String locale;
+    /**
      * The Value of a Translation.
      */
     private String value;
 
-    public static final String ELEMENT_NAME = "data";
-    public static final String KEY_NAME = "name";
-    public static final String VALUE_NAME = "value";
-
     /**
-     * Creates a new translation, where the translation is equal to the "root value"
+     * Creates a new translation from the necessary information
      *
-     * @param key       the key to use for the translation
-     * @param rootValue the "root value", which is at the same time the preliminary translation
+     * @param value the current value, which is at the same time the preliminary translation
+     * @param locale The locale that translation represents.
+     * @param key The key to use for the translation
      */
-    public Translation(final String key, final String value) {
+    public Translation(String locale, final String key, final String value) {
+        this.locale = locale;
         this.key = key;
         this.value = value;
     }
@@ -46,7 +49,7 @@ public class Translation {
 
     @Override
     public String toString() {
-        return "Translation [key=" + key + ", value=" + value + "]";
+        return "Translation [key=" + key + ", value=" + value + ", locale=" + locale + "]";
     }
 
     @Override
@@ -80,4 +83,7 @@ public class Translation {
         return true;
     }
 
+    public String getLocale() {
+        return locale;
+    }
 }

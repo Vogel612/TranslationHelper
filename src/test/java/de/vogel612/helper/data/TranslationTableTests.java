@@ -11,12 +11,12 @@ import org.junit.Test;
 public class TranslationTableTests {
 
 	private static final Translation[] testData = new Translation[]{
-		new Translation("key1", "root1"), new Translation("key2", "root2")
+		new Translation("", "key1", "root1"), new Translation("", "key2", "root2")
 	};
 
 	private static final Translation[] testTranslations = new Translation[]{
-		new Translation("key1", "translation1"),
-		new Translation("key2", "translation2")
+		new Translation("", "key1", "translation1"),
+		new Translation("", "key2", "translation2")
 	};
 	
 	private TranslationTable cut;
@@ -39,7 +39,7 @@ public class TranslationTableTests {
 	}
 
 	@Test
-	public void columOne_isTranslationValue() {
+	public void columnOne_isTranslationValue() {
 		assertEquals("translation1", cut.getValueAt(0, 1));
 		assertEquals("translation2", cut.getValueAt(1, 1));
 	}

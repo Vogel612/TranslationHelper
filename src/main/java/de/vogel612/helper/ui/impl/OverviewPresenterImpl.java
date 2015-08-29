@@ -76,11 +76,8 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	@Override
 	public void onTranslationSubmit(final Translation t) {
 		translationPresenter.hide();
-		model.updateTranslation(OverviewPresenter.DEFAULT_TARGET_LOCALE,
-				t.getKey(), t.getValue());
-		// TODO clarify locale..
-		view.rebuildWith(model.getTranslations(DEFAULT_TARGET_LOCALE),
-				Side.RIGHT);
+		model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
+		view.rebuildWith(model.getTranslations(t.getLocale()), Side.RIGHT);
 	}
 
 	@Override
@@ -89,9 +86,9 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 	}
 
 	@Override
-	public void onTranslateRequest(final String key) {
-		translationPresenter.setRequestedTranslation(model
-				.getSingleTranslation("", key));
+	public void onTranslateRequest(final String key, final String locale) {
+		translationPresenter.setRequestedTranslation(
+				model.getSingleTranslation(locale, key), "" /*FIXME pass in original*/);
 		translationPresenter.show();
 	}
 

@@ -150,7 +150,7 @@ public class OverviewViewImpl implements OverviewView {
 						.getPoint());
 				final String key = ((TranslationTable) translationContainer
 						.getModel()).getKeyAt(row);
-				presenter.onTranslateRequest(key);
+				presenter.onTranslateRequest(key,"" /* FIXME pass correct locale */);
 			}
 
 			@Override
@@ -180,11 +180,6 @@ public class OverviewViewImpl implements OverviewView {
 	public void displayError(final String title, final String errorMessage) {
 		JOptionPane.showMessageDialog(window, errorMessage, title,
 				JOptionPane.ERROR_MESSAGE);
-	}
-
-	@Override
-	public void destroy() {
-		// TODO Auto-generated method stub
 	}
 
 }
