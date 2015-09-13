@@ -12,16 +12,16 @@ public class TranslationTable extends AbstractTableModel {
         this(Collections.emptyList(), Collections.emptyList());
     }
 
-    public TranslationTable(final List<Translation> left,
-      final List<Translation> right) {
-        super();
+    public TranslationTable(final List<Translation> left, final List<Translation> right) {
+        if (left.size() != right.size()) {
+            throw new IllegalArgumentException("Translations must be balanced. iow. sides must be of equal size");
+        }
         setSide(Side.LEFT, left);
         setSide(Side.RIGHT, right);
     }
 
     public void setSide(final Side side, final List<Translation> translations) {
-        List<Translation> currentOrDefault = data.getOrDefault(side,
-          new ArrayList<>());
+        List<Translation> currentOrDefault = data.getOrDefault(side, new ArrayList<>());
         if (currentOrDefault.size() != translations.size()
           && currentOrDefault.size() != 0) {
             throw new IllegalArgumentException(
@@ -46,8 +46,9 @@ public class TranslationTable extends AbstractTableModel {
             throw new IllegalArgumentException(
               "Negative Row / Column values or Column values greater than 2 are not allowed");
         }
-        return column == 0 ? data.get(Side.LEFT).get(row).getValue() : data
-          .get(Side.RIGHT).get(row).getValue();
+        return column == 0
+               ? data.get(Side.LEFT).get(row).getValue()
+               : data.get(Side.RIGHT).get(row).getValue();
     }
 
     public String getKeyAt(final int row) {

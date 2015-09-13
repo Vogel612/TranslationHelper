@@ -8,9 +8,13 @@ import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.TranslationPresenter;
 
 import java.nio.file.Path;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 public class OverviewPresenterImpl implements OverviewPresenter {
 
+    private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
     private final OverviewModel model;
     private final OverviewView view;
     private final TranslationPresenter translationPresenter;
@@ -48,7 +52,8 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
     @Override
     public void onTranslationRequest(final String locale, final Side side) {
-        view.rebuildWith(model.getTranslations(locale), side);
+        chosenLocale.put(side, locale);
+        rebuildView();
     }
 
     @Override
@@ -58,9 +63,13 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
     @Override
     public void onParseCompletion() {
-        view.rebuildWith(model.getTranslations(DEFAULT_ROOT_LOCALE), Side.LEFT);
-        view.rebuildWith(model.getTranslations(DEFAULT_TARGET_LOCALE),
-          Side.RIGHT);
+        rebuildView();
+    }
+
+    private void rebuildView() {
+        List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE));
+        List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE));
+        view.rebuildWith(left, right);
     }
 
     @Override
@@ -77,7 +86,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
     public void onTranslationSubmit(final Translation t) {
         translationPresenter.hide();
         model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
-        view.rebuildWith(model.getTranslations(t.getLocale()), Side.RIGHT);
+        rebuildView();
     }
 
     @Override

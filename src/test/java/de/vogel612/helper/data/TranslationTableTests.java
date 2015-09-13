@@ -5,26 +5,30 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.swing.*;
 import java.util.Arrays;
 
 
 public class TranslationTableTests {
 
-    private static final Translation[] testData = new Translation[]{
+    private static final Translation[] leftSide = new Translation[]{
       new Translation("", "key1", "root1"), new Translation("", "key2", "root2")
     };
 
-    private static final Translation[] testTranslations = new Translation[]{
+    private static final Translation[] rightSide = new Translation[]{
       new Translation("", "key1", "translation1"),
       new Translation("", "key2", "translation2")
+    };
+
+    private static final Translation[] unbalancedRightSide = new Translation[] {
+      new Translation("", "key1", "translation1")
     };
 
     private TranslationTable cut;
 
     @Before
     public void setup() {
-        cut = new TranslationTable(Arrays.asList(testData),
-          Arrays.asList(testTranslations));
+        cut = new TranslationTable(Arrays.asList(leftSide), Arrays.asList(rightSide));
     }
 
     @Test
@@ -52,7 +56,18 @@ public class TranslationTableTests {
 
     @Test
     public void rowCount_matchesConstructorListLength() {
-        assertEquals(testData.length, cut.getRowCount());
+        assertEquals(leftSide.length, cut.getRowCount());
+    }
+
+    @Test
+    public void getLastRow() {
+        assertEquals("root2", cut.getValueAt(cut.getRowCount() - 1, 0));
+    }
+
+    @Test
+    public void rowCount_matchesJTableRowCount() {
+        JTable container = new JTable(cut);
+        assertEquals(container.getRowCount(), cut.getRowCount());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -75,4 +90,8 @@ public class TranslationTableTests {
         cut.getKeyAt(-1);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testUnbalancedData(){
+        cut = new TranslationTable(Arrays.asList(leftSide), Arrays.asList(unbalancedRightSide));
+    }
 }

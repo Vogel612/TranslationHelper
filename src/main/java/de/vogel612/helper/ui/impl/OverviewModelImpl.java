@@ -148,9 +148,7 @@ public class OverviewModelImpl implements OverviewModel {
         final List<Element> translationElements = document.getRootElement()
           .getChildren(ELEMENT_NAME);
 
-        return translationElements.stream().map(el -> {
-            return new Translation(locale, el);
-        }).collect(Collectors.toList());
+        return translationElements.stream().map(el -> new Translation(locale, el)).collect(Collectors.toList());
     }
 
     @Override

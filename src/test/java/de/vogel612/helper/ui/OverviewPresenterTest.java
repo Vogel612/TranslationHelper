@@ -1,11 +1,13 @@
 package de.vogel612.helper.ui;
 
+import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
+import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 
@@ -95,17 +97,16 @@ public class OverviewPresenterTest {
     public void onParseCompletion_rebuildsView() {
         List<Translation> rootList = mock(List.class);
         doReturn(rootList).when(m).getTranslations(
-          OverviewPresenter.DEFAULT_ROOT_LOCALE);
+          DEFAULT_ROOT_LOCALE);
         List<Translation> targetList = mock(List.class);
         doReturn(targetList).when(m).getTranslations(
-          OverviewPresenter.DEFAULT_TARGET_LOCALE);
+          DEFAULT_TARGET_LOCALE);
 
         cut.onParseCompletion();
 
-        verify(m).getTranslations(OverviewPresenter.DEFAULT_ROOT_LOCALE);
-        verify(m).getTranslations(OverviewPresenter.DEFAULT_TARGET_LOCALE);
-        verify(v).rebuildWith(rootList, Side.LEFT);
-        verify(v).rebuildWith(targetList, Side.RIGHT);
+        verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(m).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(v).rebuildWith(rootList, targetList);
         verifyNoMoreInteractions(m, v, p);
     }
 
@@ -125,16 +126,18 @@ public class OverviewPresenterTest {
 
     @Test
     public void onTranslationSubmit_hidesTranslationView_propagatesEdit_updatesView() {
-        final Translation t = new Translation("", "Key", "Translation");
+        final Translation t = new Translation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
         final List<Translation> list = mock(List.class);
-        doReturn(list).when(m).getTranslations("");
+        final List<Translation> leftSide = mock(List.class);
+        doReturn(list).when(m).getTranslations(DEFAULT_TARGET_LOCALE);
+        doReturn(leftSide).when(m).getTranslations(DEFAULT_ROOT_LOCALE);
 
         cut.onTranslationSubmit(t);
 
-        verify(m).updateTranslation("",
-          "Key", "Translation");
-        verify(m).getTranslations("");
-        verify(v).rebuildWith(list, Side.RIGHT);
+        verify(m).updateTranslation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
+        verify(m).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(v).rebuildWith(leftSide, list);
         verify(p).hide();
         verifyNoMoreInteractions(m, v, p);
     }

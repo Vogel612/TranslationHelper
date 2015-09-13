@@ -167,10 +167,8 @@ public class OverviewViewImpl implements OverviewView {
     }
 
     @Override
-    public void rebuildWith(final List<Translation> translations,
-      final Side side) {
-        ((TranslationTable) translationContainer.getModel()).setSide(side,
-          translations);
+    public void rebuildWith(final List<Translation> left, final List<Translation> right) {
+        translationContainer.setModel(new TranslationTable(left, right));
     }
 
     @Override
