@@ -77,52 +77,52 @@ public class OverviewModelImpl implements OverviewModel {
             presenter.onException(ex, errorMessage);
         }
 
-        normalizeLocaleFiles();
+        normalizeDocuments();
         presenter.onParseCompletion();
     }
 
-    private void normalizeLocaleFiles() {
-        final List<Element> translationElements = translations
-          .get(SINGLE_TRUTH_LOCALE).getRootElement()
-          .getChildren(ELEMENT_NAME);
-        final Set<String> singleTruth = new HashSet<>();
-
-        translationElements.stream()
+    private void normalizeDocuments() {
+        final Set<String> singleTruth = translations
+          .get(SINGLE_TRUTH_LOCALE)
+          .getRootElement()
+          .getChildren(ELEMENT_NAME)
+          .stream()
           .map(el -> el.getAttribute(KEY_NAME).getValue())
-          .forEach(singleTruth::add);
+          .collect(Collectors.toSet());
 
         translations.values().forEach(
           doc -> normalizeDocument(doc, singleTruth));
 
     }
 
-    private void normalizeDocument(final Document doc,
-      final Set<String> singleTruth) {
-        final List<Element> localeElements = doc.getRootElement().getChildren(
-          ELEMENT_NAME);
+    private void normalizeDocument(final Document doc, final Set<String> singleTruth) {
+        final List<Element> localeElements = doc.getRootElement().getChildren(ELEMENT_NAME);
         Set<String> localeKeys = new HashSet<>();
 
         // remove keys not present in the Single truth
-        for (Iterator<Element> cleanupIt = localeElements.iterator(); cleanupIt.hasNext(); ) {
-            final Element el = cleanupIt.next();
+        for (Iterator<Element> it = localeElements.iterator(); it.hasNext(); ) {
+            final Element el = it.next();
             if (!singleTruth.contains(el.getAttribute(KEY_NAME).getValue())) {
-                cleanupIt.remove();
+                it.remove();
                 continue;
             }
             localeKeys.add(el.getAttribute(KEY_NAME).getValue());
         }
 
-        // build new elements for newly created keys in root
-        singleTruth.stream().filter(key -> !localeKeys.contains(key))
-          .forEach(k -> {
-              Element newElement = new Element(ELEMENT_NAME);
-              Element valueContainer = new Element(VALUE_NAME);
-              valueContainer.setText("");
+        singleTruth.stream()
+          .filter(key -> !localeKeys.contains(key))
+          .map(OverviewModelImpl::createNewElement)
+          .forEach(doc.getRootElement()::addContent);
+    }
 
-              newElement.setAttribute(KEY_NAME, k);
-              newElement.addContent(valueContainer);
-              doc.getRootElement().addContent(newElement);
-          });
+    private static Element createNewElement(String key) {
+        Element newElement = new Element(ELEMENT_NAME);
+        Element valueContainer = new Element(VALUE_NAME);
+        valueContainer.setText("");
+
+        newElement.setAttribute(KEY_NAME, key);
+        newElement.addContent(valueContainer);
+        return newElement;
     }
 
     private Document parseFile(final Path path) {
@@ -180,9 +180,8 @@ public class OverviewModelImpl implements OverviewModel {
         }
     }
 
-    private String fileNameString(final String localeIdent) {
-        return String.format(FILE_NAME_FORMAT, localeIdent.isEmpty() ? "" : "."
-          + localeIdent.toLowerCase());
+    private String fileNameString(final String locale) {
+        return String.format(FILE_NAME_FORMAT, locale.isEmpty() ? "" : "." + locale.toLowerCase());
     }
 
     @Override

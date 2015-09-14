@@ -27,6 +27,10 @@ public class OverviewModelTest {
       new Translation("", "TestKey1", "New Translation"),
       new Translation("", "TestKey2", "Another Test Value")
     };
+    private static final Translation[] expectedNormalized = {
+      new Translation("test", "TestKey1", "Second Test"),
+      new Translation("test", "TestKey2", "")
+    };
 
     private OverviewModelImpl cut;
     private OverviewPresenter p;
@@ -55,10 +59,13 @@ public class OverviewModelTest {
         verify(p).onParseCompletion();
         verifyNoMoreInteractions(p);
 
-        Translation[] translations;
-        translations = cut.getTranslations("").toArray(new Translation[0]);
+        Translation[] rootTranslations;
+        rootTranslations = cut.getTranslations("").toArray(new Translation[0]);
+        assertArrayEquals(expected, rootTranslations);
 
-        assertArrayEquals(expected, translations);
+        Translation[] normalizedTranslations;
+        normalizedTranslations  = cut.getTranslations("ts").toArray(new Translation[0]);
+        assertArrayEquals(expectedNormalized, normalizedTranslations);
     }
 
     @Test
@@ -93,7 +100,6 @@ public class OverviewModelTest {
 
         Translation[] translations;
         translations = cut.getTranslations("").toArray(new Translation[0]);
-
         assertArrayEquals(expected, translations);
     }
 
