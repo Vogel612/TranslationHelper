@@ -114,7 +114,7 @@ public class OverviewViewImpl implements OverviewView {
                   .getPoint());
                 final String key = ((TranslationTable) translationContainer
                   .getModel()).getKeyAt(row);
-                presenter.onTranslateRequest(key, "" /* FIXME pass correct locale */);
+                presenter.onTranslateRequest(key);
             }
 
             @Override

@@ -96,11 +96,9 @@ public class OverviewPresenterTest {
     @Test
     public void onParseCompletion_rebuildsView() {
         List<Translation> rootList = mock(List.class);
-        doReturn(rootList).when(m).getTranslations(
-          DEFAULT_ROOT_LOCALE);
+        doReturn(rootList).when(m).getTranslations(DEFAULT_ROOT_LOCALE);
         List<Translation> targetList = mock(List.class);
-        doReturn(targetList).when(m).getTranslations(
-          DEFAULT_TARGET_LOCALE);
+        doReturn(targetList).when(m).getTranslations(DEFAULT_TARGET_LOCALE);
 
         cut.onParseCompletion();
 
@@ -113,13 +111,16 @@ public class OverviewPresenterTest {
     @Test
     public void onTranslateRequest_delegatesToTranslationPresenter() {
         final String key = "Key";
-        Translation fake = mock(Translation.class);
-        doReturn(fake).when(m).getSingleTranslation("", key);
+        Translation fakeRoot = mock(Translation.class);
+        doReturn(fakeRoot).when(m).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        Translation fakeTarget = mock(Translation.class);
+        doReturn(fakeTarget).when(m).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
 
-        cut.onTranslateRequest(key, "");
+        cut.onTranslateRequest(key);
 
-        verify(m).getSingleTranslation("", key);
-        verify(p).setRequestedTranslation(fake, "");
+        verify(m).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        verify(m).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        verify(p).setRequestedTranslation(fakeRoot, fakeTarget);
         verify(p).show();
         verifyNoMoreInteractions(m, v, p);
     }

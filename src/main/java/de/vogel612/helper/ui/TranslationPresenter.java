@@ -35,5 +35,5 @@ public interface TranslationPresenter {
 
     void hide();
 
-    void setRequestedTranslation(Translation t, String locale);
+    void setRequestedTranslation(Translation left, Translation right);
 }

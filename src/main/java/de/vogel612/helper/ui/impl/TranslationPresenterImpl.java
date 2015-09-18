@@ -151,9 +151,9 @@ public class TranslationPresenterImpl implements TranslationPresenter {
     }
 
     @Override
-    public void setRequestedTranslation(final Translation t, final String original) {
-        this.translation = t;
-        this.rootValueLabel.setText(original);
+    public void setRequestedTranslation(Translation left, Translation right) {
+        this.translation = right;
+        this.rootValueLabel.setText(left.getValue());
         input.setText(translation.getValue());
         submit.addActionListener(event -> {
             translation.setValue(input.getText());
