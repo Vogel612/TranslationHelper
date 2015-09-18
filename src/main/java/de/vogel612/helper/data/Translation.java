@@ -1,5 +1,8 @@
 package de.vogel612.helper.data;
 
+import org.jdom2.Element;
+import de.vogel612.helper.ui.OverviewModel;
+
 /**
  * <p> A simple data holder class to organize Translations. This class exposes an immutable {@link #key},
  * an immutable {@link #locale} and  a
@@ -25,26 +28,38 @@ public class Translation {
     /**
      * Creates a new translation from the necessary information
      *
-     * @param value the current value, which is at the same time the preliminary translation
-     * @param locale The locale that translation represents.
-     * @param key The key to use for the translation
+     * @param value  The current value, which is at the same time the preliminary translation
+     * @param locale The locale that this translation represents.
+     * @param key    The key to use for the translation
      */
-    public Translation(String locale, final String key, final String value) {
+    public Translation(final String locale, final String key, final String value) {
         this.locale = locale;
         this.key = key;
         this.value = value;
+    }
+
+    /**
+     * Creates a new translation from a DOM element in a resx file
+     *
+     * @param locale The locale that this translation represents
+     * @param el     The DOM element representing a Translation
+     */
+    public Translation(final String locale, final Element el) {
+        this.key = el.getAttribute(OverviewModel.KEY_NAME).getValue();
+        this.value = el.getChildText(OverviewModel.VALUE_NAME);
+        this.locale = locale;
     }
 
     public String getKey() {
         return key;
     }
 
-    public void setValue(final String newValue) {
-        value = newValue;
-    }
-
     public String getValue() {
         return value;
+    }
+
+    public void setValue(final String newValue) {
+        value = newValue;
     }
 
     @Override
@@ -63,23 +78,16 @@ public class Translation {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (getClass() != obj.getClass()) { return false; }
         Translation other = (Translation) obj;
         if (key == null) {
-            if (other.key != null)
-                return false;
-        } else if (!key.equals(other.key))
-            return false;
+            if (other.key != null) { return false; }
+        } else if (!key.equals(other.key)) { return false; }
         if (value == null) {
-            if (other.value != null)
-                return false;
-        } else if (!value.equals(other.value))
-            return false;
+            if (other.value != null) { return false; }
+        } else if (!value.equals(other.value)) { return false; }
         return true;
     }
 

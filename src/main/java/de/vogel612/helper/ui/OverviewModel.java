@@ -1,24 +1,28 @@
 package de.vogel612.helper.ui;
 
+import de.vogel612.helper.data.Translation;
+
 import java.nio.file.Path;
 import java.util.List;
 
-import de.vogel612.helper.data.Translation;
-
 public interface OverviewModel {
 
-	void register(OverviewPresenter p);
+    String VALUE_NAME = "value";
+    String KEY_NAME = "name";
+    String SINGLE_TRUTH_LOCALE = "";
 
-	void loadFromDirectory(Path resxFolder);
+    void register(OverviewPresenter p);
 
-	List<Translation> getTranslations(String locale);
+    void loadFromDirectory(Path resxFolder);
 
-	List<String> getAvailableLocales();
+    List<Translation> getTranslations(String locale);
 
-	Translation getSingleTranslation(String locale, String key);
+    List<String> getAvailableLocales();
 
-	void updateTranslation(String locale, String key, String newTranslation);
+    Translation getSingleTranslation(String locale, String key);
 
-	void saveAll();
+    void updateTranslation(String locale, String key, String newTranslation);
+
+    void saveAll();
 
 }

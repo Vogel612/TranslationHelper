@@ -1,13 +1,17 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'sonar-runner'
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.0.1'
+    id 'sonar-runner'
+    id 'com.wiredforcode.spawn' version '0.6.0'
+}
+
+import com.wiredforcode.gradle.spawn.*;
 
 version = '1.0'
 
-task fatJar(type: Jar) {
-    dependsOn project.tasks.findByName('test')
+task fatJar(type: Jar, dependsOn: 'test') {
     archiveName 'TranslationHelper-all.jar'
     destinationDir new File(project.rootDir, "dist")
     from {
@@ -21,14 +25,10 @@ task fatJar(type: Jar) {
     with jar
 }
 
-task run(type: JavaExec) {
-    dependsOn project.tasks.findByName('compileJava')
 
-    classpath new File(project.rootDir, "bin"), configurations.compile
-    workingDir new File(project.rootDir, "bin")
-    main 'de.vogel612.helper.Main'
-
-    args "${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI"
+task run(type: SpawnProcessTask, dependsOn: 'fatJar') {
+    command "java -jar ${projectDir}/dist/TranslationHelper-all.jar ${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI"
+    ready ' '
 }
 
 repositories {
@@ -42,17 +42,6 @@ dependencies {
     compile group: 'jaxen', name: 'jaxen', version: '1.1.6'
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
-
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-    }
 }
 
 jacocoTestReport {
@@ -72,7 +61,6 @@ uploadArchives {
 }
 
 test {
-    outputs.upToDateWhen { false }
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         afterSuite { desc, result ->

@@ -1,166 +1,165 @@
 package de.vogel612.helper.ui.impl;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.TranslationPresenter;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 public class TranslationPresenterImpl implements TranslationPresenter {
 
-	private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
-	private static final String TITLE_FORMAT = "Translating - %s to %s";
-	private final JFrame window;
-	private final JTextField input;
-	private final JButton submit;
-	private final JButton cancel;
+    private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
+    private static final String TITLE_FORMAT = "Translating - %s to %s";
+    private final JFrame window;
+    private final JTextField input;
+    private final JButton submit;
+    private final JButton cancel;
 
-	private final JLabel rootValueLabel;
+    private final JLabel rootValueLabel;
 
-	private OverviewPresenter overview;
-	private Translation translation;
+    private OverviewPresenter overview;
+    private Translation translation;
 
-	public TranslationPresenterImpl() {
-		window = new JFrame("Translate:");
-		input = new JTextField();
-		submit = new JButton("okay");
-		cancel = new JButton("cancel");
+    public TranslationPresenterImpl() {
+        window = new JFrame("Translate:");
+        input = new JTextField();
+        submit = new JButton("okay");
+        cancel = new JButton("cancel");
 
-		rootValueLabel = new JLabel();
+        rootValueLabel = new JLabel();
 
-		doLayout();
+        doLayout();
 
-	}
-	private void doLayout() {
-		window.setMinimumSize(WINDOW_SIZE);
-		window.setPreferredSize(WINDOW_SIZE);
-		window.setSize(WINDOW_SIZE);
-		window.setLayout(new GridBagLayout());
+    }
 
-		addRootValueLabel();
-		addInputText();
-		addCancel();
-		addSubmit();
-	}
-	private void addSubmit() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.weightx = 1.0;
-		constraints.insets = new Insets(15, 15, 15, 15);
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 1;
-		constraints.gridy = 2;
-		constraints.weighty = 0.33;
-		window.add(submit, constraints);
-	}
-	private void addCancel() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.weightx = 1.0;
-		constraints.insets = new Insets(15, 15, 15, 15);
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 2;
-		constraints.weighty = 0.33;
-		constraints.gridwidth = 1;
-		window.add(cancel, constraints);
-	}
-	private void addInputText() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.weightx = 1.0;
-		constraints.insets = new Insets(15, 15, 15, 15);
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.weighty = 0.33;
-		window.add(input, constraints);
+    private void doLayout() {
+        window.setMinimumSize(WINDOW_SIZE);
+        window.setPreferredSize(WINDOW_SIZE);
+        window.setSize(WINDOW_SIZE);
+        window.setLayout(new GridBagLayout());
 
-		input.addKeyListener(new KeyListener() {
+        addRootValueLabel();
+        addInputText();
+        addCancel();
+        addSubmit();
+    }
 
-			@Override
-			public void keyPressed(final KeyEvent event) {
-				switch (event.getKeyCode()) {
-					case KeyEvent.VK_ESCAPE :
-						cancel.doClick();
-						break;
-					case KeyEvent.VK_ENTER :
-						handleEnter(event);
-						break;
-					default :
-						break;
-				}
-			}
+    private void addSubmit() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.weightx = 1.0;
+        constraints.insets = new Insets(15, 15, 15, 15);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.weighty = 0.33;
+        window.add(submit, constraints);
+    }
 
-			private void handleEnter(final KeyEvent event) {
-				if (event.isShiftDown()) {
-					int caret = input.getCaretPosition();
-					String newValue = input.getText();
-					newValue = newValue.substring(0, caret) + "\r\n"
-							+ newValue.substring(caret);
-					input.setText(newValue);
-				} else {
-					submit.doClick();
-				}
-			}
+    private void addCancel() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.weightx = 1.0;
+        constraints.insets = new Insets(15, 15, 15, 15);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.weighty = 0.33;
+        constraints.gridwidth = 1;
+        window.add(cancel, constraints);
+    }
 
-			@Override
-			public void keyReleased(final KeyEvent event) {
-				// Ignore, bubbles to default
-			}
+    private void addInputText() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.weightx = 1.0;
+        constraints.insets = new Insets(15, 15, 15, 15);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.weighty = 0.33;
+        window.add(input, constraints);
 
-			@Override
-			public void keyTyped(final KeyEvent event) {
-				// Ignore, bubbles to default
-			}
+        input.addKeyListener(new KeyListener() {
 
-		});
-	}
-	private void addRootValueLabel() {
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.weightx = 1.0;
-		constraints.insets = new Insets(15, 15, 15, 15);
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.gridwidth = GridBagConstraints.REMAINDER;
-		constraints.weighty = 0.33;
+            @Override
+            public void keyPressed(final KeyEvent event) {
+                switch (event.getKeyCode()) {
+                    case KeyEvent.VK_ESCAPE:
+                        cancel.doClick();
+                        break;
+                    case KeyEvent.VK_ENTER:
+                        handleEnter(event);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-		window.add(rootValueLabel, constraints);
-	}
-	@Override
-	public void register(final OverviewPresenter p) {
-		overview = p;
-	}
+            private void handleEnter(final KeyEvent event) {
+                if (event.isShiftDown()) {
+                    int caret = input.getCaretPosition();
+                    String newValue = input.getText();
+                    newValue = newValue.substring(0, caret) + "\r\n"
+                      + newValue.substring(caret);
+                    input.setText(newValue);
+                } else {
+                    submit.doClick();
+                }
+            }
 
-	@Override
-	public void show() {
-		window.setVisible(true);
-	}
+            @Override
+            public void keyReleased(final KeyEvent event) {
+                // Ignore, bubbles to default
+            }
 
-	@Override
-	public void hide() {
-		window.setVisible(false);
-	}
+            @Override
+            public void keyTyped(final KeyEvent event) {
+                // Ignore, bubbles to default
+            }
 
-	@Override
-	public void setRequestedTranslation(final Translation t, final String original) {
-		this.translation = t;
-		this.rootValueLabel.setText(original);
-		input.setText(translation.getValue());
-		submit.addActionListener(event -> {
-			translation.setValue(input.getText());
-			overview.onTranslationSubmit(translation);
-		});
-		cancel.addActionListener(event -> overview.onTranslationAbort());
-		window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
-	}
+        });
+    }
+
+    private void addRootValueLabel() {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.weightx = 1.0;
+        constraints.insets = new Insets(15, 15, 15, 15);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = GridBagConstraints.REMAINDER;
+        constraints.weighty = 0.33;
+
+        window.add(rootValueLabel, constraints);
+    }
+
+    @Override
+    public void register(final OverviewPresenter p) {
+        overview = p;
+    }
+
+    @Override
+    public void show() {
+        window.setVisible(true);
+    }
+
+    @Override
+    public void hide() {
+        window.setVisible(false);
+    }
+
+    @Override
+    public void setRequestedTranslation(Translation left, Translation right) {
+        this.translation = right;
+        this.rootValueLabel.setText(left.getValue());
+        input.setText(translation.getValue());
+        submit.addActionListener(event -> {
+            translation.setValue(input.getText());
+            overview.onTranslationSubmit(translation);
+        });
+        cancel.addActionListener(event -> overview.onTranslationAbort());
+        window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
+    }
 }
