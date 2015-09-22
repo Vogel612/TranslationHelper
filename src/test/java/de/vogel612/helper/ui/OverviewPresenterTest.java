@@ -9,7 +9,6 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
 
 import java.nio.file.Path;
 import java.util.Arrays;

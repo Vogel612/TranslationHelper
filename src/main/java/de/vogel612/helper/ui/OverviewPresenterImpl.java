@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui.impl;
+package de.vogel612.helper.ui;
 
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
@@ -21,8 +21,7 @@ public class OverviewPresenterImpl implements OverviewPresenter {
 
     private boolean initialized = false;
 
-    public OverviewPresenterImpl(final OverviewModel m, final OverviewView v,
-      final TranslationPresenter p) {
+    public OverviewPresenterImpl(final OverviewModel m, final OverviewView v, final TranslationPresenter p) {
         model = m;
         view = v;
         translationPresenter = p;

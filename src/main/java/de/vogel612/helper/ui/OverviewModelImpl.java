@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui.impl;
+package de.vogel612.helper.ui;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -10,8 +10,6 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.OverviewModel;
-import de.vogel612.helper.ui.OverviewPresenter;
 
 import java.io.IOException;
 import java.io.OutputStream;

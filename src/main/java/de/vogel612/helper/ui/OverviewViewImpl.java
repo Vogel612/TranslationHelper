@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui.impl;
+package de.vogel612.helper.ui;
 
 import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;

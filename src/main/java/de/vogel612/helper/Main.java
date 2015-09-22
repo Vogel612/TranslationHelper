@@ -3,11 +3,10 @@ package de.vogel612.helper;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.OverviewModelImpl;
+import de.vogel612.helper.ui.OverviewPresenterImpl;
+import de.vogel612.helper.ui.OverviewViewImpl;
 import de.vogel612.helper.ui.TranslationPresenter;
-import de.vogel612.helper.ui.impl.OverviewModelImpl;
-import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
-import de.vogel612.helper.ui.impl.OverviewViewImpl;
-import de.vogel612.helper.ui.impl.TranslationPresenterImpl;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,7 +36,7 @@ public class Main {
             return;
         }
 
-        TranslationPresenter tp = new TranslationPresenterImpl();
+        TranslationPresenter tp = new TranslationPresenter();
         OverviewModel m = new OverviewModelImpl();
         OverviewView v = new OverviewViewImpl();
 
