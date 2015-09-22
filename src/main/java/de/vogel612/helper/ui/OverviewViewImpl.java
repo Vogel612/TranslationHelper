@@ -7,8 +7,6 @@ import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.data.TranslationTableRenderer;
-import de.vogel612.helper.ui.OverviewPresenter;
-import de.vogel612.helper.ui.OverviewView;
 
 import javax.swing.*;
 import java.awt.*;

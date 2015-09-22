@@ -1,7 +1,6 @@
 package de.vogel612.helper.ui;
 
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.OverviewPresenter;
 
 import javax.swing.*;
 import java.awt.*;

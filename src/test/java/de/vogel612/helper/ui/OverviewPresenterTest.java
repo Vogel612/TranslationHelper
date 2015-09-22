@@ -28,7 +28,7 @@ public class OverviewPresenterTest {
         m = mock(OverviewModel.class);
         p = mock(TranslationPresenter.class);
 
-        cut = new OverviewPresenterImpl(m, v, p);
+        cut = new OverviewPresenter(m, v, p);
         reset(v, m, p);
     }
 
