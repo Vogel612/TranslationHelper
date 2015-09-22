@@ -2,10 +2,6 @@ package de.vogel612.helper.ui;
 
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.OverviewModel;
-import de.vogel612.helper.ui.OverviewPresenter;
-import de.vogel612.helper.ui.OverviewView;
-import de.vogel612.helper.ui.TranslationPresenter;
 
 import java.nio.file.Path;
 import java.util.EnumMap;

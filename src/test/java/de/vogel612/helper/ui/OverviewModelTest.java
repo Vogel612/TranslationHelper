@@ -31,12 +31,12 @@ public class OverviewModelTest {
       new Translation("test", "TestKey2", "")
     };
 
-    private OverviewModelImpl cut;
+    private OverviewModel cut;
     private OverviewPresenter p;
 
     @Before
     public void setup() {
-        cut = new OverviewModelImpl();
+        cut = new OverviewModel();
         p = mock(OverviewPresenter.class);
         cut.register(p);
     }

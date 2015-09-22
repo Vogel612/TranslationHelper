@@ -1,9 +1,8 @@
 package de.vogel612.helper;
 
-import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
-import de.vogel612.helper.ui.OverviewModelImpl;
+import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenterImpl;
 import de.vogel612.helper.ui.OverviewViewImpl;
 import de.vogel612.helper.ui.TranslationPresenter;
@@ -37,7 +36,7 @@ public class Main {
         }
 
         TranslationPresenter tp = new TranslationPresenter();
-        OverviewModel m = new OverviewModelImpl();
+        OverviewModel m = new OverviewModel();
         OverviewView v = new OverviewViewImpl();
 
         OverviewPresenter p = new OverviewPresenterImpl(m, v, tp);
