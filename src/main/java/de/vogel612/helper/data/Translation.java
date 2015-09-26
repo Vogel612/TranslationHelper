@@ -1,7 +1,8 @@
 package de.vogel612.helper.data;
 
+import static de.vogel612.helper.ui.OverviewModel.*;
+
 import org.jdom2.Element;
-import de.vogel612.helper.ui.OverviewModel;
 
 /**
  * <p> A simple data holder class to organize Translations. This class exposes an immutable {@link #key},
@@ -45,8 +46,8 @@ public class Translation {
      * @param el     The DOM element representing a Translation
      */
     public Translation(final String locale, final Element el) {
-        this.key = el.getAttribute(OverviewModel.KEY_NAME).getValue();
-        this.value = el.getChildText(OverviewModel.VALUE_NAME);
+        this.key = el.getAttribute(KEY_NAME).getValue();
+        this.value = el.getChildText(VALUE_NAME);
         this.locale = locale;
     }
 

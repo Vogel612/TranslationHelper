@@ -3,33 +3,121 @@ package de.vogel612.helper.ui;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 
+import javax.swing.*;
+import java.awt.event.WindowEvent;
 import java.nio.file.Path;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
-public interface OverviewPresenter {
+public class OverviewPresenter {
 
-    String DEFAULT_TARGET_LOCALE = "de";
-    String DEFAULT_ROOT_LOCALE = "";
+    public static final String DEFAULT_TARGET_LOCALE = "de";
+    public static final String DEFAULT_ROOT_LOCALE = "";
 
-    void show();
+    private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
+    private final OverviewModel model;
+    private final OverviewView view;
+    private final TranslationPresenter translationPresenter;
 
-    void initialize();
+    private boolean initialized = false;
 
-    void loadFiles(Path resxFolder);
+    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p) {
+        model = m;
+        view = v;
+        translationPresenter = p;
 
-    String[] getLocaleOptions();
+        view.initialize();
+    }
 
-    void onTranslationRequest(String locale, Side side);
+    public void show() {
+        if (!initialized) {
+            initialize();
+        }
+        view.show();
+    }
 
-    void onException(Exception e, String message);
+    public void initialize() {
+        // initialization shall only happen once!
+        if (initialized) {
+            return;
+        }
+        view.register(this);
+        model.register(this);
+        translationPresenter.register(this);
+        initialized = true;
+    }
 
-    void onParseCompletion();
+    public void onTranslationRequest(final String locale, final Side side) {
+        chosenLocale.put(side, locale);
+        rebuildView();
+    }
 
-    void onTranslationSubmit(Translation t);
+    public void onException(final Exception e, final String message) {
+        view.displayError(message, e.getMessage());
+    }
 
-    void onTranslateRequest(String key);
+    public void onParseCompletion() {
+        rebuildView();
+    }
 
-    void onTranslationAbort();
+    private void rebuildView() {
+        List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE));
+        List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE));
+        view.rebuildWith(left, right);
+    }
 
-    void onSaveRequest();
+    public void loadFiles(final Path resxFolder) {
+        model.loadFromDirectory(resxFolder);
+    }
 
+    public String[] getLocaleOptions() {
+        return model.getAvailableLocales().toArray(new String[]{});
+    }
+
+    public void onTranslationSubmit(final Translation t) {
+        translationPresenter.hide();
+        model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
+        rebuildView();
+    }
+
+    public void onTranslationAbort() {
+        translationPresenter.hide();
+    }
+
+    public void onTranslateRequest(final String key) {
+        translationPresenter.setRequestedTranslation(
+          model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
+          model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
+        );
+        translationPresenter.show();
+    }
+
+    public void onSaveRequest() {
+        model.saveAll();
+    }
+
+    public void onWindowCloseRequest(WindowEvent windowEvent) {
+        if (model.isNotSaved()) {
+            // prompt to save changes
+            int choice = JOptionPane.showConfirmDialog(windowEvent.getWindow(),
+              "You have unsaved changes. Do you wish to save before exiting?",
+              "Unsaved Changes",
+              JOptionPane.YES_NO_CANCEL_OPTION);
+            switch (choice) {
+                case JOptionPane.YES_OPTION:
+                    model.saveAll();
+                    // fallthrough intended
+                case JOptionPane.NO_OPTION:
+                    view.hide();
+                    System.exit(0);
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    // do nothing
+                    break;
+            }
+        } else {
+            System.exit(0);
+        }
+    }
 }

@@ -1,13 +1,11 @@
 package de.vogel612.helper;
 
+import de.vogel612.helper.data.Side;
+import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
-import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.SwingOverviewView;
 import de.vogel612.helper.ui.TranslationPresenter;
-import de.vogel612.helper.ui.impl.OverviewModelImpl;
-import de.vogel612.helper.ui.impl.OverviewPresenterImpl;
-import de.vogel612.helper.ui.impl.OverviewViewImpl;
-import de.vogel612.helper.ui.impl.TranslationPresenterImpl;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,7 +21,7 @@ public class Main {
     public static void main(final String[] args) {
         // parsing the first argument given into a proper path to load the resx
         // from
-        if (args.length != 1) {
+        if (args.length != 1 && args.length != 3) {
             // don't even bother!
             System.out.println(ARGUMENT_MISMATCH);
             return;
@@ -37,13 +35,24 @@ public class Main {
             return;
         }
 
-        TranslationPresenter tp = new TranslationPresenterImpl();
-        OverviewModel m = new OverviewModelImpl();
-        OverviewView v = new OverviewViewImpl();
+        TranslationPresenter tp = new TranslationPresenter();
+        OverviewModel m = new OverviewModel();
+        OverviewView v = new SwingOverviewView();
 
-        OverviewPresenter p = new OverviewPresenterImpl(m, v, tp);
+        OverviewPresenter p = new OverviewPresenter(m, v, tp);
         p.initialize();
         p.loadFiles(resxFolder);
+        // set the selected locales if they were specified on commandline
+        // check whether they are available before that and fall back if they aren't
+        if (args.length == 3) {
+            final String leftLocale = args[1];
+            final String rightLocale = args[2];
+            if (m.getAvailableLocales().contains(leftLocale) && m.getAvailableLocales().contains(rightLocale)) {
+                p.onTranslationRequest(leftLocale, Side.LEFT);
+                p.onTranslationRequest(rightLocale, Side.RIGHT);
+            }
+            // "fallback"
+        }
         p.show();
     }
 

@@ -1,13 +1,11 @@
 package de.vogel612.helper.ui;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.impl.OverviewModelImpl;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -32,12 +30,12 @@ public class OverviewModelTest {
       new Translation("test", "TestKey2", "")
     };
 
-    private OverviewModelImpl cut;
+    private OverviewModel cut;
     private OverviewPresenter p;
 
     @Before
     public void setup() {
-        cut = new OverviewModelImpl();
+        cut = new OverviewModel();
         p = mock(OverviewPresenter.class);
         cut.register(p);
     }
@@ -111,5 +109,16 @@ public class OverviewModelTest {
         Translation actual = cut.getSingleTranslation("", "TestKey2");
 
         assertEquals(expected[1], actual);
+    }
+
+    @Test
+    public void isNotSaved_isFalse_afterSaving() {
+        // abusing the loading test as setup
+        loadFromFile_andSuccessiveGet_returnCorrectInformation();
+        reset(p);
+
+        assertTrue(cut.isNotSaved());
+        cut.saveAll();
+        assertFalse(cut.isNotSaved());
     }
 }
