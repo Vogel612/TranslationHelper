@@ -1,5 +1,6 @@
 package de.vogel612.helper;
 
+import de.vogel612.helper.data.Side;
 import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
@@ -41,6 +42,17 @@ public class Main {
         OverviewPresenter p = new OverviewPresenter(m, v, tp);
         p.initialize();
         p.loadFiles(resxFolder);
+        // set the selected locales if they were specified on commandline
+        // check whether they are available before that and fall back if they aren't
+        if (args.length == 3) {
+            final String leftLocale = args[1];
+            final String rightLocale = args[2];
+            if (m.getAvailableLocales().contains(leftLocale) && m.getAvailableLocales().contains(rightLocale)) {
+                p.onTranslationRequest(leftLocale, Side.LEFT);
+                p.onTranslationRequest(rightLocale, Side.RIGHT);
+            }
+            // "fallback"
+        }
         p.show();
     }
 
