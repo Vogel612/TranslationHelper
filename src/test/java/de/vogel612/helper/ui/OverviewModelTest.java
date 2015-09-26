@@ -1,7 +1,6 @@
 package de.vogel612.helper.ui;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -110,5 +109,16 @@ public class OverviewModelTest {
         Translation actual = cut.getSingleTranslation("", "TestKey2");
 
         assertEquals(expected[1], actual);
+    }
+
+    @Test
+    public void isNotSaved_isFalse_afterSaving() {
+        // abusing the loading test as setup
+        loadFromFile_andSuccessiveGet_returnCorrectInformation();
+        reset(p);
+
+        assertTrue(cut.isNotSaved());
+        cut.saveAll();
+        assertFalse(cut.isNotSaved());
     }
 }
