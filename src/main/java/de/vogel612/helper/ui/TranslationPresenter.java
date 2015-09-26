@@ -55,7 +55,6 @@ public class TranslationPresenter {
         rootValueLabel = new JLabel();
 
         doLayout();
-
     }
 
     private void doLayout() {

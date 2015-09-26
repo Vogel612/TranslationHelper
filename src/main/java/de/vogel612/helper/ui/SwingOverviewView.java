@@ -12,9 +12,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.List;
 
-public class OverviewViewImpl implements OverviewView {
+public class SwingOverviewView implements OverviewView {
 
     private static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
     private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 700);
@@ -31,10 +33,10 @@ public class OverviewViewImpl implements OverviewView {
 
     private OverviewPresenter presenter;
 
-    public OverviewViewImpl() {
+    public SwingOverviewView() {
         window = new JFrame("Rubberduck Translation Helper");
-        // FIXME: send that to the presenter so we can clean up and close shit!
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
         translationContainer = new JTable();
         translationContainer.setModel(new TranslationTable());
         menuBar = new JPanel();
@@ -49,6 +51,44 @@ public class OverviewViewImpl implements OverviewView {
         saveButton.addActionListener(event -> presenter.onSaveRequest());
         chooseLeft.addActionListener(event -> chooseAndLoadLanguage(Side.LEFT));
         chooseRight.addActionListener(event -> chooseAndLoadLanguage(Side.RIGHT));
+
+        window.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent windowEvent) {
+                // nothing
+            }
+
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                p.onWindowCloseRequest(windowEvent);
+            }
+
+            @Override
+            public void windowClosed(WindowEvent windowEvent) {
+                // nothing
+            }
+
+            @Override
+            public void windowIconified(WindowEvent windowEvent) {
+                // nothing
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent windowEvent) {
+                // nothing
+            }
+
+            @Override
+            public void windowActivated(WindowEvent windowEvent) {
+                // nothing
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent windowEvent) {
+                // nothing
+            }
+        });
     }
 
     private void chooseAndLoadLanguage(Side side) {
@@ -151,17 +191,11 @@ public class OverviewViewImpl implements OverviewView {
 
         addToGridBag(menuBar, window, MENU_BAR_DIMENSION, constraints);
 
-        GridBagConstraints buttonConstraints = (GridBagConstraints) constraints
-          .clone();
+        GridBagConstraints buttonConstraints = (GridBagConstraints) constraints.clone();
         buttonConstraints.gridx = GridBagConstraints.RELATIVE;
         addToGridBag(chooseLeft, menuBar, BUTTON_DIMENSION, buttonConstraints);
         addToGridBag(chooseRight, menuBar, BUTTON_DIMENSION, buttonConstraints);
         addToGridBag(saveButton, menuBar, BUTTON_DIMENSION, buttonConstraints);
-    }
-
-    @Override
-    public void show() {
-        window.setVisible(true);
     }
 
     @Override
@@ -175,4 +209,13 @@ public class OverviewViewImpl implements OverviewView {
           JOptionPane.ERROR_MESSAGE);
     }
 
+    @Override
+    public void show() {
+        window.setVisible(true);
+    }
+
+    @Override
+    public void hide() {
+        window.setVisible(false);
+    }
 }

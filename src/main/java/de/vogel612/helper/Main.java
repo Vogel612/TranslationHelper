@@ -3,7 +3,7 @@ package de.vogel612.helper;
 import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
-import de.vogel612.helper.ui.OverviewViewImpl;
+import de.vogel612.helper.ui.SwingOverviewView;
 import de.vogel612.helper.ui.TranslationPresenter;
 
 import java.nio.file.Path;
@@ -20,7 +20,7 @@ public class Main {
     public static void main(final String[] args) {
         // parsing the first argument given into a proper path to load the resx
         // from
-        if (args.length != 1) {
+        if (args.length != 1 && args.length != 3) {
             // don't even bother!
             System.out.println(ARGUMENT_MISMATCH);
             return;
@@ -36,7 +36,7 @@ public class Main {
 
         TranslationPresenter tp = new TranslationPresenter();
         OverviewModel m = new OverviewModel();
-        OverviewView v = new OverviewViewImpl();
+        OverviewView v = new SwingOverviewView();
 
         OverviewPresenter p = new OverviewPresenter(m, v, tp);
         p.initialize();

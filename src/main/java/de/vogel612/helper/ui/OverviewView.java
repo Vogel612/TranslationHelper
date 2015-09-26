@@ -16,4 +16,5 @@ public interface OverviewView {
 
     void displayError(String title, String errorMessage);
 
+    void hide();
 }

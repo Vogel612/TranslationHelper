@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,6 +45,8 @@ public class OverviewModel {
 
     private OverviewPresenter presenter;
     private Path currentPath;
+    private final AtomicBoolean saved = new AtomicBoolean(true);
+    public static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
 
     private static String parseFileName(final Path path) {
         final Matcher localeMatcher = localeFinder.matcher(path.getFileName().toString());
@@ -92,7 +95,7 @@ public class OverviewModel {
 
         translations.values().forEach(
           doc -> normalizeDocument(doc, singleTruth));
-
+        saved.lazySet(false);
     }
 
     private void normalizeDocument(final Document doc, final Set<String> singleTruth) {
@@ -165,14 +168,14 @@ public class OverviewModel {
     }
 
     public void saveAll() {
-        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
         for (Map.Entry<String, Document> entry : translations.entrySet()) {
             final Path outFile = currentPath.resolve(fileNameString(entry
               .getKey()));
             try (OutputStream outStream = Files.newOutputStream(outFile,
               StandardOpenOption.TRUNCATE_EXISTING,
               StandardOpenOption.WRITE)) {
-                outputter.output(entry.getValue(), outStream);
+                XML_PRETTY_PRINT.output(entry.getValue(), outStream);
+                saved.lazySet(true);
             } catch (IOException e) {
                 e.printStackTrace(System.err);
                 presenter.onException(e, "Could not save File");
@@ -194,4 +197,7 @@ public class OverviewModel {
         return new ArrayList<>(translations.keySet());
     }
 
+    public boolean isNotSaved() {
+        return !saved.get();
+    }
 }

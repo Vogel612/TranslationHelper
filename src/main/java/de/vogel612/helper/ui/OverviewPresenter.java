@@ -3,6 +3,8 @@ package de.vogel612.helper.ui;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 
+import javax.swing.*;
+import java.awt.event.WindowEvent;
 import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.List;
@@ -93,5 +95,29 @@ public class OverviewPresenter {
 
     public void onSaveRequest() {
         model.saveAll();
+    }
+
+    public void onWindowCloseRequest(WindowEvent windowEvent) {
+        if (model.isNotSaved()) {
+            // prompt to save changes
+            int choice = JOptionPane.showConfirmDialog(windowEvent.getWindow(),
+              "You have unsaved changes. Do you wish to save before exiting?",
+              "Unsaved Changes",
+              JOptionPane.YES_NO_CANCEL_OPTION);
+            switch (choice) {
+                case JOptionPane.YES_OPTION:
+                    model.saveAll();
+                    // fallthrough intended
+                case JOptionPane.NO_OPTION:
+                    view.hide();
+                    System.exit(0);
+                    break;
+                case JOptionPane.CANCEL_OPTION:
+                    // do nothing
+                    break;
+            }
+        } else {
+            System.exit(0);
+        }
     }
 }
