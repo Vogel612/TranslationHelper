@@ -36,7 +36,10 @@ public class OverviewPresenterTest {
     public void initialize_registersPresenter() {
         cut.initialize();
 
-        verify(v).register(cut);
+        verify(v).addTranslationRequestListener(any());
+        verify(v).addWindowClosingListener(any());
+        verify(v).addSaveRequestListener(any());
+        verify(v).addLocaleChangeRequestListener(any());
         verify(m).register(cut);
         verify(p).register(cut);
         verifyNoMoreInteractions(m, v, p);
@@ -54,7 +57,10 @@ public class OverviewPresenterTest {
     public void show_callsInitialize_ifNotInitialized() {
         cut.show();
         verify(v).show();
-        verify(v).register(cut);
+        verify(v).addTranslationRequestListener(any());
+        verify(v).addWindowClosingListener(any());
+        verify(v).addSaveRequestListener(any());
+        verify(v).addLocaleChangeRequestListener(any());
         verify(m).register(cut);
         verify(p).register(cut);
         verifyNoMoreInteractions(m, v, p);

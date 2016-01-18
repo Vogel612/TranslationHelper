@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class OverviewPresenter {
 
+    // TODO Can we assume DEFAULTS for this??
     public static final String DEFAULT_TARGET_LOCALE = "de";
     public static final String DEFAULT_ROOT_LOCALE = "";
 
@@ -44,15 +45,18 @@ public class OverviewPresenter {
         if (initialized) {
             return;
         }
-        // TODO: Make a real event-driven model from this mess
-        view.register(this);
+        view.addLocaleChangeRequestListener(this::onLocaleRequest);
+        view.addSaveRequestListener(this::onSaveRequest);
+        view.addTranslationRequestListener(this::onTranslateRequest);
+        view.addWindowClosingListener(this::onWindowCloseRequest);
+
         model.register(this);
         translationPresenter.register(this);
         initialized = true;
     }
 
-    // This is some messed up Event mechanism. Possibly run over listeners instead?
-    public void onTranslationRequest(final String locale, final Side side) {
+    //SMELL public for main...
+    public void onLocaleRequest(final String locale, final Side side) {
         chosenLocale.put(side, locale);
         rebuildView();
     }
@@ -92,7 +96,7 @@ public class OverviewPresenter {
         translationPresenter.hide();
     }
 
-    public void onTranslateRequest(final String key) {
+    protected void onTranslateRequest(final String key) {
         translationPresenter.setRequestedTranslation(
           model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
           model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
@@ -100,11 +104,11 @@ public class OverviewPresenter {
         translationPresenter.show();
     }
 
-    public void onSaveRequest() {
+    protected void onSaveRequest() {
         model.saveAll();
     }
 
-    public void onWindowCloseRequest(WindowEvent windowEvent) {
+    private void onWindowCloseRequest(WindowEvent windowEvent) {
         if (model.isNotSaved()) {
             // prompt to save changes
             int choice = JOptionPane.showConfirmDialog(windowEvent.getWindow(),

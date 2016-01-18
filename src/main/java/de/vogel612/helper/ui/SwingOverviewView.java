@@ -12,7 +12,11 @@ import de.vogel612.helper.data.TranslationTableRenderer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class SwingOverviewView implements OverviewView {
 
@@ -29,7 +33,10 @@ public class SwingOverviewView implements OverviewView {
     private final JButton chooseLeft;
     private final JButton chooseRight;
 
-    private OverviewPresenter presenter;
+    private final Set<BiConsumer<String, Side>> localeChangeRequestListeners = new HashSet<>();
+    private final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
+    private final Set<Runnable> saveRequestListeners = new HashSet<>();
+    private final Set<Consumer<WindowEvent>> windowCloseListeners = new HashSet<>();
 
     public SwingOverviewView() {
         window = new JFrame("Rubberduck Translation Helper");
@@ -41,30 +48,47 @@ public class SwingOverviewView implements OverviewView {
         saveButton = new JButton("save");
         chooseLeft = new JButton("choose left");
         chooseRight = new JButton("choose right");
-    }
 
-    @Override
-    public void register(final OverviewPresenter p) {
-        presenter = p;
-        saveButton.addActionListener(event -> presenter.onSaveRequest());
+        saveButton.addActionListener(event -> saveRequestListeners.forEach(Runnable::run));
         chooseLeft.addActionListener(event -> chooseAndLoadLanguage(Side.LEFT));
         chooseRight.addActionListener(event -> chooseAndLoadLanguage(Side.RIGHT));
 
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                p.onWindowCloseRequest(windowEvent);
+                windowCloseListeners.forEach(l -> l.accept(windowEvent));
             }
         });
     }
 
+    @Override
+    public void addLocaleChangeRequestListener(BiConsumer<String, Side> listener) {
+        localeChangeRequestListeners.add(listener);
+    }
+
+    @Override
+    public void addTranslationRequestListener(Consumer<String> listener) {
+        translationRequestListeners.add(listener);
+    }
+    
+    @Override
+    public void addSaveRequestListener(Runnable listener) {
+        saveRequestListeners.add(listener);
+    }
+
+    @Override
+    public void addWindowClosingListener(Consumer<WindowEvent> listener) {
+        windowCloseListeners.add(listener);
+    }
+
     private void chooseAndLoadLanguage(Side side) {
         String locale = chooseLocale();
-        presenter.onTranslationRequest(locale, side);
+        localeChangeRequestListeners.forEach(l -> l.accept(locale, side));
     }
 
     private String chooseLocale() {
-        String[] localeOptions = presenter.getLocaleOptions();
+        // FIXME: Request LocaleOptions!?
+        String[] localeOptions = {""};//presenter.getLocaleOptions();
         int selectedOption = JOptionPane.showOptionDialog(window,
           "Please choose the Locale out of following options:",
           "Choose Locale",
@@ -118,7 +142,7 @@ public class SwingOverviewView implements OverviewView {
                 final int row = translationContainer.rowAtPoint(event.getPoint());
                 final String key = ((TranslationTable) translationContainer
                   .getModel()).getKeyAt(row);
-                presenter.onTranslateRequest(key);
+                translationRequestListeners.forEach(c -> c.accept(key));
             }
         });
     }

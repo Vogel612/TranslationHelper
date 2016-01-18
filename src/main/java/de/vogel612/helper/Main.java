@@ -52,8 +52,8 @@ public class Main {
             final String rightLocale = args[2];
             if (m.getAvailableLocales().contains(leftLocale)
               && m.getAvailableLocales().contains(rightLocale)) {
-                p.onTranslationRequest(leftLocale, Side.LEFT);
-                p.onTranslationRequest(rightLocale, Side.RIGHT);
+                p.onLocaleRequest(leftLocale, Side.LEFT);
+                p.onLocaleRequest(rightLocale, Side.RIGHT);
             }
             // "fallback"
         }
