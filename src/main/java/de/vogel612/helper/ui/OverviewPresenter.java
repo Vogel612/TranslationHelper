@@ -1,5 +1,7 @@
 package de.vogel612.helper.ui;
 
+import static javax.swing.JOptionPane.*;
+
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 
@@ -42,18 +44,21 @@ public class OverviewPresenter {
         if (initialized) {
             return;
         }
+        // TODO: Make a real event-driven model from this mess
         view.register(this);
         model.register(this);
         translationPresenter.register(this);
         initialized = true;
     }
 
+    // This is some messed up Event mechanism. Possibly run over listeners instead?
     public void onTranslationRequest(final String locale, final Side side) {
         chosenLocale.put(side, locale);
         rebuildView();
     }
 
     public void onException(final Exception e, final String message) {
+        // FIXME: Allow termination for unrecoverable exception
         view.displayError(message, e.getMessage());
     }
 
@@ -72,7 +77,9 @@ public class OverviewPresenter {
     }
 
     public String[] getLocaleOptions() {
-        return model.getAvailableLocales().toArray(new String[]{});
+        final List<String> availableLocales = model.getAvailableLocales();
+        // minor performance boost over passing in an empty array
+        return availableLocales.toArray(new String[availableLocales.size()]);
     }
 
     public void onTranslationSubmit(final Translation t) {
@@ -103,16 +110,16 @@ public class OverviewPresenter {
             int choice = JOptionPane.showConfirmDialog(windowEvent.getWindow(),
               "You have unsaved changes. Do you wish to save before exiting?",
               "Unsaved Changes",
-              JOptionPane.YES_NO_CANCEL_OPTION);
+              YES_NO_CANCEL_OPTION);
             switch (choice) {
-                case JOptionPane.YES_OPTION:
+                case YES_OPTION:
                     model.saveAll();
                     // fallthrough intended
-                case JOptionPane.NO_OPTION:
+                case NO_OPTION:
                     view.hide();
                     System.exit(0);
                     break;
-                case JOptionPane.CANCEL_OPTION:
+                case CANCEL_OPTION:
                     // do nothing
                     break;
             }

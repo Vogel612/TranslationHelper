@@ -11,9 +11,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
-    public static final String RUBBERDUCK_PATH = "RetailCoder.VBE/UI";
-    public static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
-    public static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
+    // FIXME: Don't rely on this!
+    private static final String RUBBERDUCK_PATH = "RetailCoder.VBE/UI";
+    // protected for testing verifications
+    protected static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
+    protected static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
 
     private Main() {
     }
@@ -30,6 +32,7 @@ public class Main {
         // normalize path to allow checking
         resxFolder = resxFolder.normalize();
 
+        // TODO: Check if we really need this...
         if (!resxFolder.endsWith(RUBBERDUCK_PATH)) {
             System.out.println(ILLEGAL_FOLDER);
             return;
@@ -47,7 +50,8 @@ public class Main {
         if (args.length == 3) {
             final String leftLocale = args[1];
             final String rightLocale = args[2];
-            if (m.getAvailableLocales().contains(leftLocale) && m.getAvailableLocales().contains(rightLocale)) {
+            if (m.getAvailableLocales().contains(leftLocale)
+              && m.getAvailableLocales().contains(rightLocale)) {
                 p.onTranslationRequest(leftLocale, Side.LEFT);
                 p.onTranslationRequest(rightLocale, Side.RIGHT);
             }

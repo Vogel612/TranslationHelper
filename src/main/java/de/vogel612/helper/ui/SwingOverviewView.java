@@ -2,6 +2,7 @@ package de.vogel612.helper.ui;
 
 import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
@@ -10,10 +11,7 @@ import de.vogel612.helper.data.TranslationTableRenderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.*;
 import java.util.List;
 
 public class SwingOverviewView implements OverviewView {
@@ -52,41 +50,10 @@ public class SwingOverviewView implements OverviewView {
         chooseLeft.addActionListener(event -> chooseAndLoadLanguage(Side.LEFT));
         chooseRight.addActionListener(event -> chooseAndLoadLanguage(Side.RIGHT));
 
-        window.addWindowListener(new WindowListener() {
-
-            @Override
-            public void windowOpened(WindowEvent windowEvent) {
-                // nothing
-            }
-
+        window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
                 p.onWindowCloseRequest(windowEvent);
-            }
-
-            @Override
-            public void windowClosed(WindowEvent windowEvent) {
-                // nothing
-            }
-
-            @Override
-            public void windowIconified(WindowEvent windowEvent) {
-                // nothing
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent windowEvent) {
-                // nothing
-            }
-
-            @Override
-            public void windowActivated(WindowEvent windowEvent) {
-                // nothing
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent windowEvent) {
-                // nothing
             }
         });
     }
@@ -141,40 +108,18 @@ public class SwingOverviewView implements OverviewView {
     }
 
     private void bindEventListener() {
-        translationContainer.addMouseListener(new MouseListener() {
+        translationContainer.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mouseClicked(final MouseEvent event) {
                 if (event.getClickCount() != 2) { // only react to doubleclicks!
                     return;
                 }
-                final int row = translationContainer.rowAtPoint(event
-                  .getPoint());
+                final int row = translationContainer.rowAtPoint(event.getPoint());
                 final String key = ((TranslationTable) translationContainer
                   .getModel()).getKeyAt(row);
                 presenter.onTranslateRequest(key);
             }
-
-            @Override
-            public void mouseEntered(final MouseEvent arg0) {
-                // IGNORE
-            }
-
-            @Override
-            public void mouseExited(final MouseEvent arg0) {
-                // IGNORE
-            }
-
-            @Override
-            public void mousePressed(final MouseEvent arg0) {
-                // IGNORE
-            }
-
-            @Override
-            public void mouseReleased(final MouseEvent arg0) {
-                // IGNORE
-            }
-
         });
     }
 
@@ -205,8 +150,7 @@ public class SwingOverviewView implements OverviewView {
 
     @Override
     public void displayError(final String title, final String errorMessage) {
-        JOptionPane.showMessageDialog(window, errorMessage, title,
-          JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(window, errorMessage, title, ERROR_MESSAGE);
     }
 
     @Override

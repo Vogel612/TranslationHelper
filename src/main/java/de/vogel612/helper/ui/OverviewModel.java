@@ -33,7 +33,7 @@ public class OverviewModel {
 
     private static final String ELEMENT_NAME = "data";
     private static final String FILE_NAME_FORMAT = "RubberduckUI%s.resx";
-    private static final String FILENAME_REGEX = "^.*RubberduckUI\\.?([a-z]{2})?\\.resx$";
+    private static final String FILENAME_REGEX = "^.*RubberduckUI\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
 
     private static final Pattern localeFinder = Pattern.compile(FILENAME_REGEX);
 
@@ -74,6 +74,7 @@ public class OverviewModel {
                 OverviewModel::parseFileName, this::parseFile)
             ));
         } catch (IOException ex) {
+            // SMELL: Why is this the responsiblity of client code?
             String errorMessage = String.format(
               "Could not access %s due to %s", resxFolder, ex);
             System.err.println(errorMessage);
