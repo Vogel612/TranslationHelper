@@ -4,10 +4,7 @@ plugins {
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.0.1'
     id 'sonar-runner'
-    id 'com.wiredforcode.spawn' version '0.6.0'
 }
-
-import com.wiredforcode.gradle.spawn.*;
 
 version = '1.0'
 
@@ -26,9 +23,10 @@ task fatJar(type: Jar, dependsOn: 'test') {
 }
 
 
-task run(type: SpawnProcessTask, dependsOn: 'fatJar') {
-    command "java -jar ${projectDir}/dist/TranslationHelper-all.jar ${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI"
-    ready ' '
+task run(type: JavaExec, dependsOn: 'test') {
+    classpath sourceSets.main.runtimeClasspath
+    main 'de.vogel612.helper.Main'
+    args ("${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI")
 }
 
 repositories {
