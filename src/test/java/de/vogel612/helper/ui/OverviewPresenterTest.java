@@ -43,8 +43,9 @@ public class OverviewPresenterTest {
         verify(v).addSaveRequestListener(any());
         verify(v).addLocaleChangeRequestListener(any());
         verify(m).addParseCompletionListener(any());
+        verify(p).addTranslationSubmitListener(any());
+        verify(p).addTranslationAbortListener(any());
 
-        verify(p).register(cut);
         verifyNoMoreInteractions(m, v, p);
     }
 
@@ -65,8 +66,9 @@ public class OverviewPresenterTest {
         verify(v).addSaveRequestListener(any());
         verify(v).addLocaleChangeRequestListener(any());
         verify(m).addParseCompletionListener(any());
+        verify(p).addTranslationSubmitListener(any());
+        verify(p).addTranslationAbortListener(any());
 
-        verify(p).register(cut);
         verifyNoMoreInteractions(m, v, p);
     }
 

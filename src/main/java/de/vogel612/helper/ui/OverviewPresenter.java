@@ -53,7 +53,9 @@ public class OverviewPresenter {
 
         model.addParseCompletionListener(this::onParseCompletion);
 
-        translationPresenter.register(this);
+        translationPresenter.addTranslationAbortListener(this::onTranslationAbort);
+        translationPresenter.addTranslationSubmitListener(this::onTranslationSubmit);
+
         initialized = true;
     }
 
@@ -89,19 +91,20 @@ public class OverviewPresenter {
         }
     }
 
+    // TODO: Push-model for caching locale options??
     public String[] getLocaleOptions() {
         final List<String> availableLocales = model.getAvailableLocales();
         // minor performance boost over passing in an empty array
         return availableLocales.toArray(new String[availableLocales.size()]);
     }
 
-    public void onTranslationSubmit(final Translation t) {
+    void onTranslationSubmit(final Translation t) {
         translationPresenter.hide();
         model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
         rebuildView();
     }
 
-    public void onTranslationAbort() {
+    void onTranslationAbort() {
         translationPresenter.hide();
     }
 

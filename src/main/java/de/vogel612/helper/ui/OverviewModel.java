@@ -25,6 +25,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Overview model. Provides in-memory caching, parsing and writing of resx file data for Rubberduck files
+ */
 public class OverviewModel {
 
     public static final String VALUE_NAME = "value";
@@ -52,8 +55,8 @@ public class OverviewModel {
         final Matcher localeMatcher = localeFinder.matcher(path.getFileName().toString());
         if (localeMatcher.find()) { // should always be true, since we check beforehand
             return localeMatcher.group(1) == null
-                                  ? SINGLE_TRUTH_LOCALE
-                                  : localeMatcher.group(1);
+                   ? SINGLE_TRUTH_LOCALE
+                   : localeMatcher.group(1);
         }
         throw new IllegalArgumentException("Argument was not a conform resx file");
     }

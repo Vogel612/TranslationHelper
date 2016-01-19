@@ -4,8 +4,11 @@ import de.vogel612.helper.data.Translation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -43,7 +46,10 @@ public class TranslationPresenter {
 
     private final JLabel rootValueLabel;
 
-    private OverviewPresenter overview;
+    private final Set<Runnable> translationAbortListeners = new HashSet<>();
+    private final Set<Consumer<Translation>> translationSubmitListeners = new HashSet<>();
+
+    //    private OverviewPresenter overview;
     private Translation translation;
 
     public TranslationPresenter() {
@@ -53,6 +59,7 @@ public class TranslationPresenter {
         cancel = new JButton("cancel");
 
         rootValueLabel = new JLabel();
+        cancel.addActionListener(event -> translationAbortListeners.forEach(Runnable::run));
 
         doLayout();
     }
@@ -103,7 +110,7 @@ public class TranslationPresenter {
         constraints.weighty = 0.33;
         window.add(input, constraints);
 
-        input.addKeyListener(new KeyListener() {
+        input.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(final KeyEvent event) {
@@ -130,17 +137,6 @@ public class TranslationPresenter {
                     submit.doClick();
                 }
             }
-
-            @Override
-            public void keyReleased(final KeyEvent event) {
-                // Ignore, bubbles to default
-            }
-
-            @Override
-            public void keyTyped(final KeyEvent event) {
-                // Ignore, bubbles to default
-            }
-
         });
     }
 
@@ -157,9 +153,9 @@ public class TranslationPresenter {
         window.add(rootValueLabel, constraints);
     }
 
-    public void register(final OverviewPresenter p) {
-        overview = p;
-    }
+//    public void register(final OverviewPresenter p) {
+//        overview = p;
+//    }
 
     public void show() {
         window.setVisible(true);
@@ -169,15 +165,22 @@ public class TranslationPresenter {
         window.setVisible(false);
     }
 
+    public void addTranslationSubmitListener(Consumer<Translation> listener) {
+        translationSubmitListeners.add(listener);
+    }
+
+    public void addTranslationAbortListener(Runnable listener) {
+        translationAbortListeners.add(listener);
+    }
+
     public void setRequestedTranslation(Translation left, Translation right) {
         this.translation = right;
         this.rootValueLabel.setText(left.getValue());
         input.setText(translation.getValue());
         submit.addActionListener(event -> {
             translation.setValue(input.getText());
-            overview.onTranslationSubmit(translation);
+            translationSubmitListeners.forEach(l -> l.accept(translation));
         });
-        cancel.addActionListener(event -> overview.onTranslationAbort());
         window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
     }
 }
