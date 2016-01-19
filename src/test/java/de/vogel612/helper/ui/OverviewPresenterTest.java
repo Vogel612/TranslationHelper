@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,8 @@ public class OverviewPresenterTest {
         verify(v).addWindowClosingListener(any());
         verify(v).addSaveRequestListener(any());
         verify(v).addLocaleChangeRequestListener(any());
-        verify(m).register(cut);
+        verify(m).addParseCompletionListener(any());
+
         verify(p).register(cut);
         verifyNoMoreInteractions(m, v, p);
     }
@@ -61,7 +63,8 @@ public class OverviewPresenterTest {
         verify(v).addWindowClosingListener(any());
         verify(v).addSaveRequestListener(any());
         verify(v).addLocaleChangeRequestListener(any());
-        verify(m).register(cut);
+        verify(m).addParseCompletionListener(any());
+
         verify(p).register(cut);
         verifyNoMoreInteractions(m, v, p);
     }
@@ -80,7 +83,12 @@ public class OverviewPresenterTest {
         Path mock = mock(Path.class);
 
         cut.loadFiles(mock);
-        verify(m).loadFromDirectory(mock);
+        try {
+            verify(m).loadFromDirectory(mock);
+        } catch (IOException e) {
+            // shouldn't ever actually happen
+            throw new AssertionError("Error when loading all files in the model", e);
+        }
         verifyNoMoreInteractions(m, v, p);
     }
 
@@ -160,7 +168,12 @@ public class OverviewPresenterTest {
     public void onSaveRequest_delegatesToModel() {
         cut.onSaveRequest();
 
-        verify(m).saveAll();
+        try {
+            verify(m).saveAll();
+        } catch (IOException e) {
+            // shouldn't ever actually happen
+            throw new AssertionError("IOException when trying to save", e);
+        }
         verifyNoMoreInteractions(m, v, p);
     }
 

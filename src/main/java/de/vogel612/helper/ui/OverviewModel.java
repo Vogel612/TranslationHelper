@@ -36,6 +36,7 @@ public class OverviewModel {
     private static final String FILENAME_REGEX = "^.*RubberduckUI\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
 
     private static final Pattern localeFinder = Pattern.compile(FILENAME_REGEX);
+    private final Set<Runnable> parseCompletionListeners = new HashSet<>();
 
     private final Map<String, Document> translations = new HashMap<>();
     private final XPathFactory xPathFactory = XPathFactory.instance();
@@ -43,7 +44,6 @@ public class OverviewModel {
       + ELEMENT_NAME + "[@" + KEY_NAME + "=$key]/"
       + VALUE_NAME, Filters.element(), Collections.singletonMap("key", ""));
 
-    private OverviewPresenter presenter;
     private Path currentPath;
     private final AtomicBoolean saved = new AtomicBoolean(true);
     public static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
@@ -59,30 +59,22 @@ public class OverviewModel {
         throw new IllegalArgumentException("Argument was not a conform resx file");
     }
 
-    public void register(final OverviewPresenter p) {
-        presenter = p;
+    public void addParseCompletionListener(Runnable listener) {
+        parseCompletionListeners.add(listener);
     }
 
-    public void loadFromDirectory(final Path resxFolder) {
+    public void loadFromDirectory(final Path resxFolder) throws IOException {
         this.currentPath = resxFolder;
         translations.clear();
-
         try (Stream<Path> resxFiles = Files.find(resxFolder, 1, (path,
             properties) -> path.toString().matches(FILENAME_REGEX),
           FileVisitOption.FOLLOW_LINKS)) {
             translations.putAll(resxFiles.collect(Collectors.toMap(
                 OverviewModel::parseFileName, this::parseFile)
             ));
-        } catch (IOException ex) {
-            // SMELL: Why is this the responsiblity of client code?
-            String errorMessage = String.format(
-              "Could not access %s due to %s", resxFolder, ex);
-            System.err.println(errorMessage);
-            presenter.onException(ex, errorMessage);
         }
-
         normalizeDocuments();
-        presenter.onParseCompletion();
+        parseCompletionListeners.forEach(Runnable::run);
     }
 
     private void normalizeDocuments() {
@@ -138,10 +130,11 @@ public class OverviewModel {
             doc = documentBuilder.build(path.toFile());
             return doc;
         } catch (JDOMException e) {
-            presenter.onException(e, "Unspecified Parsing error");
+            // FIXME: Get the presenter out of error-handling!
+            // presenter.onException(e, "Unspecified Parsing error");
             throw new IllegalStateException("Unable to parse " + xmlFile, e);
         } catch (IOException e) {
-            presenter.onException(e, "Unspecified I/O Error");
+            // presenter.onException(e, "Unspecified I/O Error");
             throw new UncheckedIOException("Unable to read" + xmlFile, e);
         }
     }
@@ -168,7 +161,7 @@ public class OverviewModel {
         return valueExpression.evaluateFirst(translations.get(locale));
     }
 
-    public void saveAll() {
+    public void saveAll() throws IOException {
         for (Map.Entry<String, Document> entry : translations.entrySet()) {
             final Path outFile = currentPath.resolve(fileNameString(entry
               .getKey()));
@@ -177,9 +170,6 @@ public class OverviewModel {
               StandardOpenOption.WRITE)) {
                 XML_PRETTY_PRINT.output(entry.getValue(), outStream);
                 saved.lazySet(true);
-            } catch (IOException e) {
-                e.printStackTrace(System.err);
-                presenter.onException(e, "Could not save File");
             }
         }
     }

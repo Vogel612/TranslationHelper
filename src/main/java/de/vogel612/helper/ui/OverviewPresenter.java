@@ -7,6 +7,7 @@ import de.vogel612.helper.data.Translation;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.List;
@@ -50,7 +51,8 @@ public class OverviewPresenter {
         view.addTranslationRequestListener(this::onTranslateRequest);
         view.addWindowClosingListener(this::onWindowCloseRequest);
 
-        model.register(this);
+        model.addParseCompletionListener(this::onParseCompletion);
+
         translationPresenter.register(this);
         initialized = true;
     }
@@ -77,7 +79,14 @@ public class OverviewPresenter {
     }
 
     public void loadFiles(final Path resxFolder) {
-        model.loadFromDirectory(resxFolder);
+        try {
+            model.loadFromDirectory(resxFolder);
+        } catch (IOException ex) {
+            String errorMessage = String.format(
+              "Could not access %s due to %s", resxFolder, ex);
+            System.err.println(errorMessage);
+            onException(ex, errorMessage);
+        }
     }
 
     public String[] getLocaleOptions() {
@@ -105,7 +114,12 @@ public class OverviewPresenter {
     }
 
     protected void onSaveRequest() {
-        model.saveAll();
+        try {
+            model.saveAll();
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
+            onException(e, "Could not save File");
+        }
     }
 
     private void onWindowCloseRequest(WindowEvent windowEvent) {
@@ -117,7 +131,8 @@ public class OverviewPresenter {
               YES_NO_CANCEL_OPTION);
             switch (choice) {
                 case YES_OPTION:
-                    model.saveAll();
+                    onSaveRequest();
+                    //FIXME: What if saving fails?
                     // fallthrough intended
                 case NO_OPTION:
                     view.hide();

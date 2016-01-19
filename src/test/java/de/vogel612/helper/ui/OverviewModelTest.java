@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,13 +32,13 @@ public class OverviewModelTest {
     };
 
     private OverviewModel cut;
-    private OverviewPresenter p;
+    private Runnable parseCallback;
 
     @Before
     public void setup() {
         cut = new OverviewModel();
-        p = mock(OverviewPresenter.class);
-        cut.register(p);
+        parseCallback = mock(Runnable.class);
+        cut.addParseCompletionListener(parseCallback);
     }
 
     @Test
@@ -52,10 +53,13 @@ public class OverviewModelTest {
               "Testfile could not be found in resources", e);
         }
 
-        cut.loadFromDirectory(testFolder);
-
-        verify(p).onParseCompletion();
-        verifyNoMoreInteractions(p);
+        try {
+            cut.loadFromDirectory(testFolder);
+        } catch (IOException e) {
+            throw new AssertionError("Failed to load files from directory", e);
+        }
+        verify(parseCallback).run();
+        verifyNoMoreInteractions(parseCallback);
 
         Translation[] rootTranslations;
         rootTranslations = cut.getTranslations("").toArray(new Translation[0]);
@@ -70,13 +74,14 @@ public class OverviewModelTest {
     public void editTranslation_updatesDocument() {
         // abusing the loading test as a setup...
         loadFromFile_andSuccessiveGet_returnCorrectInformation();
-        reset(p); // just to be sure
+        reset(parseCallback);
 
         cut.updateTranslation("", "TestKey1", "New Translation");
 
         Translation[] translations;
         translations = cut.getTranslations("").toArray(new Translation[0]);
 
+        verifyNoMoreInteractions(parseCallback);
         assertArrayEquals(expectedAfterEdit, translations);
     }
 
@@ -91,10 +96,13 @@ public class OverviewModelTest {
             throw new AssertionError(
               "Testfile could not be found in resources", e);
         }
-        cut.loadFromDirectory(testFile);
-
-        verify(p).onParseCompletion();
-        verifyNoMoreInteractions(p);
+        try {
+            cut.loadFromDirectory(testFile);
+        } catch (IOException e) {
+            throw new AssertionError("Failed to load files from directory", e);
+        }
+        verify(parseCallback).run();
+        verifyNoMoreInteractions(parseCallback);
 
         Translation[] translations;
         translations = cut.getTranslations("").toArray(new Translation[0]);
@@ -105,20 +113,27 @@ public class OverviewModelTest {
     public void getSingleTranslation_returnsExpectedValues() {
         // abusing the loading test as setup
         loadFromFile_andSuccessiveGet_returnCorrectInformation();
-        reset(p);
+        reset(parseCallback);
         Translation actual = cut.getSingleTranslation("", "TestKey2");
 
         assertEquals(expected[1], actual);
+        verifyNoMoreInteractions(parseCallback);
     }
 
     @Test
     public void isNotSaved_isFalse_afterSaving() {
         // abusing the loading test as setup
         loadFromFile_andSuccessiveGet_returnCorrectInformation();
-        reset(p);
+        reset(parseCallback);
 
+        verifyNoMoreInteractions(parseCallback);
         assertTrue(cut.isNotSaved());
-        cut.saveAll();
+        try {
+            cut.saveAll();
+        } catch (IOException e) {
+            throw new AssertionError("Error during saving, failing Unit-Test", e);
+        }
         assertFalse(cut.isNotSaved());
+        verifyNoMoreInteractions(parseCallback);
     }
 }
