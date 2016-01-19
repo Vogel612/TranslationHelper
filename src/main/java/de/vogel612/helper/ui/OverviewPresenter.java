@@ -105,7 +105,7 @@ public class OverviewPresenter {
         translationPresenter.hide();
     }
 
-    protected void onTranslateRequest(final String key) {
+    void onTranslateRequest(final String key) {
         translationPresenter.setRequestedTranslation(
           model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
           model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
@@ -113,7 +113,7 @@ public class OverviewPresenter {
         translationPresenter.show();
     }
 
-    protected void onSaveRequest() {
+    void onSaveRequest() {
         try {
             model.saveAll();
         } catch (IOException e) {

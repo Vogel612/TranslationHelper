@@ -29,7 +29,7 @@ public class OverviewModel {
 
     public static final String VALUE_NAME = "value";
     public static final String KEY_NAME = "name";
-    public static final String SINGLE_TRUTH_LOCALE = "";
+    private static final String SINGLE_TRUTH_LOCALE = "";
 
     private static final String ELEMENT_NAME = "data";
     private static final String FILE_NAME_FORMAT = "RubberduckUI%s.resx";
@@ -46,15 +46,14 @@ public class OverviewModel {
 
     private Path currentPath;
     private final AtomicBoolean saved = new AtomicBoolean(true);
-    public static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
+    private static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
 
     private static String parseFileName(final Path path) {
         final Matcher localeMatcher = localeFinder.matcher(path.getFileName().toString());
         if (localeMatcher.find()) { // should always be true, since we check beforehand
-            final String locale = localeMatcher.group(1) == null
+            return localeMatcher.group(1) == null
                                   ? SINGLE_TRUTH_LOCALE
                                   : localeMatcher.group(1);
-            return locale;
         }
         throw new IllegalArgumentException("Argument was not a conform resx file");
     }

@@ -14,8 +14,8 @@ public class Main {
     // FIXME: Don't rely on this!
     private static final String RUBBERDUCK_PATH = "RetailCoder.VBE/UI";
     // protected for testing verifications
-    protected static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
-    protected static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
+    static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
+    static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
 
     private Main() {
     }
