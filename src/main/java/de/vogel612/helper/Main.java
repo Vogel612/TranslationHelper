@@ -11,11 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
-    // FIXME: Don't rely on this!
-    private static final String RUBBERDUCK_PATH = "RetailCoder.VBE/UI";
     // protected for testing verifications
     static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
-    static final String ILLEGAL_FOLDER = "Rubberduck .resx files can only be found under RetailCoder.VBE/UI. Please give a path that points to a Rubberduck UI folder";
 
     private Main() {
     }
@@ -31,12 +28,6 @@ public class Main {
         Path resxFolder = Paths.get(args[0]);
         // normalize path to allow checking
         resxFolder = resxFolder.normalize();
-
-        // TODO: Check if we really need this...
-        if (!resxFolder.endsWith(RUBBERDUCK_PATH)) {
-            System.out.println(ILLEGAL_FOLDER);
-            return;
-        }
 
         TranslationPresenter tp = new TranslationPresenter();
         OverviewModel m = new OverviewModel();

@@ -37,16 +37,6 @@ public class MainTests {
         verifyNoMoreInteractions(outMock);
     }
 
-    @Test
-    public void main_rejectsNonRubberduckPaths() {
-        Main.main(new String[]{
-          "random/test/path"
-        });
-
-        verify(outMock).println(Main.ILLEGAL_FOLDER);
-        verifyNoMoreInteractions(outMock);
-    }
-
     @After
     public void tearDown() {
         System.setOut(null);
