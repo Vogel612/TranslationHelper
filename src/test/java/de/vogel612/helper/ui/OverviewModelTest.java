@@ -43,18 +43,18 @@ public class OverviewModelTest {
 
     @Test
     public void loadFromFile_normalizationWorksAsExpected() {
-        Path testFolder;
+        Path testFile;
         try {
-            testFolder = Paths.get(
+            testFile = Paths.get(
               getClass().getResource("RubberduckUI.resx").toURI()
-            ).getParent();
+            );
         } catch (URISyntaxException e) {
             throw new AssertionError(
               "Testfile could not be found in resources", e);
         }
 
         try {
-            cut.loadFromDirectory(testFolder);
+            cut.loadResxFileset(testFile);
         } catch (IOException e) {
             throw new AssertionError("Failed to load files from directory", e);
         }
@@ -91,13 +91,13 @@ public class OverviewModelTest {
         try {
             testFile = Paths.get(
               getClass().getResource("RubberduckUI.resx").toURI()
-            ).getParent();
+            );
         } catch (URISyntaxException e) {
             throw new AssertionError(
               "Testfile could not be found in resources", e);
         }
         try {
-            cut.loadFromDirectory(testFile);
+            cut.loadResxFileset(testFile);
         } catch (IOException e) {
             throw new AssertionError("Failed to load files from directory", e);
         }

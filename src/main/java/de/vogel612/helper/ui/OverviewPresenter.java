@@ -80,12 +80,12 @@ public class OverviewPresenter {
         view.rebuildWith(left, right);
     }
 
-    public void loadFiles(final Path resxFolder) {
+    public void loadFiles(final Path resxFile) {
         try {
-            model.loadFromDirectory(resxFolder);
+            model.loadResxFileset(resxFile);
         } catch (IOException ex) {
             String errorMessage = String.format(
-              "Could not access %s due to %s", resxFolder, ex);
+              "Could not access %s due to %s", resxFile, ex);
             System.err.println(errorMessage);
             onException(ex, errorMessage);
         }

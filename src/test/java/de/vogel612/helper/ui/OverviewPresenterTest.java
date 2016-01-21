@@ -87,7 +87,7 @@ public class OverviewPresenterTest {
 
         cut.loadFiles(mock);
         try {
-            verify(m).loadFromDirectory(mock);
+            verify(m).loadResxFileset(mock);
         } catch (IOException e) {
             // shouldn't ever actually happen
             throw new AssertionError("Error when loading all files in the model", e);
