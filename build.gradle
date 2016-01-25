@@ -26,7 +26,7 @@ task fatJar(type: Jar, dependsOn: 'test') {
 task run(type: JavaExec, dependsOn: 'test') {
     classpath sourceSets.main.runtimeClasspath
     main 'de.vogel612.helper.Main'
-    args ("${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI")
+    args ("${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI/RubberduckUI.resx")
 }
 
 repositories {

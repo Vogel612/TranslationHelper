@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 
 public class SwingOverviewView implements OverviewView {
 
-    private static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
+    static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
     private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 700);
 
     private static final Dimension MENU_BAR_DIMENSION = new Dimension(800, 100);

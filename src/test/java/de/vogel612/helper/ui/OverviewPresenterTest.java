@@ -8,6 +8,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Translation;
 
 import java.io.IOException;
@@ -177,18 +178,6 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("IOException when trying to save", e);
         }
-        verifyNoMoreInteractions(m, v, p);
-    }
-
-    @Test
-    public void getLocaleOptions_delegatesToModel() {
-        final String[] expected = { "de", "en", "fr" };
-        doReturn(Arrays.asList(expected)).when(m).getAvailableLocales();
-
-        String[] actual = cut.getLocaleOptions();
-        assertArrayEquals(expected, actual);
-
-        verify(m).getAvailableLocales();
         verifyNoMoreInteractions(m, v, p);
     }
 }

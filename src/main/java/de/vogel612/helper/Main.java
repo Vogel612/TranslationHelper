@@ -2,17 +2,16 @@ package de.vogel612.helper;
 
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.ui.OverviewView;
-import de.vogel612.helper.ui.OverviewModel;
+import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.SwingOverviewView;
 import de.vogel612.helper.ui.TranslationPresenter;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
     // protected for testing verifications
-    static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide one single path to read the Rubberduck resx from";
+    static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please give the following combination of parameters: {{Path To ResxFile} {locale_left locale_right}}";
 
     private Main() {
     }
@@ -35,6 +34,7 @@ public class Main {
 
         if (args.length == 0) {
             // filechooser
+            p.fileChoosing();
         } else {
             // FIXME If there's no supplied path, just open a JFileChooser or somesuch
             p.loadFiles(Paths.get(args[0]).normalize());

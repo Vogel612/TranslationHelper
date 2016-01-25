@@ -2,22 +2,25 @@ package de.vogel612.helper.ui;
 
 import static javax.swing.JOptionPane.*;
 
+import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class OverviewPresenter {
 
-    // TODO Can we assume DEFAULTS for this??
-    public static final String DEFAULT_TARGET_LOCALE = "de";
-    public static final String DEFAULT_ROOT_LOCALE = "";
+    static final String DEFAULT_TARGET_LOCALE = "de";
+    static final String DEFAULT_ROOT_LOCALE = "";
 
     private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
     private final OverviewModel model;
@@ -91,13 +94,6 @@ public class OverviewPresenter {
         }
     }
 
-    // TODO: Push-model for caching locale options??
-    public String[] getLocaleOptions() {
-        final List<String> availableLocales = model.getAvailableLocales();
-        // minor performance boost over passing in an empty array
-        return availableLocales.toArray(new String[availableLocales.size()]);
-    }
-
     void onTranslationSubmit(final Translation t) {
         translationPresenter.hide();
         model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
@@ -147,6 +143,34 @@ public class OverviewPresenter {
             }
         } else {
             System.exit(0);
+        }
+    }
+
+    /**
+     * Allows the user to choose an arbitrary *.regex file and asks them to choose out of the available locales for Left
+     * and Right in the view.
+     */
+    public void fileChoosing() {
+        //FIXME
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Resx files", "resx"));
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setDialogTitle("Choose a resx file kind to translate");
+        fileChooser.setCurrentDirectory(Paths.get(".").toFile());
+        fileChooser.setMinimumSize(SwingOverviewView.MINIMUM_WINDOW_SIZE);
+        fileChooser.setSize(SwingOverviewView.MINIMUM_WINDOW_SIZE);
+        int ret = fileChooser.showOpenDialog(null);
+        if (ret == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            System.out.println(file.toString());
+            // assume we got a file
+            try {
+                model.loadResxFileset(file.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return; // aborted file choice
         }
     }
 }
