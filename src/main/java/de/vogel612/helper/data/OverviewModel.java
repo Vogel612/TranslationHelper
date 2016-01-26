@@ -193,11 +193,6 @@ public class OverviewModel {
         return new Translation(locale, key, currentValue);
     }
 
-    // FIXME: Do we even need this?? Consider extracting this to the RegexChooser
-    public List<String> getAvailableLocales() {
-        return new ArrayList<>(translations.keySet());
-    }
-
     /**
      * Checks whether the current in-memory-cache has been saved to disk.<br />
      * <b>BEWARE:</b> This does not check whether the in-memory-cache is up to date with the content on disk

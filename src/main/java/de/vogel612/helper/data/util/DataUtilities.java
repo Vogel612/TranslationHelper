@@ -3,8 +3,6 @@ package de.vogel612.helper.data.util;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.Filters;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
@@ -57,6 +55,13 @@ public class DataUtilities {
         throw new IllegalArgumentException("Argument was not a conform resx file");
     }
 
+    /**
+     * Creates a new <tt>data</tt>-entry for a given key with an empty value child attached
+     *
+     * @param key The key for the new element
+     *
+     * @return The element itself
+     */
     public static Element createNewElement(String key) {
         Element newElement = new Element(ELEMENT_NAME);
         Element valueContainer = new Element(VALUE_NAME);
@@ -67,13 +72,30 @@ public class DataUtilities {
         return newElement;
     }
 
+    /**
+     * Grabs the <tt>value</tt> subelement of a resx <tt>data</tt>-entry with a specified key from a given {@link
+     * Document}
+     *
+     * @param doc The document to search for the ELement
+     * @param key The key of the associated <tt>data</tt>-entry
+     *
+     * @return The element, if it exists, null otherwise
+     */
     public static Element getValueElement(Document doc, final String key) {
         VALUE_EXPRESSION.setVariable("key", key);
         return VALUE_EXPRESSION.evaluateFirst(doc);
     }
 
+    /**
+     * Build the filename from fileset and locale
+     *
+     * @param fileset The fileset the File belongs to
+     * @param locale  The locale that's saved into that file
+     *
+     * @return The built filename as String
+     */
     public static String fileNameString(final String fileset, final String locale) {
-        return String.format(FILE_NAME_FORMAT, fileset, locale.isEmpty() ? "" : "." + locale.toLowerCase());
+        return String.format(FILE_NAME_FORMAT, fileset, locale.isEmpty() ? "" : "." + locale);
     }
 
     /**

@@ -39,16 +39,17 @@ public class Main {
             p.loadFiles(resxFile);
             // set the selected locales if they were specified on commandline
             // check whether they are available before that and fall back if they aren't
-            if (args.length == 3) {
-                final String leftLocale = args[1];
-                final String rightLocale = args[2];
-                if (m.getAvailableLocales().contains(leftLocale)
-                  && m.getAvailableLocales().contains(rightLocale)) {
-                    p.onLocaleRequest(leftLocale, Side.LEFT);
-                    p.onLocaleRequest(rightLocale, Side.RIGHT);
-                }
-                // "fallback"
-            }
+            // FIXME: select these locales in the ResxChooser
+//            if (args.length == 3) {
+//                final String leftLocale = args[1];
+//                final String rightLocale = args[2];
+//                if (m.getAvailableLocales().contains(leftLocale)
+//                  && m.getAvailableLocales().contains(rightLocale)) {
+//                    p.onLocaleRequest(leftLocale, Side.LEFT);
+//                    p.onLocaleRequest(rightLocale, Side.RIGHT);
+//                }
+//                // "fallback"
+//            }
         }
     }
 

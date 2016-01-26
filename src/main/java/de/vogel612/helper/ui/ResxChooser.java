@@ -72,11 +72,11 @@ public class ResxChooser {
         });
         rightLocaleChange.addActionListener(e -> {
             rightLocale = chooseLocale();
-            rightLocaleLbl.setText(rightLocale);
+            rightLocaleLbl.setText("RIGHT: " + rightLocale);
         });
         leftLocaleChange.addActionListener(e -> {
             leftLocale = chooseLocale();
-            leftLocaleLbl.setText(leftLocale);
+            leftLocaleLbl.setText("LEFT: " + leftLocale);
         });
         chooseFileset.addActionListener(e -> {
             int ret = fileChooser.showOpenDialog(null);
