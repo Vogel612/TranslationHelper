@@ -1,6 +1,7 @@
 package de.vogel612.helper.ui;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -64,6 +65,7 @@ public class OverviewViewTests extends AssertJSwingJUnitTestCase {
     public void saveButton_firesSaveRequestLister() {
         frame.button("save").click();
 
+        frame.requireVisible();
         verify(saveReqListener).run();
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
     }
@@ -72,7 +74,18 @@ public class OverviewViewTests extends AssertJSwingJUnitTestCase {
     public void languageRequestButton_firesLanguageRequestListener() {
         frame.button("chooseLang").click();
 
+        frame.requireVisible();
         verify(langReqListener).run();
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
     }
+
+    @Test
+    public void closingWindow_firesWindowClosingListener() {
+        frame.close();
+
+        verify(windowClosingListener).accept(any(WindowEvent.class));
+        verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
+    }
+
+    // FIXME need some translation table tests
 }
