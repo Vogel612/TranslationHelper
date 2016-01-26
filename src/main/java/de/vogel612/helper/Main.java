@@ -4,6 +4,7 @@ import de.vogel612.helper.data.Side;
 import de.vogel612.helper.ui.*;
 import de.vogel612.helper.data.OverviewModel;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
@@ -31,11 +32,11 @@ public class Main {
         p.show();
 
         if (args.length == 0) {
-            // filechooser
             p.fileChoosing();
         } else {
-            // FIXME If there's no supplied path, just open a JFileChooser or somesuch
-            p.loadFiles(Paths.get(args[0]).normalize());
+            final Path resxFile = Paths.get(args[0]).normalize();
+            rc.setFileset(resxFile);
+            p.loadFiles(resxFile);
             // set the selected locales if they were specified on commandline
             // check whether they are available before that and fall back if they aren't
             if (args.length == 3) {

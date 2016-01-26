@@ -24,15 +24,16 @@ import java.util.stream.Stream;
 // FIXME investigate moving this here
 // FIXME write unit-tests
 public class DataUtilities {
+    public static final String SINGLE_TRUTH_LOCALE = "";
+
     public static final String VALUE_NAME = "value";
     public static final String KEY_NAME = "name";
-    public static final String SINGLE_TRUTH_LOCALE = "";
     public static final String ELEMENT_NAME = "data";
-    public static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
     private static final XPathFactory X_PATH_FACTORY = XPathFactory.instance();
     public static final XPathExpression<Element> VALUE_EXPRESSION = X_PATH_FACTORY.compile("/*/"
       + ELEMENT_NAME + "[@" + KEY_NAME + "=$key]/"
       + VALUE_NAME, Filters.element(), Collections.singletonMap("key", ""));
+
     public static final String FILE_NAME_FORMAT = "%s%s.resx";
     private static final String FILENAME_REGEX = "^.*?([a-z]*)\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
     public static final Pattern FILENAME_PATTERN = Pattern.compile(FILENAME_REGEX,

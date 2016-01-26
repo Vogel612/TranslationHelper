@@ -7,7 +7,6 @@ import de.vogel612.helper.data.util.DataUtilities;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +44,7 @@ public class ResxChooser {
 
     public ResxChooser() {
         window.setLayout(new GridLayout(4, 2, 10, 10));
-        final Dimension size = new Dimension(500, 700);
+        final Dimension size = new Dimension(500, 400);
         window.setMinimumSize(size);
         window.setSize(size);
 
@@ -72,35 +71,57 @@ public class ResxChooser {
             window.setVisible(false);
         });
         rightLocaleChange.addActionListener(e -> {
-            // FIXME check we got a path and if we do, get the locales up for choice
-            return;
+            rightLocale = chooseLocale();
+            rightLocaleLbl.setText(rightLocale);
         });
         leftLocaleChange.addActionListener(e -> {
-            // FIXME see above
-            return;
+            leftLocale = chooseLocale();
+            leftLocaleLbl.setText(leftLocale);
         });
         chooseFileset.addActionListener(e -> {
             int ret = fileChooser.showOpenDialog(null);
             if (ret == JFileChooser.APPROVE_OPTION) {
                 fileset = fileChooser.getSelectedFile().toPath();
-                // FIXME update filesetLbl and get locale options
-                final Matcher filesetMatcher = FILENAME_PATTERN.matcher(fileset.getFileName().toString());
-                if (filesetMatcher.matches()) { // should always be true
-                    final String filesetName = filesetMatcher.group(1);
-                    filesetLbl.setText(filesetName); // group is not optional
-
-                    try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(fileset.getParent(), filesetName)) {
-                        localeOptionCache.clear();
-                        localeOptionCache.addAll(filesetFiles.map(
-                          DataUtilities::parseFileName).collect(
-                          Collectors.toSet()));
-                    } catch (IOException e1) {
-                        // FIXME handle
-                        e1.printStackTrace();
-                    }
-                }
+                onFilesetChange();
             }
         });
+    }
+
+    public void setFileset(Path fileset) {
+        this.fileset = fileset;
+        onFilesetChange();
+    }
+
+    private void onFilesetChange() {
+        final Matcher filesetMatcher = FILENAME_PATTERN.matcher(fileset.getFileName().toString());
+        if (filesetMatcher.matches()) { // should always be true
+            final String filesetName = filesetMatcher.group(1);
+            filesetLbl.setText(filesetName); // group is not optional
+
+            try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(fileset.getParent(), filesetName)) {
+                localeOptionCache.clear();
+                localeOptionCache.addAll(filesetFiles.map(
+                  DataUtilities::parseFileName).collect(
+                  Collectors.toSet()));
+                //FIXME drop the locales not available for this set
+            } catch (IOException e1) {
+                // FIXME handle
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    private String chooseLocale() {
+        final String[] localeChoices = localeOptionCache.toArray(new String[localeOptionCache.size()]);
+        int result = JOptionPane.showOptionDialog(window,
+          "Choose a locale",
+          "",
+          JOptionPane.DEFAULT_OPTION,
+          JOptionPane.QUESTION_MESSAGE,
+          null,
+          localeChoices,
+          localeChoices[0]);
+        return localeChoices[result];
     }
 
     public void show() {
