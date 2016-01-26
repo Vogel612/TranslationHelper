@@ -45,6 +45,9 @@ public class SwingOverviewView implements OverviewView {
         saveButton = new JButton("save");
         chooseLang = new JButton("choose sides");
 
+        saveButton.setName("save");
+        chooseLang.setName("chooseLang");
+
         saveButton.addActionListener(event -> saveRequestListeners.forEach(Runnable::run));
         chooseLang.addActionListener(event -> langChoiceRequestListeners.forEach(Runnable::run));
 

@@ -40,6 +40,7 @@ dependencies {
     compile group: 'jaxen', name: 'jaxen', version: '1.1.6'
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
+    testCompile 'org.assertj:assertj-swing-junit:3.0.2'
 }
 
 jacocoTestReport {
@@ -59,11 +60,6 @@ uploadArchives {
 }
 
 test {
-    jacoco {
-        excludes = ["de.vogel612.helper.ui.ResxChooser"
-                    , "de.vogel612.helper.ui.SwingOverviewView"
-                    , "de.vogel612.helper.ui.TranslationPresenter"]
-    }
     testLogging {
         events "passed", "skipped", "failed", "standardOut", "standardError"
         afterSuite { desc, result ->
