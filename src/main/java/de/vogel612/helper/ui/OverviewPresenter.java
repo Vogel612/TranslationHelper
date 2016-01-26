@@ -5,6 +5,7 @@ import static javax.swing.JOptionPane.*;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -26,13 +27,15 @@ public class OverviewPresenter {
     private final OverviewModel model;
     private final OverviewView view;
     private final TranslationPresenter translationPresenter;
+    private final ResxChooser resxChooser;
 
     private boolean initialized = false;
 
-    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p) {
+    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p, ResxChooser rc) {
         model = m;
         view = v;
         translationPresenter = p;
+        resxChooser = rc;
 
         view.initialize();
     }
@@ -49,7 +52,7 @@ public class OverviewPresenter {
         if (initialized) {
             return;
         }
-        view.addLocaleChangeRequestListener(this::onLocaleRequest);
+        view.addLanguageRequestListener(this::fileChoosing);
         view.addSaveRequestListener(this::onSaveRequest);
         view.addTranslationRequestListener(this::onTranslateRequest);
         view.addWindowClosingListener(this::onWindowCloseRequest);
@@ -59,10 +62,12 @@ public class OverviewPresenter {
         translationPresenter.addTranslationAbortListener(this::onTranslationAbort);
         translationPresenter.addTranslationSubmitListener(this::onTranslationSubmit);
 
+        resxChooser.addCompletionListener(this::fileChoiceCompletion);
+
         initialized = true;
     }
 
-    //SMELL public for main...
+    //FIXME SMELL public for main...
     public void onLocaleRequest(final String locale, final Side side) {
         chosenLocale.put(side, locale);
         rebuildView();
@@ -75,6 +80,12 @@ public class OverviewPresenter {
 
     public void onParseCompletion() {
         rebuildView();
+    }
+
+    private void fileChoiceCompletion(ResxChooserEvent evt) {
+        chosenLocale.put(Side.LEFT, evt.getLeftLocale());
+        chosenLocale.put(Side.RIGHT, evt.getRightLocale());
+        loadFiles(evt.getFileset());
     }
 
     private void rebuildView() {
@@ -151,26 +162,6 @@ public class OverviewPresenter {
      * and Right in the view.
      */
     public void fileChoosing() {
-        //FIXME
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Resx files", "resx"));
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setDialogTitle("Choose a resx file kind to translate");
-        fileChooser.setCurrentDirectory(Paths.get(".").toFile());
-        fileChooser.setMinimumSize(SwingOverviewView.MINIMUM_WINDOW_SIZE);
-        fileChooser.setSize(SwingOverviewView.MINIMUM_WINDOW_SIZE);
-        int ret = fileChooser.showOpenDialog(null);
-        if (ret == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            System.out.println(file.toString());
-            // assume we got a file
-            try {
-                model.loadResxFileset(file.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            return; // aborted file choice
-        }
+        resxChooser.show();
     }
 }

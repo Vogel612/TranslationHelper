@@ -22,7 +22,7 @@ public interface OverviewView {
 
     void hide();
 
-    void addLocaleChangeRequestListener(BiConsumer<String, Side> listener);
+    void addLanguageRequestListener(Runnable listener);
 
     void addTranslationRequestListener(Consumer<String> listener);
 

@@ -68,13 +68,7 @@ public class OverviewModel {
         }
         translations.clear();
 
-        // FIXME get this kinda available to ResxChooser to allow that one to get the locales himself
-        try (Stream<Path> resxFiles = Files.find(currentPath,
-          1,
-          // build our own matcher for filenames in the set!
-          //TODO investigate move
-          (path, properties) -> path.getFileName().toString().matches(String.format(FILESET_REGEX, currentFileset)),
-          FileVisitOption.FOLLOW_LINKS)) {
+        try (Stream<Path> resxFiles = DataUtilities.streamFileset(currentPath, currentFileset)) {
             translations.putAll(resxFiles.collect(Collectors.toMap(
                 DataUtilities::parseFileName, this::parseFile)
             ));

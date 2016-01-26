@@ -13,7 +13,6 @@ import de.vogel612.helper.data.Translation;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
@@ -22,6 +21,7 @@ public class OverviewPresenterTest {
     private OverviewView v;
     private OverviewModel m;
     private TranslationPresenter p;
+    private ResxChooser rc;
 
     private OverviewPresenter cut;
 
@@ -30,9 +30,10 @@ public class OverviewPresenterTest {
         v = mock(OverviewView.class);
         m = mock(OverviewModel.class);
         p = mock(TranslationPresenter.class);
+        rc = mock(ResxChooser.class);
 
-        cut = new OverviewPresenter(m, v, p);
-        reset(v, m, p);
+        cut = new OverviewPresenter(m, v, p, rc);
+        reset(v, m, p, rc);
     }
 
     @Test
@@ -42,7 +43,7 @@ public class OverviewPresenterTest {
         verify(v).addTranslationRequestListener(any());
         verify(v).addWindowClosingListener(any());
         verify(v).addSaveRequestListener(any());
-        verify(v).addLocaleChangeRequestListener(any());
+        verify(v).addLanguageRequestListener(any());
         verify(m).addParseCompletionListener(any());
         verify(p).addTranslationSubmitListener(any());
         verify(p).addTranslationAbortListener(any());
@@ -53,9 +54,9 @@ public class OverviewPresenterTest {
     @Test
     public void initialize_registersPresenter_onlyOnce() {
         cut.initialize();
-        reset(m, v, p);
+        reset(m, v, p, rc);
         cut.initialize();
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -65,21 +66,22 @@ public class OverviewPresenterTest {
         verify(v).addTranslationRequestListener(any());
         verify(v).addWindowClosingListener(any());
         verify(v).addSaveRequestListener(any());
-        verify(v).addLocaleChangeRequestListener(any());
+        verify(v).addLanguageRequestListener(any());
         verify(m).addParseCompletionListener(any());
         verify(p).addTranslationSubmitListener(any());
         verify(p).addTranslationAbortListener(any());
+        verify(rc).addCompletionListener(any());
 
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
     public void show_callsShow_onView() {
         cut.initialize();
-        reset(m, v, p);
+        reset(m, v, p, rc);
         cut.show();
         verify(v).show();
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -93,7 +95,7 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("Error when loading all files in the model", e);
         }
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -107,7 +109,7 @@ public class OverviewPresenterTest {
 
         verify(v).displayError(message, errorMessage);
         verify(e).getMessage();
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -122,7 +124,7 @@ public class OverviewPresenterTest {
         verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
         verify(m).getTranslations(DEFAULT_TARGET_LOCALE);
         verify(v).rebuildWith(rootList, targetList);
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -139,7 +141,7 @@ public class OverviewPresenterTest {
         verify(m).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
         verify(p).setRequestedTranslation(fakeRoot, fakeTarget);
         verify(p).show();
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -157,7 +159,7 @@ public class OverviewPresenterTest {
         verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
         verify(v).rebuildWith(leftSide, list);
         verify(p).hide();
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -165,7 +167,7 @@ public class OverviewPresenterTest {
         cut.onTranslationAbort();
 
         verify(p).hide();
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 
     @Test
@@ -178,6 +180,6 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("IOException when trying to save", e);
         }
-        verifyNoMoreInteractions(m, v, p);
+        verifyNoMoreInteractions(m, v, p, rc);
     }
 }

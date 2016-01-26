@@ -1,11 +1,8 @@
 package de.vogel612.helper;
 
 import de.vogel612.helper.data.Side;
-import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.*;
 import de.vogel612.helper.data.OverviewModel;
-import de.vogel612.helper.ui.OverviewPresenter;
-import de.vogel612.helper.ui.SwingOverviewView;
-import de.vogel612.helper.ui.TranslationPresenter;
 
 import java.nio.file.Paths;
 
@@ -26,10 +23,11 @@ public class Main {
         }
 
         TranslationPresenter tp = new TranslationPresenter();
+        ResxChooser rc = new ResxChooser();
         OverviewModel m = new OverviewModel();
         OverviewView v = new SwingOverviewView();
 
-        OverviewPresenter p = new OverviewPresenter(m, v, tp);
+        OverviewPresenter p = new OverviewPresenter(m, v, tp, rc);
         p.show();
 
         if (args.length == 0) {
