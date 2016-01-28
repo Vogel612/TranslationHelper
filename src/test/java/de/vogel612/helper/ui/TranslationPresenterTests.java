@@ -3,9 +3,7 @@ package de.vogel612.helper.ui;
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
@@ -37,6 +35,8 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
 
         abortListener = mock(Runnable.class);
         submitListener = mock(Consumer.class);
+
+        robot().settings().delayBetweenEvents(20);
     }
 
     @Before
@@ -44,7 +44,7 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
         cut = new TranslationPresenter();
         cut.addTranslationAbortListener(abortListener);
         cut.addTranslationSubmitListener(submitListener);
-        cut.setRequestedTranslation(new Translation("","",""), new Translation("","",""));
+        cut.setRequestedTranslation(new Translation("", "", ""), new Translation("", "", ""));
         cut.show();
 
         frame = findFrame(new GenericTypeMatcher<Frame>(Frame.class) {
@@ -61,6 +61,18 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
 
         frame.requireVisible();
         verify(abortListener).run();
+        verifyNoMoreInteractions(abortListener, submitListener);
+    }
+
+    @Test
+    public void settingTranslation_fillsRelevantUI() {
+        cut.setRequestedTranslation(new Translation("src", "key", "original"),
+          new Translation("target", "key", "current"));
+
+        frame.textBox().requireText("current");
+        frame.textBox().requireEditable();
+        frame.label().requireText("original");
+        // FIXME verify title
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 

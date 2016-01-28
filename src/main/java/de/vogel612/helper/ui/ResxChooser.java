@@ -56,6 +56,12 @@ public class ResxChooser {
         window.add(chooseFileset);
         window.add(submit);
 
+        // unit-test related
+        submit.setName("submit");
+        chooseFileset.setName("fileset");
+        rightLocaleChange.setName("right");
+        leftLocaleChange.setName("left");
+
         fileChooser.setFileFilter(new FileNameExtensionFilter("Resx files", "resx"));
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDialogTitle("Choose a resx file kind to translate");
@@ -89,7 +95,9 @@ public class ResxChooser {
 
     public void setFileset(Path fileset) {
         this.fileset = fileset;
-        onFilesetChange();
+        if (fileset != null) { // FIXME should we even allow null??
+            onFilesetChange();
+        }
     }
 
     private void onFilesetChange() {
