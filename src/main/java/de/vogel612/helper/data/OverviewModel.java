@@ -72,7 +72,7 @@ public class OverviewModel {
 
         try (Stream<Path> resxFiles = DataUtilities.streamFileset(currentPath, currentFileset)) {
             translations.putAll(resxFiles.collect(Collectors.toMap(
-                DataUtilities::parseFileName, this::parseFile)
+                DataUtilities::parseLocale, this::parseFile)
             ));
         }
         normalizeDocuments();

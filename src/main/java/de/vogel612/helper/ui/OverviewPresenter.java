@@ -8,20 +8,17 @@ import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class OverviewPresenter {
 
-    static final String DEFAULT_TARGET_LOCALE = "de";
-    static final String DEFAULT_ROOT_LOCALE = "";
+    public static final String DEFAULT_TARGET_LOCALE = "de";
+    public static final String DEFAULT_ROOT_LOCALE = "";
 
     private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
     private final OverviewModel model;
@@ -67,12 +64,6 @@ public class OverviewPresenter {
         initialized = true;
     }
 
-    //FIXME SMELL public for main...
-    public void onLocaleRequest(final String locale, final Side side) {
-        chosenLocale.put(side, locale);
-        rebuildView();
-    }
-
     public void onException(final Exception e, final String message) {
         // FIXME: Allow termination for unrecoverable exception
         view.displayError(message, e.getMessage());
@@ -82,7 +73,8 @@ public class OverviewPresenter {
         rebuildView();
     }
 
-    private void fileChoiceCompletion(ResxChooserEvent evt) {
+    public void fileChoiceCompletion(ResxChooserEvent evt) {
+        resxChooser.hide();
         chosenLocale.put(Side.LEFT, evt.getLeftLocale());
         chosenLocale.put(Side.RIGHT, evt.getRightLocale());
         loadFiles(evt.getFileset());

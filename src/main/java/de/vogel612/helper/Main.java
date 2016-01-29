@@ -1,15 +1,20 @@
 package de.vogel612.helper;
 
+import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
+import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
+
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.ui.*;
 import de.vogel612.helper.data.OverviewModel;
+import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Predicate;
 
 public class Main {
     // protected for testing verifications
-    static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please give the following combination of parameters: {{Path To ResxFile} {locale_left locale_right}}";
+    static final String ARGUMENT_MISMATCH = "Arguments do not match up. Please provide no more than a Path to the intended fileset";
 
     private Main() {
     }
@@ -17,7 +22,7 @@ public class Main {
     public static void main(final String[] args) {
         // parsing the first argument given into a proper path to load the resx
         // from
-        if (args.length > 1 && args.length != 3) {
+        if (args.length > 1) {
             // don't even bother!
             System.out.println(ARGUMENT_MISMATCH);
             return;
@@ -25,32 +30,17 @@ public class Main {
 
         TranslationPresenter tp = new TranslationPresenter();
         ResxChooser rc = new ResxChooser();
-        OverviewModel m = new OverviewModel();
-        OverviewView v = new SwingOverviewView();
-
-        OverviewPresenter p = new OverviewPresenter(m, v, tp, rc);
-        p.show();
-
-        if (args.length == 0) {
-            p.fileChoosing();
-        } else {
+        if (args.length != 0) {
             final Path resxFile = Paths.get(args[0]).normalize();
             rc.setFileset(resxFile);
-            p.loadFiles(resxFile);
-            // set the selected locales if they were specified on commandline
-            // check whether they are available before that and fall back if they aren't
-            // FIXME: select these locales in the ResxChooser
-//            if (args.length == 3) {
-//                final String leftLocale = args[1];
-//                final String rightLocale = args[2];
-//                if (m.getAvailableLocales().contains(leftLocale)
-//                  && m.getAvailableLocales().contains(rightLocale)) {
-//                    p.onLocaleRequest(leftLocale, Side.LEFT);
-//                    p.onLocaleRequest(rightLocale, Side.RIGHT);
-//                }
-//                // "fallback"
-//            }
         }
+
+        OverviewModel m = new OverviewModel();
+        OverviewView v = new SwingOverviewView();
+        OverviewPresenter p = new OverviewPresenter(m, v, tp, rc);
+
+        p.show();
+        p.fileChoosing();
     }
 
 }

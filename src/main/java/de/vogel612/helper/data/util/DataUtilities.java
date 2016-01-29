@@ -45,7 +45,7 @@ public class DataUtilities {
      *
      * @return The Language-Locale for the given file
      */
-    public static String parseFileName(final Path path) {
+    public static String parseLocale(final Path path) {
         final Matcher localeMatcher = FILENAME_PATTERN.matcher(path.getFileName().toString());
         if (localeMatcher.find()) { // should always be true, since we check beforehand
             return localeMatcher.group(2) == null

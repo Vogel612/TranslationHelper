@@ -74,7 +74,6 @@ public class ResxChooser {
                 final ResxChooserEvent event = new ResxChooserEvent(this);
                 resxChoiceCompletionListener.forEach(c -> c.accept(event));
             }
-            window.setVisible(false);
         });
         rightLocaleChange.addActionListener(e -> {
             rightLocale = chooseLocale();
@@ -93,6 +92,15 @@ public class ResxChooser {
         });
     }
 
+    public ResxChooser(Path fileset, String leftLocale, String rightLocale) {
+        this();
+        this.fileset = fileset;
+        this.leftLocale = leftLocale;
+        this.rightLocale = rightLocale;
+        // fixes problems with inexistant filesets
+        this.onFilesetChange();
+    }
+
     public void setFileset(Path fileset) {
         this.fileset = fileset;
         if (fileset != null) { // FIXME should we even allow null??
@@ -109,9 +117,17 @@ public class ResxChooser {
             try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(fileset.getParent(), filesetName)) {
                 localeOptionCache.clear();
                 localeOptionCache.addAll(filesetFiles.map(
-                  DataUtilities::parseFileName).collect(
+                  DataUtilities::parseLocale).collect(
                   Collectors.toSet()));
-                //FIXME drop the locales not available for this set
+                // drop locales we cannot have anymore...
+                if (!localeOptionCache.contains(leftLocale)) {
+                    leftLocale = null;
+                    leftLocaleLbl.setText("(none)");
+                }
+                if (!localeOptionCache.contains(rightLocale)) {
+                    rightLocale = null;
+                    rightLocaleLbl.setText("(none)");
+                }
             } catch (IOException e1) {
                 // FIXME handle
                 e1.printStackTrace();
@@ -132,6 +148,10 @@ public class ResxChooser {
         return localeChoices[result];
     }
 
+    public void hide() {
+        window.setVisible(false);
+    }
+
     public void show() {
         window.setVisible(true);
     }
@@ -148,7 +168,7 @@ public class ResxChooser {
         private final String rightLocale;
         private final String leftLocale;
 
-        private ResxChooserEvent(ResxChooser c) {
+        public ResxChooserEvent(ResxChooser c) {
             this.leftLocale = c.leftLocale;
             this.rightLocale = c.rightLocale;
             this.fileset = c.fileset;
