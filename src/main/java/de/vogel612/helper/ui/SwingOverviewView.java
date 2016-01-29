@@ -4,7 +4,6 @@ import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
-import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.data.TranslationTableRenderer;
@@ -15,12 +14,11 @@ import java.awt.event.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class SwingOverviewView implements OverviewView {
 
-    private static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
+    static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
     private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 700);
 
     private static final Dimension MENU_BAR_DIMENSION = new Dimension(800, 100);
@@ -30,13 +28,12 @@ public class SwingOverviewView implements OverviewView {
     private final JTable translationContainer;
     private final JPanel menuBar;
     private final JButton saveButton;
-    private final JButton chooseLeft;
-    private final JButton chooseRight;
+    private final JButton chooseLang;
 
-    private final Set<BiConsumer<String, Side>> localeChangeRequestListeners = new HashSet<>();
     private final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
-    private final Set<Runnable> saveRequestListeners = new HashSet<>();
     private final Set<Consumer<WindowEvent>> windowCloseListeners = new HashSet<>();
+    private final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
+    private final Set<Runnable> saveRequestListeners = new HashSet<>();
 
     public SwingOverviewView() {
         window = new JFrame("Rubberduck Translation Helper");
@@ -46,12 +43,13 @@ public class SwingOverviewView implements OverviewView {
         translationContainer.setModel(new TranslationTable());
         menuBar = new JPanel();
         saveButton = new JButton("save");
-        chooseLeft = new JButton("choose left");
-        chooseRight = new JButton("choose right");
+        chooseLang = new JButton("choose sides");
+
+        saveButton.setName("save");
+        chooseLang.setName("chooseLang");
 
         saveButton.addActionListener(event -> saveRequestListeners.forEach(Runnable::run));
-        chooseLeft.addActionListener(event -> chooseAndLoadLanguage(Side.LEFT));
-        chooseRight.addActionListener(event -> chooseAndLoadLanguage(Side.RIGHT));
+        chooseLang.addActionListener(event -> langChoiceRequestListeners.forEach(Runnable::run));
 
         window.addWindowListener(new WindowAdapter() {
             @Override
@@ -62,8 +60,8 @@ public class SwingOverviewView implements OverviewView {
     }
 
     @Override
-    public void addLocaleChangeRequestListener(BiConsumer<String, Side> listener) {
-        localeChangeRequestListeners.add(listener);
+    public void addLanguageRequestListener(Runnable listener) {
+        langChoiceRequestListeners.add(listener);
     }
 
     @Override
@@ -79,25 +77,6 @@ public class SwingOverviewView implements OverviewView {
     @Override
     public void addWindowClosingListener(Consumer<WindowEvent> listener) {
         windowCloseListeners.add(listener);
-    }
-
-    private void chooseAndLoadLanguage(Side side) {
-        String locale = chooseLocale();
-        localeChangeRequestListeners.forEach(l -> l.accept(locale, side));
-    }
-
-    private String chooseLocale() {
-        // FIXME: Request LocaleOptions!?
-        String[] localeOptions = {""};//presenter.getLocaleOptions();
-        int selectedOption = JOptionPane.showOptionDialog(window,
-          "Please choose the Locale out of following options:",
-          "Choose Locale",
-          JOptionPane.DEFAULT_OPTION,
-          JOptionPane.QUESTION_MESSAGE,
-          null,
-          localeOptions,
-          null);
-        return localeOptions[selectedOption];
     }
 
     @Override
@@ -162,8 +141,7 @@ public class SwingOverviewView implements OverviewView {
 
         GridBagConstraints buttonConstraints = (GridBagConstraints) constraints.clone();
         buttonConstraints.gridx = GridBagConstraints.RELATIVE;
-        addToGridBag(chooseLeft, menuBar, BUTTON_DIMENSION, buttonConstraints);
-        addToGridBag(chooseRight, menuBar, BUTTON_DIMENSION, buttonConstraints);
+        addToGridBag(chooseLang, menuBar, BUTTON_DIMENSION, buttonConstraints);
         addToGridBag(saveButton, menuBar, BUTTON_DIMENSION, buttonConstraints);
     }
 

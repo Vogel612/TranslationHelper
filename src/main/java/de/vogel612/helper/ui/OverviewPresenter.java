@@ -2,8 +2,10 @@ package de.vogel612.helper.ui;
 
 import static javax.swing.JOptionPane.*;
 
+import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
@@ -15,7 +17,6 @@ import java.util.Map;
 
 public class OverviewPresenter {
 
-    // TODO Can we assume DEFAULTS for this??
     public static final String DEFAULT_TARGET_LOCALE = "de";
     public static final String DEFAULT_ROOT_LOCALE = "";
 
@@ -23,13 +24,15 @@ public class OverviewPresenter {
     private final OverviewModel model;
     private final OverviewView view;
     private final TranslationPresenter translationPresenter;
+    private final ResxChooser resxChooser;
 
     private boolean initialized = false;
 
-    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p) {
+    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p, ResxChooser rc) {
         model = m;
         view = v;
         translationPresenter = p;
+        resxChooser = rc;
 
         view.initialize();
     }
@@ -46,7 +49,7 @@ public class OverviewPresenter {
         if (initialized) {
             return;
         }
-        view.addLocaleChangeRequestListener(this::onLocaleRequest);
+        view.addLanguageRequestListener(this::fileChoosing);
         view.addSaveRequestListener(this::onSaveRequest);
         view.addTranslationRequestListener(this::onTranslateRequest);
         view.addWindowClosingListener(this::onWindowCloseRequest);
@@ -56,13 +59,9 @@ public class OverviewPresenter {
         translationPresenter.addTranslationAbortListener(this::onTranslationAbort);
         translationPresenter.addTranslationSubmitListener(this::onTranslationSubmit);
 
-        initialized = true;
-    }
+        resxChooser.addCompletionListener(this::fileChoiceCompletion);
 
-    //SMELL public for main...
-    public void onLocaleRequest(final String locale, final Side side) {
-        chosenLocale.put(side, locale);
-        rebuildView();
+        initialized = true;
     }
 
     public void onException(final Exception e, final String message) {
@@ -74,28 +73,28 @@ public class OverviewPresenter {
         rebuildView();
     }
 
+    public void fileChoiceCompletion(ResxChooserEvent evt) {
+        resxChooser.hide();
+        chosenLocale.put(Side.LEFT, evt.getLeftLocale());
+        chosenLocale.put(Side.RIGHT, evt.getRightLocale());
+        loadFiles(evt.getFileset());
+    }
+
     private void rebuildView() {
         List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE));
         List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE));
         view.rebuildWith(left, right);
     }
 
-    public void loadFiles(final Path resxFolder) {
+    public void loadFiles(final Path resxFile) {
         try {
-            model.loadFromDirectory(resxFolder);
+            model.loadResxFileset(resxFile);
         } catch (IOException ex) {
             String errorMessage = String.format(
-              "Could not access %s due to %s", resxFolder, ex);
+              "Could not access %s due to %s", resxFile, ex);
             System.err.println(errorMessage);
             onException(ex, errorMessage);
         }
-    }
-
-    // TODO: Push-model for caching locale options??
-    public String[] getLocaleOptions() {
-        final List<String> availableLocales = model.getAvailableLocales();
-        // minor performance boost over passing in an empty array
-        return availableLocales.toArray(new String[availableLocales.size()]);
     }
 
     void onTranslationSubmit(final Translation t) {
@@ -148,5 +147,13 @@ public class OverviewPresenter {
         } else {
             System.exit(0);
         }
+    }
+
+    /**
+     * Allows the user to choose an arbitrary *.regex file and asks them to choose out of the available locales for Left
+     * and Right in the view.
+     */
+    public void fileChoosing() {
+        resxChooser.show();
     }
 }

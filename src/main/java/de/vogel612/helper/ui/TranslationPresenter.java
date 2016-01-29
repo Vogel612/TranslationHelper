@@ -49,7 +49,6 @@ public class TranslationPresenter {
     private final Set<Runnable> translationAbortListeners = new HashSet<>();
     private final Set<Consumer<Translation>> translationSubmitListeners = new HashSet<>();
 
-    //    private OverviewPresenter overview;
     private Translation translation;
 
     public TranslationPresenter() {
@@ -60,6 +59,14 @@ public class TranslationPresenter {
 
         rootValueLabel = new JLabel();
         cancel.addActionListener(event -> translationAbortListeners.forEach(Runnable::run));
+        submit.addActionListener(event -> {
+            translation.setValue(input.getText());
+            // binding could be a problem here :(
+            translationSubmitListeners.forEach(l -> l.accept(translation));
+        });
+
+        submit.setName("submit");
+        cancel.setName("abort");
 
         doLayout();
     }
@@ -153,10 +160,6 @@ public class TranslationPresenter {
         window.add(rootValueLabel, constraints);
     }
 
-//    public void register(final OverviewPresenter p) {
-//        overview = p;
-//    }
-
     public void show() {
         window.setVisible(true);
     }
@@ -177,10 +180,6 @@ public class TranslationPresenter {
         this.translation = right;
         this.rootValueLabel.setText(left.getValue());
         input.setText(translation.getValue());
-        submit.addActionListener(event -> {
-            translation.setValue(input.getText());
-            translationSubmitListeners.forEach(l -> l.accept(translation));
-        });
         window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
     }
 }

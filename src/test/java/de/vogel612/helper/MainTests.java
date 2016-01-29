@@ -20,30 +20,12 @@ public class MainTests {
     }
 
     @Test
-    public void main_rejectsZeroArgCall() {
-        Main.main(new String[0]);
-
-        verify(outMock).println(Main.ARGUMENT_MISMATCH);
-        verifyNoMoreInteractions(outMock);
-    }
-
-    @Test
     public void main_rejectsTwoArgumentCall() {
         Main.main(new String[]{
           "/random/test/path", "de"
         });
 
         verify(outMock).println(Main.ARGUMENT_MISMATCH);
-        verifyNoMoreInteractions(outMock);
-    }
-
-    @Test
-    public void main_rejectsNonRubberduckPaths() {
-        Main.main(new String[]{
-          "random/test/path"
-        });
-
-        verify(outMock).println(Main.ILLEGAL_FOLDER);
         verifyNoMoreInteractions(outMock);
     }
 
