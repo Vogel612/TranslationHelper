@@ -32,6 +32,9 @@ public class TranslationTableRendererTests {
     @Parameter(2)
     public Color expected;
 
+    @Parameter(3)
+    public int selectedRow;
+
     @Before
     public void setup() {
         table = mock(JTable.class);
@@ -40,13 +43,21 @@ public class TranslationTableRendererTests {
     @Parameters
     public static Collection<Object[]> testData() {
         Object[][] data = new Object[][]{
-          {"asd", "foo", Color.WHITE},
-          {"", "asd", Color.YELLOW},
-          {"asd", "asd", Color.YELLOW},
-          {"asd", "asd{0}", Color.ORANGE},
-          {"asd{0:d.5}", "asd{0}", Color.ORANGE},
-          {"asd{1}", "asd{0}", Color.ORANGE},
-          {"{0}as{1}d", "asd{0}", Color.ORANGE},
+          {"asd", "foo", Color.WHITE, -1},
+          {"", "asd", Color.YELLOW, -1},
+          {"asd", "asd", Color.YELLOW, -1},
+          {"asd", "asd{0}", Color.ORANGE, -1},
+          {"asd{0:d.5}", "asd{0}", Color.ORANGE, -1},
+          {"asd{1}", "asd{0}", Color.ORANGE, -1},
+          {"{0}as{1}d", "asd{0}", Color.ORANGE, -1},
+
+          {"asd", "foo", Color.BLUE, 0},
+          {"", "asd", Color.ORANGE, 0},
+          {"asd", "asd", Color.ORANGE, 0},
+          {"asd", "asd{0}", Color.RED, 0},
+          {"asd{0:d.5}", "asd{0}", Color.RED, 0},
+          {"asd{1}", "asd{0}", Color.RED, 0},
+          {"{0}as{1}d", "asd{0}", Color.RED, 0},
         };
         return Arrays.asList(data);
     }
@@ -55,6 +66,7 @@ public class TranslationTableRendererTests {
     public void checkBackgroundColors() {
         doReturn(leftSide).when(table).getValueAt(0, 0);
         doReturn(rightSide).when(table).getValueAt(0, 1);
+        doReturn(selectedRow).when(table).getSelectedRow();
         Component actual = cut.getTableCellRendererComponent(table, null, false, false, 0, 0);
         assertEquals(expected, actual.getBackground());
     }
