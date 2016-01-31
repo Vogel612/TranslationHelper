@@ -50,11 +50,9 @@ public class ResxChooserTests extends AssertJSwingJUnitTestCase {
         }).using(robot());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void submitButton_withUnselectedPath_doesNothing() {
         cut.setFileset(null);
-        frame.button("submit").click();
-
         verifyNoMoreInteractions(listener);
     }
 }
