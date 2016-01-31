@@ -92,20 +92,12 @@ public class ResxChooser {
         });
     }
 
-    public ResxChooser(Path fileset, String leftLocale, String rightLocale) {
-        this();
-        this.fileset = fileset;
-        this.leftLocale = leftLocale;
-        this.rightLocale = rightLocale;
-        // fixes problems with inexistant filesets
-        this.onFilesetChange();
-    }
-
     public void setFileset(Path fileset) {
-        this.fileset = fileset;
-        if (fileset != null) { // FIXME should we even allow null??
-            onFilesetChange();
+        if (fileset == null) {
+            throw new IllegalArgumentException();
         }
+        this.fileset = fileset;
+        onFilesetChange();
     }
 
     private void onFilesetChange() {

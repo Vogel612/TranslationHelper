@@ -33,13 +33,18 @@ public class TranslationTableRenderer extends DefaultTableCellRenderer {
 
         final Set<String> leftFormats = getFormatSpecifiers(left);
         final Set<String> rightFormats = getFormatSpecifiers(right);
+
+        final boolean selected = row == table.getSelectedRow();
         // Chain of responsibility??
         if (!(leftFormats.containsAll(rightFormats) && rightFormats.containsAll(leftFormats))) {
-            c.setBackground(Color.ORANGE);
+            c.setBackground(selected ? Color.RED : Color.ORANGE);
+            c.setForeground(Color.BLACK);
         } else if (left.equals(right) || right.isEmpty() || left.isEmpty()) {
-            c.setBackground(Color.YELLOW);
+            c.setBackground(selected ? Color.ORANGE : Color.YELLOW);
+            c.setForeground(Color.BLACK);
         } else {
-            c.setBackground(Color.WHITE);
+            c.setBackground(selected ? Color.BLUE : Color.WHITE);
+            c.setForeground(selected ? Color.WHITE : Color.BLACK);
         }
         return c;
     }

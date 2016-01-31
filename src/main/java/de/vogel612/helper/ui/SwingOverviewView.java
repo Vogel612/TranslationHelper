@@ -2,11 +2,13 @@ package de.vogel612.helper.ui;
 
 import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
+import static java.awt.event.KeyEvent.*;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.data.TranslationTableRenderer;
+import de.vogel612.helper.data.TranslationTableSelectionModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -108,6 +110,22 @@ public class SwingOverviewView implements OverviewView {
 
         translationContainer.setDefaultRenderer(Object.class,
           new TranslationTableRenderer());
+        translationContainer.setSelectionModel(new TranslationTableSelectionModel());
+        translationContainer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        translationContainer.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                switch (keyEvent.getKeyCode()) {
+                    case VK_ENTER:
+                        translateRow(translationContainer.getSelectedRow());
+                        keyEvent.consume();
+                        break;
+                    default:
+                        super.keyPressed(keyEvent);
+                }
+            }
+        });
     }
 
     private void bindEventListener() {
@@ -119,11 +137,15 @@ public class SwingOverviewView implements OverviewView {
                     return;
                 }
                 final int row = translationContainer.rowAtPoint(event.getPoint());
-                final String key = ((TranslationTable) translationContainer
-                  .getModel()).getKeyAt(row);
-                translationRequestListeners.forEach(c -> c.accept(key));
+                translateRow(row);
             }
         });
+    }
+
+    private void translateRow(int row) {
+        final String key = ((TranslationTable) translationContainer
+          .getModel()).getKeyAt(row);
+        translationRequestListeners.forEach(c -> c.accept(key));
     }
 
     private void addMenuBar() {
