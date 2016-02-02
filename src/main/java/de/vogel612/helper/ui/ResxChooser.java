@@ -43,18 +43,43 @@ public class ResxChooser {
 
 
     public ResxChooser() {
-        window.setLayout(new GridLayout(4, 2, 10, 10));
+        window.setLayout(new GridBagLayout());
         final Dimension size = new Dimension(500, 400);
         window.setMinimumSize(size);
         window.setSize(size);
 
-        window.add(leftLocaleLbl);
-        window.add(leftLocaleChange);
-        window.add(rightLocaleLbl);
-        window.add(rightLocaleChange);
-        window.add(filesetLbl);
-        window.add(chooseFileset);
-        window.add(submit);
+        GridBagConstraints labelConstraints = new GridBagConstraints();
+        labelConstraints.fill = GridBagConstraints.BOTH;
+        labelConstraints.gridx = 0;
+        labelConstraints.gridy = 0;
+        labelConstraints.weightx = 0.7;
+
+        GridBagConstraints buttonConstraints = new GridBagConstraints();
+        buttonConstraints.fill = GridBagConstraints.BOTH;
+        buttonConstraints.gridx = 1;
+        buttonConstraints.gridy = 0;
+        buttonConstraints.insets = new Insets(20,20,20,20);
+        buttonConstraints.weightx = 0.3;
+        buttonConstraints.anchor = GridBagConstraints.EAST;
+
+        window.add(leftLocaleLbl, labelConstraints);
+        window.add(leftLocaleChange, buttonConstraints);
+
+        labelConstraints.gridy = 1;
+        buttonConstraints.gridy = 1;
+
+        window.add(rightLocaleLbl, labelConstraints);
+        window.add(rightLocaleChange, buttonConstraints);
+
+        labelConstraints.gridy = 2;
+        buttonConstraints.gridy = 2;
+
+        window.add(filesetLbl, labelConstraints);
+        window.add(chooseFileset, buttonConstraints);
+
+        buttonConstraints.gridy = 3;
+
+        window.add(submit, buttonConstraints);
 
         // unit-test related
         submit.setName("submit");
