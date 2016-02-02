@@ -55,4 +55,10 @@ public class ResxChooserTests extends AssertJSwingJUnitTestCase {
         cut.setFileset(null);
         verifyNoMoreInteractions(listener);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setFileset_withInexistantFile_throws() {
+        cut.setFileset(Paths.get("/", "some", "stupid", "file", "that", "does", "not", "exist.resx"));
+        verifyNoMoreInteractions(listener);
+    }
 }

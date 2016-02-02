@@ -118,8 +118,8 @@ public class ResxChooser {
     }
 
     public void setFileset(Path fileset) {
-        if (fileset == null) {
-            throw new IllegalArgumentException();
+        if (fileset == null || !fileset.toFile().exists()) {
+            throw new IllegalArgumentException("File does not exist");
         }
         this.fileset = fileset;
         onFilesetChange();

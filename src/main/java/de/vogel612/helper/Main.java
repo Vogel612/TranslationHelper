@@ -31,7 +31,7 @@ public class Main {
         TranslationPresenter tp = new TranslationPresenter();
         ResxChooser rc = new ResxChooser();
         if (args.length != 0) {
-            final Path resxFile = Paths.get(args[0]).normalize();
+            final Path resxFile = Paths.get(args[0]);
             rc.setFileset(resxFile);
         }
 
