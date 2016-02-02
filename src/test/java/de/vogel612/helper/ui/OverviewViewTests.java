@@ -4,21 +4,20 @@ import static junit.framework.Assert.assertEquals;
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.*;
 
 import org.assertj.swing.core.GenericTypeMatcher;
+import org.assertj.swing.core.KeyPressInfo;
 import org.assertj.swing.data.TableCell;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
-
 import de.vogel612.helper.data.Translation;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -28,10 +27,10 @@ import java.util.function.Consumer;
  */
 public class OverviewViewTests extends AssertJSwingJUnitTestCase {
 
-    private static final Translation[] dataLeft = new Translation[] {
+    private static final Translation[] dataLeft = new Translation[]{
       new Translation("", "key", "value"), new Translation("", "another_key", "some better value")
     };
-    private static final Translation[] dataRight = new Translation[] {
+    private static final Translation[] dataRight = new Translation[]{
       new Translation("ts", "key", "something"), new Translation("ts", "another_key", "awesome value")
     };
     private FrameFixture frame;
@@ -119,6 +118,15 @@ public class OverviewViewTests extends AssertJSwingJUnitTestCase {
     @Test
     public void tableDoubleClick_firesTranslationReqListener() {
         frame.table().cell(TableCell.row(0).column(1)).doubleClick();
+
+        verify(translationReqListener).accept(eq("key"));
+        verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
+    }
+
+    @Test
+    public void keyBasedTranslation_firesTranslationReqListener() {
+        frame.table().cell(TableCell.row(0).column(1)).click();
+        frame.table().pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
 
         verify(translationReqListener).accept(eq("key"));
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
