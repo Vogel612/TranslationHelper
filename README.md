@@ -13,14 +13,24 @@ This is a small helper for me to translate Rubberduck.
 
 ##What does it do?
 
-Right now? Right now I am able to edit translations in the RubberduckUI.de.resx file.
-The first milestone is already reached and now I'm about to clear out additional locales and 
-general UX improvements.
+It displays two sets of resx-files side-by-side. There are special highlights for certain conditions:
 
-For any possible bugs I still need to squash and features I'm currently working on,
+- Matching Values for the same key (Yellow background)
+- Empty Value for a key (Yellow background)
+- Mismatching C# Format specifiers (Orange background)
+
+You can basically choose any resx-file as the basis. The TranslationHelper will automatically find similar files in the same directory and give you options to choose the left and right side of the lineup. 
+Any record you doubleclick will be expanded into a translation dialog you can then change the translation in.
+
+- Pressing `return` will open the translation dialog.
+- Pressing `return` in the translation dialog will save the changes and close the dialog.
+- Pressing `esc` in the translation dialog will abort the current translation.
+
+The TranslationHelper will only change the resx-files if you (as the user) ask it to do so.  
+If you close the Helper with unsaved changes, you will be prompted on whether to save the changes (or not).
+
+For any possible bugs I still need to squash and features / changes I'm currently working on,
 check the [issues](https://github.com/Vogel612/TranslationHelper/issues)
-
-For the things that are yet to come...I have my ["Backlog"](https://github.com/Vogel612/TranslationHelper/wiki/"Backlog")
 
 ##License
 

@@ -8,7 +8,7 @@ plugins {
 
 version = '1.0'
 
-task fatJar(type: Jar, dependsOn: 'test') {
+task fatJar(type: Jar, dependsOn: 'classes') {
     archiveName 'TranslationHelper-all.jar'
     destinationDir new File(project.rootDir, "dist")
     from {
