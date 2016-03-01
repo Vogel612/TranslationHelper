@@ -15,6 +15,10 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 public class OverviewPresenter {
 
     public static final String DEFAULT_TARGET_LOCALE = "de";
@@ -26,8 +30,6 @@ public class OverviewPresenter {
     private final TranslationPresenter translationPresenter;
     private final ResxChooser resxChooser;
 
-    private boolean initialized = false;
-
     public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p, ResxChooser rc) {
         model = m;
         view = v;
@@ -37,31 +39,21 @@ public class OverviewPresenter {
         view.initialize();
     }
 
+    // FIXME properly rewrite the Presenter :/
+//    private final Stage presentation;
+//
+//    private final GridPane resxChooser;
+//    private final StackPane overview;
+//
+//    public OverviewPresenter(Stage primaryStage, GridPane rcPane, StackPane overviewPane) {
+//        presentation = primaryStage;
+//        resxChooser = rcPane;
+//        overview = overviewPane;
+//    }
+
+
     public void show() {
-        if (!initialized) {
-            initialize();
-        }
         view.show();
-    }
-
-    public void initialize() {
-        // initialization shall only happen once!
-        if (initialized) {
-            return;
-        }
-        view.addLanguageRequestListener(this::fileChoosing);
-        view.addSaveRequestListener(this::onSaveRequest);
-        view.addTranslationRequestListener(this::onTranslateRequest);
-        view.addWindowClosingListener(this::onWindowCloseRequest);
-
-        model.addParseCompletionListener(this::onParseCompletion);
-
-        translationPresenter.addTranslationAbortListener(this::onTranslationAbort);
-        translationPresenter.addTranslationSubmitListener(this::onTranslationSubmit);
-
-        resxChooser.addCompletionListener(this::fileChoiceCompletion);
-
-        initialized = true;
     }
 
     public void onException(final Exception e, final String message) {
@@ -97,17 +89,17 @@ public class OverviewPresenter {
         }
     }
 
-    void onTranslationSubmit(final Translation t) {
+    public void onTranslationSubmit(final Translation t) {
         translationPresenter.hide();
         model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
         rebuildView();
     }
 
-    void onTranslationAbort() {
+    public void onTranslationAbort() {
         translationPresenter.hide();
     }
 
-    void onTranslateRequest(final String key) {
+    public void onTranslateRequest(final String key) {
         translationPresenter.setRequestedTranslation(
           model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
           model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
@@ -115,7 +107,7 @@ public class OverviewPresenter {
         translationPresenter.show();
     }
 
-    void onSaveRequest() {
+    public void onSaveRequest() {
         try {
             model.saveAll();
         } catch (IOException e) {
@@ -124,7 +116,7 @@ public class OverviewPresenter {
         }
     }
 
-    private void onWindowCloseRequest(WindowEvent windowEvent) {
+    public void onWindowCloseRequest(WindowEvent windowEvent) {
         if (model.isNotSaved()) {
             // prompt to save changes
             int choice = JOptionPane.showConfirmDialog(windowEvent.getWindow(),

@@ -1,30 +1,43 @@
 package de.vogel612.helper.ui;
 
-import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 
 import java.awt.event.WindowEvent;
+import java.util.HashSet;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Set;
 import java.util.function.Consumer;
 
-public interface OverviewView {
+public abstract class OverviewView {
 
-    void addWindowClosingListener(Consumer<WindowEvent> listener);
+    protected final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
+    protected final Set<Consumer<WindowEvent>> windowCloseListeners = new HashSet<>();
+    protected final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
+    protected final Set<Runnable> saveRequestListeners = new HashSet<>();
 
-    void initialize();
+    public final void addWindowClosingListener(Consumer<WindowEvent> listener) {
+        windowCloseListeners.add(listener);
+    }
 
-    void show();
+    public final void addLanguageRequestListener(Runnable listener) {
+        langChoiceRequestListeners.add(listener);
+    }
 
-    void rebuildWith(List<Translation> left, List<Translation> right);
+    public final void addTranslationRequestListener(Consumer<String> listener) {
+        translationRequestListeners.add(listener);
+    }
 
-    void displayError(String title, String errorMessage);
+    public final void addSaveRequestListener(Runnable listener) {
+        saveRequestListeners.add(listener);
+    }
 
-    void hide();
+    public abstract void initialize();
 
-    void addLanguageRequestListener(Runnable listener);
+    public abstract void show();
 
-    void addTranslationRequestListener(Consumer<String> listener);
+    public abstract void rebuildWith(List<Translation> left, List<Translation> right);
 
-    void addSaveRequestListener(Runnable listener);
+    public abstract void displayError(String title, String errorMessage);
+
+    public abstract void hide();
 }

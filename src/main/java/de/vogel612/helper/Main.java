@@ -35,6 +35,19 @@ public class Main {
         OverviewView v = new SwingOverviewView();
         OverviewPresenter p = new OverviewPresenter(m, v, tp, rc);
 
+        // Wire up all the crap
+        v.addLanguageRequestListener(p::fileChoosing);
+        v.addSaveRequestListener(p::onSaveRequest);
+        v.addTranslationRequestListener(p::onTranslateRequest);
+        v.addWindowClosingListener(p::onWindowCloseRequest);
+
+        m.addParseCompletionListener(p::onParseCompletion);
+
+        tp.addTranslationAbortListener(p::onTranslationAbort);
+        tp.addTranslationSubmitListener(p::onTranslationSubmit);
+
+        rc.addCompletionListener(p::fileChoiceCompletion);
+
         p.show();
         p.fileChoosing();
     }

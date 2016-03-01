@@ -74,6 +74,8 @@ public class JFXResxChooser extends ResxChooser implements Initializable {
         final String[] localeChoices = localeOptionCache.toArray(new String[localeOptionCache.size()]);
         // FIXME rewrite as JavaFX dialog
         ChoiceDialog<String> dialog = new ChoiceDialog<>(localeChoices[0], localeChoices);
+        dialog.setHeaderText("Choose a Language");
+        dialog.setContentText("");
         dialog.show();
         dialog.setOnCloseRequest(evt -> {
             dialog.close();
@@ -107,15 +109,15 @@ public class JFXResxChooser extends ResxChooser implements Initializable {
             evt.consume();
             // FIXME need the owner window for proper modal behaviour
             final File resxFile = fileChooser.showOpenDialog(null);
-            setFileset(resxFile.toPath());
+            setFileset(resxFile.toPath()); // updates UI for us
         });
         leftChoose.setOnAction(evt -> showLocaleDialog(result -> {
             left = result;
-            leftTranslation.setText("Left: " + result);
+            Platform.runLater(() -> leftTranslation.setText("Left: " + result));
         }));
         rightChoose.setOnAction(evt -> showLocaleDialog(result -> {
             right = result;
-            rightTranslation.setText("Right: " + result);
+            Platform.runLater(() -> rightTranslation.setText("Right: " + result));
         }));
     }
 }

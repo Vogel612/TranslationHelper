@@ -3,6 +3,7 @@ package de.vogel612.helper;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.jfx.JFXOverviewView;
 import de.vogel612.helper.ui.jfx.JFXResxChooser;
 import de.vogel612.helper.ui.swing.SwingOverviewView;
 import de.vogel612.helper.ui.TranslationPresenter;
@@ -16,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class TranslationHelper extends Application {
 
@@ -34,30 +36,51 @@ public class TranslationHelper extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // FIXME parse argument and pass it to JFXResxChooser
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResxChooser.fxml"));
+        // FIXME: Make this the DI Context root and wire up stuff here instead of in the OverviewPresenter!
+        FXMLLoader resxLoader = new FXMLLoader(getClass().getResource("/ResxChooser.fxml"));
 
-        GridPane rcPane = loader.load();
-        JFXResxChooser rc = loader.getController();
+        GridPane rcPane = resxLoader.load();
+        JFXResxChooser rc = resxLoader.getController();
         Parameters params = getParameters();
         if (params.getUnnamed().size() != 0) { // should be 1..
             final Path resxFile = Paths.get(params.getUnnamed().get(0));
             rc.setFileset(resxFile);
         }
 
+        // That's a view though.. duh.
         TranslationPresenter tp = new TranslationPresenter();
 
+        FXMLLoader overviewLoader = new FXMLLoader(getClass().getResource("/OverviewView.fxml"));
+        StackPane overviewPane = overviewLoader.load();
+        JFXOverviewView v = overviewLoader.getController();
+
         OverviewModel m = new OverviewModel();
-        OverviewView v = new SwingOverviewView();
-        OverviewPresenter p = new OverviewPresenter(m, v, tp, rc);
+//        OverviewPresenter p = new OverviewPresenter(primaryStage, rcPane, overviewPane);
+        OverviewPresenter p = new OverviewPresenter(null, null, null, null); // just to stop the compiler from screaming at me
+
+        // Wire up all the crap
+        v.addLanguageRequestListener(p::fileChoosing);
+        v.addSaveRequestListener(p::onSaveRequest);
+        v.addTranslationRequestListener(p::onTranslateRequest);
+        v.addWindowClosingListener(p::onWindowCloseRequest);
+
+        m.addParseCompletionListener(p::onParseCompletion);
+
+        tp.addTranslationAbortListener(p::onTranslationAbort);
+        tp.addTranslationSubmitListener(p::onTranslationSubmit);
+
+        rc.addCompletionListener(p::fileChoiceCompletion);
 
         p.show();
         p.fileChoosing();
 
+        Stage resxStage = new Stage(StageStyle.UNDECORATED);
+        resxStage.setScene(new Scene(rcPane));
+        resxStage.setTitle("Choose Your Resx");
 
-        primaryStage.setTitle("FXML JFXResxChooser");
-        Scene myScene = new Scene(rcPane);
-        primaryStage.setScene(myScene);
+        primaryStage.setTitle("Translation Helper");
+        primaryStage.setScene(new Scene(overviewPane));
         primaryStage.show();
+        resxStage.show();
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class SwingOverviewView implements OverviewView {
+public class SwingOverviewView extends OverviewView {
 
     static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
     private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 700);
@@ -32,11 +32,6 @@ public class SwingOverviewView implements OverviewView {
     private final JPanel menuBar;
     private final JButton saveButton;
     private final JButton chooseLang;
-
-    private final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
-    private final Set<Consumer<WindowEvent>> windowCloseListeners = new HashSet<>();
-    private final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
-    private final Set<Runnable> saveRequestListeners = new HashSet<>();
 
     public SwingOverviewView() {
         window = new JFrame("Rubberduck Translation Helper");
@@ -60,26 +55,6 @@ public class SwingOverviewView implements OverviewView {
                 windowCloseListeners.forEach(l -> l.accept(windowEvent));
             }
         });
-    }
-
-    @Override
-    public void addLanguageRequestListener(Runnable listener) {
-        langChoiceRequestListeners.add(listener);
-    }
-
-    @Override
-    public void addTranslationRequestListener(Consumer<String> listener) {
-        translationRequestListeners.add(listener);
-    }
-    
-    @Override
-    public void addSaveRequestListener(Runnable listener) {
-        saveRequestListeners.add(listener);
-    }
-
-    @Override
-    public void addWindowClosingListener(Consumer<WindowEvent> listener) {
-        windowCloseListeners.add(listener);
     }
 
     @Override

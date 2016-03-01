@@ -19,7 +19,6 @@ public class SwingResxChooser extends ResxChooser {
 
     private final JFrame window = new JFrame("Translation Helper - File and Locale chooser");
     private final JFileChooser fileChooser = new JFileChooser();
-    private final Set<String> localeOptionCache = new HashSet<>();
 
     private final JButton rightLocaleChange = new JButton("change");
     private final JLabel rightLocaleLbl = new JLabel();

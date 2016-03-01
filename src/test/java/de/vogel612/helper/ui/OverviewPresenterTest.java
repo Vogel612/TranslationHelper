@@ -7,6 +7,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Translation;
@@ -37,49 +38,9 @@ public class OverviewPresenterTest {
         reset(v, m, p, rc);
     }
 
-    @Test
-    public void initialize_registersPresenter() {
-        cut.initialize();
-
-        verify(v).addTranslationRequestListener(any());
-        verify(v).addWindowClosingListener(any());
-        verify(v).addSaveRequestListener(any());
-        verify(v).addLanguageRequestListener(any());
-        verify(m).addParseCompletionListener(any());
-        verify(p).addTranslationSubmitListener(any());
-        verify(p).addTranslationAbortListener(any());
-
-        verifyNoMoreInteractions(m, v, p);
-    }
-
-    @Test
-    public void initialize_registersPresenter_onlyOnce() {
-        cut.initialize();
-        reset(m, v, p, rc);
-        cut.initialize();
-        verifyNoMoreInteractions(m, v, p, rc);
-    }
-
-    @Test
-    public void show_callsInitialize_ifNotInitialized() {
-        cut.show();
-        verify(v).show();
-        verify(v).addTranslationRequestListener(any());
-        verify(v).addWindowClosingListener(any());
-        verify(v).addSaveRequestListener(any());
-        verify(v).addLanguageRequestListener(any());
-        verify(m).addParseCompletionListener(any());
-        verify(p).addTranslationSubmitListener(any());
-        verify(p).addTranslationAbortListener(any());
-        verify(rc).addCompletionListener(any());
-
-        verifyNoMoreInteractions(m, v, p, rc);
-    }
 
     @Test
     public void show_callsShow_onView() {
-        cut.initialize();
-        reset(m, v, p, rc);
         cut.show();
         verify(v).show();
         verifyNoMoreInteractions(m, v, p, rc);
@@ -114,6 +75,7 @@ public class OverviewPresenterTest {
     }
 
     @Test
+    @Ignore("dependencies aren't wired in presenter anymore")
     public void onParseCompletion_rebuildsView() {
         List<Translation> rootList = mock(List.class);
         doReturn(rootList).when(m).getTranslations(DEFAULT_ROOT_LOCALE);
