@@ -11,6 +11,7 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
+import de.vogel612.helper.ui.swing.SwingResxChooser;
 
 import java.awt.*;
 import java.nio.file.Paths;
@@ -37,7 +38,7 @@ public class ResxChooserTests extends AssertJSwingJUnitTestCase {
 
     @Before
     public void before() {
-        cut = new ResxChooser();
+        cut = new SwingResxChooser();
         cut.addCompletionListener(listener);
         cut.setFileset(Paths.get(getClass().getResource("RubberduckUI.resx").getFile()));
         cut.show();

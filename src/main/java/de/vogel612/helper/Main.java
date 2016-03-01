@@ -1,16 +1,12 @@
 package de.vogel612.helper;
 
-import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
-import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
-
-import de.vogel612.helper.data.Side;
 import de.vogel612.helper.ui.*;
 import de.vogel612.helper.data.OverviewModel;
-import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
+import de.vogel612.helper.ui.swing.SwingOverviewView;
+import de.vogel612.helper.ui.swing.SwingResxChooser;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.function.Predicate;
 
 public class Main {
     // protected for testing verifications
@@ -29,7 +25,7 @@ public class Main {
         }
 
         TranslationPresenter tp = new TranslationPresenter();
-        ResxChooser rc = new ResxChooser();
+        ResxChooser rc = new SwingResxChooser();
         if (args.length != 0) {
             final Path resxFile = Paths.get(args[0]);
             rc.setFileset(resxFile);

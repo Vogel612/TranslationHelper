@@ -3,13 +3,10 @@ package de.vogel612.helper.ui;
 import static de.vogel612.helper.data.util.DataUtilities.FILENAME_PATTERN;
 
 import de.vogel612.helper.data.util.DataUtilities;
+import de.vogel612.helper.ui.jfx.JFXResxChooser;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -18,163 +15,57 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * View to select a set of Resx-Files and locales.
+ * Created by vogel612 on 01.03.16.
  */
-public class ResxChooser {
+public abstract class ResxChooser {
+    protected final Set<String> localeOptionCache = new HashSet<>();
+    private final Set<Consumer<JFXResxChooser.ResxChooserEvent>> resxChoiceCompletionListener = new HashSet<>();
+    protected String left;
+    protected String right;
+    protected Path filesetBacking;
 
-    private final JFrame window = new JFrame("Translation Helper - File and Locale chooser");
-    private final JFileChooser fileChooser = new JFileChooser();
-    private final Set<String> localeOptionCache = new HashSet<>();
-
-    private final JButton rightLocaleChange = new JButton("change");
-    private final JLabel rightLocaleLbl = new JLabel();
-    private String rightLocale;
-
-    private final JButton leftLocaleChange = new JButton("change");
-    private final JLabel leftLocaleLbl = new JLabel();
-    private String leftLocale;
-
-    private final JButton chooseFileset = new JButton("Choose");
-    private final JLabel filesetLbl = new JLabel();
-    private Path fileset;
-
-    private final JButton submit = new JButton("Okay");
-    private final Set<Consumer<ResxChooserEvent>> resxChoiceCompletionListener = new HashSet<>();
-
-
-    public ResxChooser() {
-        window.setLayout(new GridBagLayout());
-        final Dimension size = new Dimension(500, 400);
-        window.setMinimumSize(size);
-        window.setSize(size);
-
-        GridBagConstraints labelConstraints = new GridBagConstraints();
-        labelConstraints.fill = GridBagConstraints.BOTH;
-        labelConstraints.gridx = 0;
-        labelConstraints.gridy = 0;
-        labelConstraints.weightx = 0.7;
-
-        GridBagConstraints buttonConstraints = new GridBagConstraints();
-        buttonConstraints.fill = GridBagConstraints.BOTH;
-        buttonConstraints.gridx = 1;
-        buttonConstraints.gridy = 0;
-        buttonConstraints.insets = new Insets(20,20,20,20);
-        buttonConstraints.weightx = 0.3;
-        buttonConstraints.anchor = GridBagConstraints.EAST;
-
-        window.add(leftLocaleLbl, labelConstraints);
-        window.add(leftLocaleChange, buttonConstraints);
-
-        labelConstraints.gridy = 1;
-        buttonConstraints.gridy = 1;
-
-        window.add(rightLocaleLbl, labelConstraints);
-        window.add(rightLocaleChange, buttonConstraints);
-
-        labelConstraints.gridy = 2;
-        buttonConstraints.gridy = 2;
-
-        window.add(filesetLbl, labelConstraints);
-        window.add(chooseFileset, buttonConstraints);
-
-        buttonConstraints.gridy = 3;
-
-        window.add(submit, buttonConstraints);
-
-        // unit-test related
-        submit.setName("submit");
-        chooseFileset.setName("fileset");
-        rightLocaleChange.setName("right");
-        leftLocaleChange.setName("left");
-
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Resx files", "resx"));
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setDialogTitle("Choose a resx file kind to translate");
-        fileChooser.setCurrentDirectory(Paths.get(".").toFile());
-        fileChooser.setMinimumSize(SwingOverviewView.MINIMUM_WINDOW_SIZE);
-        fileChooser.setSize(SwingOverviewView.MINIMUM_WINDOW_SIZE);
-
-        submit.addActionListener(e -> {
-            if (fileset != null && leftLocale != null && rightLocale != null) {
-                final ResxChooserEvent event = new ResxChooserEvent(this);
-                resxChoiceCompletionListener.forEach(c -> c.accept(event));
-            }
-        });
-        rightLocaleChange.addActionListener(e -> {
-            rightLocale = chooseLocale();
-            rightLocaleLbl.setText("RIGHT: " + rightLocale);
-        });
-        leftLocaleChange.addActionListener(e -> {
-            leftLocale = chooseLocale();
-            leftLocaleLbl.setText("LEFT: " + leftLocale);
-        });
-        chooseFileset.addActionListener(e -> {
-            int ret = fileChooser.showOpenDialog(null);
-            if (ret == JFileChooser.APPROVE_OPTION) {
-                fileset = fileChooser.getSelectedFile().toPath();
-                onFilesetChange();
-            }
-        });
-    }
-
-    public void setFileset(Path fileset) {
+    public final void setFileset(Path fileset) {
         if (fileset == null || !fileset.toFile().exists()) {
             throw new IllegalArgumentException("File does not exist");
         }
-        this.fileset = fileset;
+        this.filesetBacking = fileset;
         onFilesetChange();
     }
 
-    private void onFilesetChange() {
-        final Matcher filesetMatcher = FILENAME_PATTERN.matcher(fileset.getFileName().toString());
+    protected final void onFilesetChange() {
+        final Matcher filesetMatcher = FILENAME_PATTERN.matcher(filesetBacking.getFileName().toString());
         if (filesetMatcher.matches()) { // should always be true
+            // group is not optional, so we're good
             final String filesetName = filesetMatcher.group(1);
-            filesetLbl.setText(filesetName); // group is not optional
-
-            try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(fileset.getParent(), filesetName)) {
+            try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(filesetBacking.getParent(),
+              filesetName)) {
                 localeOptionCache.clear();
                 localeOptionCache.addAll(filesetFiles.map(
                   DataUtilities::parseLocale).collect(
                   Collectors.toSet()));
-                // drop locales we cannot have anymore...
-                if (!localeOptionCache.contains(leftLocale)) {
-                    leftLocale = null;
-                    leftLocaleLbl.setText("(none)");
-                }
-                if (!localeOptionCache.contains(rightLocale)) {
-                    rightLocale = null;
-                    rightLocaleLbl.setText("(none)");
-                }
             } catch (IOException e1) {
                 // FIXME handle
                 e1.printStackTrace();
             }
         }
+        onFilesetChangeInternal();
     }
 
-    private String chooseLocale() {
-        final String[] localeChoices = localeOptionCache.toArray(new String[localeOptionCache.size()]);
-        int result = JOptionPane.showOptionDialog(window,
-          "Choose a locale",
-          "",
-          JOptionPane.DEFAULT_OPTION,
-          JOptionPane.QUESTION_MESSAGE,
-          null,
-          localeChoices,
-          localeChoices[0]);
-        return localeChoices[result];
-    }
+    protected abstract void onFilesetChangeInternal();
 
-    public void hide() {
-        window.setVisible(false);
-    }
+    public abstract void hide();
 
-    public void show() {
-        window.setVisible(true);
-    }
+    public abstract void show();
 
-    public void addCompletionListener(Consumer<ResxChooserEvent> listener) {
+    public final void addCompletionListener(Consumer<JFXResxChooser.ResxChooserEvent> listener) {
         resxChoiceCompletionListener.add(listener);
+    }
+
+    protected final void completeChoice() {
+        if (left != null && right != null && filesetBacking != null) {
+            final ResxChooserEvent evt = new ResxChooserEvent(this);
+            resxChoiceCompletionListener.forEach(l -> l.accept(evt));
+        }
     }
 
     /**
@@ -186,9 +77,9 @@ public class ResxChooser {
         private final String leftLocale;
 
         public ResxChooserEvent(ResxChooser c) {
-            this.leftLocale = c.leftLocale;
-            this.rightLocale = c.rightLocale;
-            this.fileset = c.fileset;
+            this.leftLocale = c.left;
+            this.rightLocale = c.right;
+            this.fileset = c.filesetBacking;
         }
 
         public String getLeftLocale() {

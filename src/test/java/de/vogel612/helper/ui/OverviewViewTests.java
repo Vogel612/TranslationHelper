@@ -15,6 +15,7 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.swing.SwingOverviewView;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

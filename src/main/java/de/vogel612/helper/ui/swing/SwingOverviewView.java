@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui;
+package de.vogel612.helper.ui.swing;
 
 import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
@@ -9,6 +9,7 @@ import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.data.TranslationTableRenderer;
 import de.vogel612.helper.data.TranslationTableSelectionModel;
+import de.vogel612.helper.ui.OverviewView;
 
 import javax.swing.*;
 import java.awt.*;

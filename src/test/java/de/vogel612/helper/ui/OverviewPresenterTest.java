@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.swing.SwingResxChooser;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ public class OverviewPresenterTest {
         v = mock(OverviewView.class);
         m = mock(OverviewModel.class);
         p = mock(TranslationPresenter.class);
-        rc = mock(ResxChooser.class);
+        rc = mock(SwingResxChooser.class);
 
         cut = new OverviewPresenter(m, v, p, rc);
         reset(v, m, p, rc);
