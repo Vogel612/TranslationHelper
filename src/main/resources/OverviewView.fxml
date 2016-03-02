@@ -4,25 +4,29 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.geometry.Insets?>
 <StackPane xmlns:fx="http://javafx.com/fxml"
            fx:controller="de.vogel612.helper.ui.jfx.JFXOverviewController"
            minHeight="300" minWidth="600">
-    <!--<children>-->
-        <!--<MenuBar StackPane.alignment="TOP_CENTER" StackPane.margin="5">-->
+    <padding>
+        <Insets top="15" bottom="20" right="15" left="15" />
+    </padding>
+    <children>
+        <MenuBar>
             <!--<children>-->
                 <!--<Button fx:id="save" text="Save" />-->
                 <!--<Button fx:id="chooseLang" text="Choose Languages" />-->
             <!--</children>-->
-        <!--</MenuBar>-->
-        <!--<ScrollPane StackPane.alignment="CENTER" StackPane.margin="10">-->
+        </MenuBar>
+        <ScrollPane>
             <!--<children>-->
-                <!--&lt;!&ndash;<TableView fx:id="table">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<columns>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<TableColumn editable="false" minWidth="250" />&ndash;&gt;-->
-                        <!--&lt;!&ndash;<TableColumn editable="false" minWidth="250" />&ndash;&gt;-->
-                    <!--&lt;!&ndash;</columns>&ndash;&gt;-->
-                <!--&lt;!&ndash;</TableView>&ndash;&gt;-->
+                <!--<TableView fx:id="table">-->
+                    <!--<columns>-->
+                        <!--<TableColumn editable="false" minWidth="250" />-->
+                        <!--<TableColumn editable="false" minWidth="250" />-->
+                    <!--</columns>-->
+                <!--</TableView>-->
             <!--</children>-->
-        <!--</ScrollPane>-->
-    <!--</children>-->
+        </ScrollPane>
+    </children>
 </StackPane>

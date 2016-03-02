@@ -4,6 +4,7 @@ import de.vogel612.helper.ui.*;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.ui.swing.SwingOverviewView;
 import de.vogel612.helper.ui.swing.SwingResxChooser;
+import de.vogel612.helper.ui.swing.SwingTranslationView;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +25,7 @@ public class Main {
             return;
         }
 
-        TranslationPresenter tp = new TranslationPresenter();
+        TranslationView tv = new SwingTranslationView();
         ResxChooser rc = new SwingResxChooser();
         if (args.length != 0) {
             final Path resxFile = Paths.get(args[0]);
@@ -33,20 +34,9 @@ public class Main {
 
         OverviewModel m = new OverviewModel();
         OverviewView v = new SwingOverviewView();
-        OverviewPresenter p = new OverviewPresenter(m, v, tp, rc);
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc);
 
-        // Wire up all the crap
-        v.addLanguageRequestListener(p::fileChoosing);
-        v.addSaveRequestListener(p::onSaveRequest);
-        v.addTranslationRequestListener(p::onTranslateRequest);
-        v.addWindowClosingListener(p::onWindowCloseRequest);
-
-        m.addParseCompletionListener(p::onParseCompletion);
-
-        tp.addTranslationAbortListener(p::onTranslationAbort);
-        tp.addTranslationSubmitListener(p::onTranslationSubmit);
-
-        rc.addCompletionListener(p::fileChoiceCompletion);
+        DependencyRoot.inject(m, v, p, tv, rc);
 
         p.show();
         p.fileChoosing();

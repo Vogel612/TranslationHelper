@@ -1,14 +1,12 @@
-package de.vogel612.helper.ui;
+package de.vogel612.helper.ui.swing;
 
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.common.TranslationViewCommon;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
 
 /**
  * <p>
@@ -35,10 +33,9 @@ import java.util.function.Consumer;
  * @implNote Implementation will not happen with an additional separated View
  * interface, since there is in no way enough View-Logic to justify it
  */
-public class TranslationPresenter {
+public class SwingTranslationView extends TranslationViewCommon {
 
     private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
-    private static final String TITLE_FORMAT = "Translating - %s to %s";
     private final JFrame window;
     private final JTextField input;
     private final JButton submit;
@@ -46,12 +43,9 @@ public class TranslationPresenter {
 
     private final JLabel rootValueLabel;
 
-    private final Set<Runnable> translationAbortListeners = new HashSet<>();
-    private final Set<Consumer<Translation>> translationSubmitListeners = new HashSet<>();
-
     private Translation translation;
 
-    public TranslationPresenter() {
+    public SwingTranslationView() {
         window = new JFrame("Translate:");
         input = new JTextField();
         submit = new JButton("okay");
@@ -160,22 +154,17 @@ public class TranslationPresenter {
         window.add(rootValueLabel, constraints);
     }
 
+    @Override
     public void show() {
         window.setVisible(true);
     }
 
+    @Override
     public void hide() {
         window.setVisible(false);
     }
 
-    public void addTranslationSubmitListener(Consumer<Translation> listener) {
-        translationSubmitListeners.add(listener);
-    }
-
-    public void addTranslationAbortListener(Runnable listener) {
-        translationAbortListeners.add(listener);
-    }
-
+    @Override
     public void setRequestedTranslation(Translation left, Translation right) {
         this.translation = right;
         this.rootValueLabel.setText(left.getValue());

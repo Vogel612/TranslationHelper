@@ -12,6 +12,7 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.swing.SwingTranslationView;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -22,7 +23,7 @@ import java.util.function.Consumer;
  */
 public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
 
-    private TranslationPresenter cut;
+    private SwingTranslationView cut;
 
     private FrameFixture frame;
     private Runnable abortListener;
@@ -41,7 +42,7 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
 
     @Before
     public void before() {
-        cut = new TranslationPresenter();
+        cut = new SwingTranslationView();
         cut.addTranslationAbortListener(abortListener);
         cut.addTranslationSubmitListener(submitListener);
         cut.setRequestedTranslation(new Translation("", "", ""), new Translation("", "", ""));

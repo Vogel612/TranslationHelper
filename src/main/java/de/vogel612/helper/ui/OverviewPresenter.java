@@ -23,10 +23,10 @@ public class OverviewPresenter {
     private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
     private final OverviewModel model;
     private final OverviewView view;
-    private final TranslationPresenter translationPresenter;
+    private final TranslationView translationPresenter;
     private final ResxChooser resxChooser;
 
-    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationPresenter p, ResxChooser rc) {
+    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationView p, ResxChooser rc) {
         model = m;
         view = v;
         translationPresenter = p;

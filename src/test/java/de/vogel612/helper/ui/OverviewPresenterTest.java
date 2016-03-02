@@ -3,7 +3,6 @@ package de.vogel612.helper.ui;
 import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
 import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
@@ -12,7 +11,7 @@ import org.junit.Test;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.common.OverviewViewCommon;
-import de.vogel612.helper.ui.swing.SwingResxChooser;
+import de.vogel612.helper.ui.ResxChooser;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,7 +22,7 @@ public class OverviewPresenterTest {
 
     private OverviewView v;
     private OverviewModel m;
-    private TranslationPresenter p;
+    private TranslationView p;
     private ResxChooser rc;
 
     private OverviewPresenter cut;
@@ -32,8 +31,8 @@ public class OverviewPresenterTest {
     public void beforeTest() {
         v = mock(OverviewViewCommon.class);
         m = mock(OverviewModel.class);
-        p = mock(TranslationPresenter.class);
-        rc = mock(SwingResxChooser.class);
+        p = mock(TranslationView.class);
+        rc = mock(ResxChooser.class);
 
         cut = new OverviewPresenter(m, v, p, rc);
         reset(v, m, p, rc);

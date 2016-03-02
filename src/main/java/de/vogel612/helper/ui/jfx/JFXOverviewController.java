@@ -58,18 +58,18 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        /*
-        Objects.requireNonNull(save, "save was not FXML-injected correctly");
-        Objects.requireNonNull(table, "table was not FXML-injected correctly");
-        Objects.requireNonNull(chooseLang, "chooseLang was not FXML-injected correctly");
 
-        save.setOnAction(evt -> {
-            saveRequestListeners.forEach(Runnable::run);
-        });
-        chooseLang.setOnAction(evt -> {
-            langChoiceRequestListeners.forEach(Runnable::run);
-        });
-        */
+//        Objects.requireNonNull(save, "save was not FXML-injected correctly");
+//        Objects.requireNonNull(table, "table was not FXML-injected correctly");
+//        Objects.requireNonNull(chooseLang, "chooseLang was not FXML-injected correctly");
+
+//        save.setOnAction(evt -> {
+//            saveRequestListeners.forEach(Runnable::run);
+//        });
+//        chooseLang.setOnAction(evt -> {
+//            langChoiceRequestListeners.forEach(Runnable::run);
+//        });
+
         // FIXME window close request listeners!!
         // FIXME row selection listeners for Return and Double-Click
     }

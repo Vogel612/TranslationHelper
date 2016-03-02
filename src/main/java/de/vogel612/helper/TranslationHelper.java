@@ -1,23 +1,17 @@
 package de.vogel612.helper;
 
 import de.vogel612.helper.data.OverviewModel;
-import de.vogel612.helper.ui.OverviewPresenter;
-import de.vogel612.helper.ui.OverviewView;
-import de.vogel612.helper.ui.ResxChooser;
+import de.vogel612.helper.ui.*;
 import de.vogel612.helper.ui.jfx.JFXOverviewView;
-import de.vogel612.helper.ui.jfx.JFXResxChooserController;
-import de.vogel612.helper.ui.TranslationPresenter;
 import de.vogel612.helper.ui.jfx.JFXResxChooserView;
+import de.vogel612.helper.ui.jfx.JFXTranslationView;
+import de.vogel612.helper.ui.swing.SwingTranslationView;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class TranslationHelper extends Application {
 
@@ -42,26 +36,14 @@ public class TranslationHelper extends Application {
             final Path resxFile = Paths.get(params.getUnnamed().get(0));
             rc.setFileset(resxFile);
         }
-
-        // That's a view though.. duh.
-        TranslationPresenter tp = new TranslationPresenter();
+        TranslationView tv = new JFXTranslationView(primaryStage, getClass().getResource("/TranslationView.fxml"));
         OverviewView v = new JFXOverviewView(primaryStage, getClass().getResource("/OverviewView.fxml"));
 
         OverviewModel m = new OverviewModel();
-        OverviewPresenter p = new OverviewPresenter(m, v, tp, rc); // just to stop the compiler from screaming at me
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc); // just to stop the compiler from screaming at me
 
         // Wire up all the crap
-        v.addLanguageRequestListener(p::fileChoosing);
-        v.addSaveRequestListener(p::onSaveRequest);
-        v.addTranslationRequestListener(p::onTranslateRequest);
-        v.addWindowClosingListener(p::onWindowCloseRequest);
-
-        m.addParseCompletionListener(p::onParseCompletion);
-
-        tp.addTranslationAbortListener(p::onTranslationAbort);
-        tp.addTranslationSubmitListener(p::onTranslationSubmit);
-
-        rc.addCompletionListener(p::fileChoiceCompletion);
+        DependencyRoot.inject(m, v, p, tv, rc);
 
         p.show();
         p.fileChoosing();
