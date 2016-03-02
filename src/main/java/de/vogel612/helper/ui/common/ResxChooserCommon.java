@@ -1,6 +1,7 @@
 package de.vogel612.helper.ui.common;
 
 import static de.vogel612.helper.data.util.DataUtilities.FILENAME_PATTERN;
+import static de.vogel612.helper.data.util.DataUtilities.streamFileset;
 
 import de.vogel612.helper.data.util.DataUtilities;
 import de.vogel612.helper.ui.ResxChooser;
@@ -15,14 +16,28 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Created by vogel612 on 01.03.16.
+ * Encapsulates common functionality for {@link ResxChooser Resx Choosers} into an abstract class.<br/>
+ * <p>
+ * Encapsulated is the fields necessary to store data, namely {@link #left}, {@link #right} and {@link
+ * #filesetBacking}.
+ * Additionally there is an automatic reparsing functionality of the encapsulated {@link #localeOptionCache}, given
+ * implementing classes call {@link #onFilesetChange()} when the Fileset changes. That triggers a recheck for the
+ * locale
+ * options. Additionally {@link #onFilesetChange()} will call {@link #onFilesetChangeInternal()} upon completion to
+ * notify the implementing class.
+ * </p>
+ * <p>
+ * There even is a method for internal use, that handles listener notification, namely {@link #completeChoice()}. It
+ * will access the fields in the current class to build a {@link de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent}
+ * with the relevant information
+ * </p>
  */
 public abstract class ResxChooserCommon implements ResxChooser {
     protected final Set<String> localeOptionCache = new HashSet<>();
     private final Set<Consumer<ResxChooserEvent>> resxChoiceCompletionListener = new HashSet<>();
     protected String left;
     protected String right;
-    protected Path filesetBacking;
+    protected Path filesetBacking; // could be done with Observable notifying onFilesetChange() ...
 
     @Override
     public final void setFileset(Path fileset) {
@@ -33,13 +48,17 @@ public abstract class ResxChooserCommon implements ResxChooser {
         onFilesetChange();
     }
 
+    /**
+     * Should be called when changing the {@link #filesetBacking} to update the {@link #localeOptionCache available
+     * locales}.
+     * This also calls {@link #onFilesetChangeInternal()} to notify child classes of the refresh.
+     */
     protected final void onFilesetChange() {
         final Matcher filesetMatcher = FILENAME_PATTERN.matcher(filesetBacking.getFileName().toString());
         if (filesetMatcher.matches()) { // should always be true
             // group is not optional, so we're good
             final String filesetName = filesetMatcher.group(1);
-            try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(filesetBacking.getParent(),
-              filesetName)) {
+            try (final Stream<Path> filesetFiles = streamFileset(filesetBacking.getParent(), filesetName)) {
                 localeOptionCache.clear();
                 localeOptionCache.addAll(filesetFiles.map(
                   DataUtilities::parseLocale).collect(

@@ -19,7 +19,6 @@ import java.util.stream.Stream;
  * Centralizes access to data processing for {@link de.vogel612.helper.data.OverviewModel} and other classes that
  * benefit from the abstraction
  */
-// FIXME investigate moving this here
 // FIXME write unit-tests
 public class DataUtilities {
     public static final String SINGLE_TRUTH_LOCALE = "";

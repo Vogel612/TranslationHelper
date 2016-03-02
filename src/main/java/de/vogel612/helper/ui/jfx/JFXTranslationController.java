@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 
 /**
  * Created by vogel612 on 02.03.16.
@@ -67,5 +68,18 @@ public class JFXTranslationController extends TranslationViewCommon implements I
             translationSubmitListeners.forEach(c -> c.accept(translation));
         });
         cancel.setOnAction(evt -> translationAbortListeners.forEach(Runnable::run));
+        input.setOnKeyTyped((evt) -> {
+            if (evt.getCode() == KeyCode.ENTER) {
+                if (evt.isShiftDown()) {
+                    input.setText(input.getText() + "\r\n");
+                } else {
+                    submit.fire(); // FIXME verify?
+                }
+                evt.consume();
+            } else if (evt.getCode() == KeyCode.ESCAPE) {
+                cancel.fire();
+            }
+            // should keep bubbling to default handler
+        });
     }
 }

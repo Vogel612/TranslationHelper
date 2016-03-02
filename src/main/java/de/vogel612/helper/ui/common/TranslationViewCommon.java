@@ -8,7 +8,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Created by vogel612 on 02.03.16.
+ * Encapsulates common functionality for {@link TranslationView Translation Views} into an abstract class.<br/>
+ * <p>Encapsulated is all functionality related to adding and maintaining Listeners. They are kept in {@link
+ * #translationAbortListeners} and {@link #translationSubmitListeners} respectively and available to extending classes.
+ * Furthermore it contains a title-format string to use with the currently translated Translation's {@link
+ * Translation#key key} and {@link Translation#locale locale}</p>
  */
 public abstract class TranslationViewCommon implements TranslationView {
     protected static final String TITLE_FORMAT = "Translating - %s to %s";
