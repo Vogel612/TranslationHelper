@@ -2,20 +2,18 @@ package de.vogel612.helper.ui.swing;
 
 import static de.vogel612.helper.data.util.DataUtilities.FILENAME_PATTERN;
 
-import de.vogel612.helper.ui.ResxChooser;
+import de.vogel612.helper.ui.common.ResxChooserCommon;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 
 /**
  * View to select a set of Resx-Files and locales.
  */
-public class SwingResxChooser extends ResxChooser {
+public class SwingResxChooser extends ResxChooserCommon {
 
     private final JFrame window = new JFrame("Translation Helper - File and Locale chooser");
     private final JFileChooser fileChooser = new JFileChooser();

@@ -9,17 +9,14 @@ import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
 import de.vogel612.helper.data.TranslationTableRenderer;
 import de.vogel612.helper.data.TranslationTableSelectionModel;
-import de.vogel612.helper.ui.OverviewView;
+import de.vogel612.helper.ui.common.OverviewViewCommon;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
 
-public class SwingOverviewView extends OverviewView {
+public class SwingOverviewView extends OverviewViewCommon {
 
     static final Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 500);
     private static final Dimension DEFAULT_WINDOW_SIZE = new Dimension(1000, 700);

@@ -3,72 +3,76 @@ package de.vogel612.helper.ui.jfx;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewView;
 
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 /**
- * Created by vogel612 on 01.03.16.
+ * Created by vogel612 on 02.03.16.
  */
-public class JFXOverviewView extends OverviewView implements Initializable {
+public class JFXOverviewView implements OverviewView {
 
-    @FXML
-    private Button save;
+    private final JFXOverviewController controller;
+    private final Scene ui;
+    private final Stage stage;
 
-    @FXML
-    private Button chooseLang;
+    public JFXOverviewView(Stage stage, URL fxml) throws IOException {
+        this.stage = stage;
+        FXMLLoader loader = new FXMLLoader(fxml);
+        ui = new Scene(loader.load());
+        controller = loader.getController();
+    }
 
-    @FXML
-    private TableView table;
+    @Override
+    public void addWindowClosingListener(Consumer<WindowEvent> listener) {
+        controller.addWindowClosingListener(listener);
+    }
 
-    public JFXOverviewView() {
+    @Override
+    public void addLanguageRequestListener(Runnable listener) {
+        controller.addLanguageRequestListener(listener);
+    }
 
+    @Override
+    public void addTranslationRequestListener(Consumer<String> listener) {
+        controller.addTranslationRequestListener(listener);
+    }
+
+    @Override
+    public void addSaveRequestListener(Runnable listener) {
+        controller.addSaveRequestListener(listener);
     }
 
     @Override
     public void initialize() {
-
+        // shouldn't be needed anymore
     }
 
     @Override
     public void show() {
-
+        stage.setScene(ui);
+        stage.show();
     }
 
     @Override
     public void rebuildWith(List<Translation> left, List<Translation> right) {
-
+        controller.rebuildWith(left, right);
     }
 
     @Override
     public void displayError(String title, String errorMessage) {
-
+        controller.displayError(title, errorMessage);
     }
 
     @Override
     public void hide() {
-
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        Objects.requireNonNull(save, "save was not FXML-injected correctly");
-        Objects.requireNonNull(table, "table was not FXML-injected correctly");
-        Objects.requireNonNull(chooseLang, "chooseLang was not FXML-injected correctly");
-
-        save.setOnAction(evt -> {
-            saveRequestListeners.forEach(Runnable::run);
-        });
-        chooseLang.setOnAction(evt -> {
-            langChoiceRequestListeners.forEach(Runnable::run);
-        });
-        // FIXME window close request listeners!!
-        // FIXME row selection listeners for Return and Double-Click
+        stage.hide();
     }
 }

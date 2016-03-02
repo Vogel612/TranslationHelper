@@ -5,7 +5,7 @@ import static javax.swing.JOptionPane.*;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
+import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
@@ -14,10 +14,6 @@ import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 public class OverviewPresenter {
 
@@ -38,18 +34,6 @@ public class OverviewPresenter {
 
         view.initialize();
     }
-
-    // FIXME properly rewrite the Presenter :/
-//    private final Stage presentation;
-//
-//    private final GridPane resxChooser;
-//    private final StackPane overview;
-//
-//    public OverviewPresenter(Stage primaryStage, GridPane rcPane, StackPane overviewPane) {
-//        presentation = primaryStage;
-//        resxChooser = rcPane;
-//        overview = overviewPane;
-//    }
 
 
     public void show() {
@@ -76,6 +60,7 @@ public class OverviewPresenter {
         List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE));
         List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE));
         view.rebuildWith(left, right);
+        view.show();
     }
 
     public void loadFiles(final Path resxFile) {

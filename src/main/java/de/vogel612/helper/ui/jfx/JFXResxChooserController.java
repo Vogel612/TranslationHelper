@@ -3,7 +3,7 @@ package de.vogel612.helper.ui.jfx;
 
 import static de.vogel612.helper.data.util.DataUtilities.FILENAME_PATTERN;
 
-import de.vogel612.helper.ui.ResxChooser;
+import de.vogel612.helper.ui.common.ResxChooserCommon;
 
 import java.io.File;
 import java.net.URL;
@@ -21,7 +21,7 @@ import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-public class JFXResxChooser extends ResxChooser implements Initializable {
+public class JFXResxChooserController extends ResxChooserCommon implements Initializable {
 
     @FXML
     private Label leftTranslation;
@@ -46,7 +46,7 @@ public class JFXResxChooser extends ResxChooser implements Initializable {
 
     private final FileChooser fileChooser = new FileChooser();
 
-    public JFXResxChooser() {
+    public JFXResxChooserController() {
         fileChooser.setTitle("Choose RESX file");
         fileChooser.getExtensionFilters().add(new ExtensionFilter("Resx Files", "resx"));
     }

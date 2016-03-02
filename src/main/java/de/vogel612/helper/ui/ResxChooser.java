@@ -1,97 +1,20 @@
 package de.vogel612.helper.ui;
 
-import static de.vogel612.helper.data.util.DataUtilities.FILENAME_PATTERN;
+import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
 
-import de.vogel612.helper.data.util.DataUtilities;
-import de.vogel612.helper.ui.jfx.JFXResxChooser;
-
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * Created by vogel612 on 01.03.16.
+ * Created by vogel612 on 02.03.16.
  */
-public abstract class ResxChooser {
-    protected final Set<String> localeOptionCache = new HashSet<>();
-    private final Set<Consumer<JFXResxChooser.ResxChooserEvent>> resxChoiceCompletionListener = new HashSet<>();
-    protected String left;
-    protected String right;
-    protected Path filesetBacking;
+public interface ResxChooser {
+    void setFileset(Path fileset);
 
-    public final void setFileset(Path fileset) {
-        if (fileset == null || !fileset.toFile().exists()) {
-            throw new IllegalArgumentException("File does not exist");
-        }
-        this.filesetBacking = fileset;
-        onFilesetChange();
-    }
+    void hide();
 
-    protected final void onFilesetChange() {
-        final Matcher filesetMatcher = FILENAME_PATTERN.matcher(filesetBacking.getFileName().toString());
-        if (filesetMatcher.matches()) { // should always be true
-            // group is not optional, so we're good
-            final String filesetName = filesetMatcher.group(1);
-            try (final Stream<Path> filesetFiles = DataUtilities.streamFileset(filesetBacking.getParent(),
-              filesetName)) {
-                localeOptionCache.clear();
-                localeOptionCache.addAll(filesetFiles.map(
-                  DataUtilities::parseLocale).collect(
-                  Collectors.toSet()));
-            } catch (IOException e1) {
-                // FIXME handle
-                e1.printStackTrace();
-            }
-        }
-        onFilesetChangeInternal();
-    }
+    void show();
 
-    protected abstract void onFilesetChangeInternal();
+    void addCompletionListener(Consumer<ResxChooserEvent> listener);
 
-    public abstract void hide();
-
-    public abstract void show();
-
-    public final void addCompletionListener(Consumer<JFXResxChooser.ResxChooserEvent> listener) {
-        resxChoiceCompletionListener.add(listener);
-    }
-
-    protected final void completeChoice() {
-        if (left != null && right != null && filesetBacking != null) {
-            final ResxChooserEvent evt = new ResxChooserEvent(this);
-            resxChoiceCompletionListener.forEach(l -> l.accept(evt));
-        }
-    }
-
-    /**
-     * An event signaling the choice of fileset and locale is completed
-     */
-    public static class ResxChooserEvent {
-        private final Path fileset;
-        private final String rightLocale;
-        private final String leftLocale;
-
-        public ResxChooserEvent(ResxChooser c) {
-            this.leftLocale = c.left;
-            this.rightLocale = c.right;
-            this.fileset = c.filesetBacking;
-        }
-
-        public String getLeftLocale() {
-            return leftLocale;
-        }
-
-        public String getRightLocale() {
-            return rightLocale;
-        }
-
-        public Path getFileset() {
-            return fileset;
-        }
-    }
 }

@@ -11,6 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Translation;
+import de.vogel612.helper.ui.common.OverviewViewCommon;
 import de.vogel612.helper.ui.swing.SwingResxChooser;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class OverviewPresenterTest {
 
     @Before
     public void beforeTest() {
-        v = mock(OverviewView.class);
+        v = mock(OverviewViewCommon.class);
         m = mock(OverviewModel.class);
         p = mock(TranslationPresenter.class);
         rc = mock(SwingResxChooser.class);

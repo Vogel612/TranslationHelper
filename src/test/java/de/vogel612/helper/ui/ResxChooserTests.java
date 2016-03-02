@@ -10,7 +10,7 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
-import de.vogel612.helper.ui.ResxChooser.ResxChooserEvent;
+import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
 import de.vogel612.helper.ui.swing.SwingResxChooser;
 
 import java.awt.*;
