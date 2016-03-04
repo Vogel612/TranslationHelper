@@ -122,11 +122,8 @@ public class OverviewModel {
             doc = documentBuilder.build(path.toFile());
             return doc;
         } catch (JDOMException e) {
-            // FIXME: Get the presenter out of error-handling!
-            // presenter.onException(e, "Unspecified Parsing error");
             throw new IllegalStateException("Unable to parse " + xmlFile, e);
         } catch (IOException e) {
-            // presenter.onException(e, "Unspecified I/O Error");
             throw new UncheckedIOException("Unable to read" + xmlFile, e);
         }
     }

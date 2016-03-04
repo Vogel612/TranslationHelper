@@ -1,28 +1,24 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.StackPane?>
-<StackPane xmlns:fx="http://javafx.com/fxml"
-           fx:controller="de.vogel612.helper.ui.jfx.JFXOverviewController"
-           minHeight="300" minWidth="600">
+<?import javafx.scene.layout.GridPane?>
+<GridPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="de.vogel612.helper.ui.jfx.JFXOverviewController"
+            minHeight="300" minWidth="600">
     <padding>
         <Insets top="15" bottom="20" right="15" left="15"/>
     </padding>
     <children>
-        <ButtonBar StackPane.alignment="TOP_CENTER">
+        <ButtonBar minHeight="30" GridPane.rowIndex="0" GridPane.columnIndex="0">
             <buttons>
-                <Button fx:id="save" text="Save"/>
-                <Button fx:id="chooseLang" text="Choose Languages"/>
+                <Button fx:id="save" text="Save" minWidth="60" minHeight="20"/>
+                <Button fx:id="chooseLang" text="Choose Languages" minWidth="60" minHeight="20"/>
             </buttons>
         </ButtonBar>
-        <ScrollPane StackPane.alignment="CENTER" minHeight="240" minWidth="580">
-            <content>
-                <TableView fx:id="table">
-                    <columns>
-                        <TableColumn editable="false" minWidth="250"/>
-                        <TableColumn editable="false" minWidth="250"/>
-                    </columns>
-                </TableView>
-            </content>
-        </ScrollPane>
+        <TableView fx:id="table" GridPane.rowIndex="1" GridPane.columnIndex="0">
+            <columns>
+                <TableColumn editable="false" minWidth="250"/>
+                <TableColumn editable="false" minWidth="250"/>
+            </columns>
+        </TableView>
     </children>
-</StackPane>
+</GridPane>

@@ -72,7 +72,6 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
 
     private void showLocaleDialog(Consumer<String> callback) {
         final String[] localeChoices = localeOptionCache.toArray(new String[localeOptionCache.size()]);
-        // FIXME rewrite as JavaFX dialog
         ChoiceDialog<String> dialog = new ChoiceDialog<>(localeChoices[0], localeChoices);
         dialog.setHeaderText("Choose a Language");
         dialog.setContentText("");
@@ -85,13 +84,12 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
 
     @Override
     public void hide() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    // FIXME probably need to get that into presenter
     public void show() {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -73,11 +73,12 @@ public class JFXTranslationController extends TranslationViewCommon implements I
                 if (evt.isShiftDown()) {
                     input.setText(input.getText() + "\r\n");
                 } else {
-                    submit.fire(); // FIXME verify?
+                    submit.fire();
                 }
                 evt.consume();
             } else if (evt.getCode() == KeyCode.ESCAPE) {
                 cancel.fire();
+                evt.consume();
             }
             // should keep bubbling to default handler
         });
