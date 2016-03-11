@@ -81,8 +81,7 @@ public class SwingOverviewView extends OverviewViewCommon {
         window.add(scroller, constraints);
         bindEventListener();
 
-        translationContainer.setDefaultRenderer(Object.class,
-          new TranslationTableRenderer());
+        translationContainer.setDefaultRenderer(Object.class, new TranslationTableRenderer());
         translationContainer.setSelectionModel(new TranslationTableSelectionModel());
         translationContainer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 

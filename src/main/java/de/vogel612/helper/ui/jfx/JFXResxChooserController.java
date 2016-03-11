@@ -105,6 +105,7 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
         submit.setOnAction(evt -> completeChoice());
         filesetChoose.setOnAction(evt -> {
             evt.consume();
+            // FIXME unsaved changes??
             // FIXME need the owner window for proper modal behaviour
             final File resxFile = fileChooser.showOpenDialog(null);
             setFileset(resxFile.toPath()); // updates UI for us

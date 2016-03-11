@@ -77,14 +77,10 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         Objects.requireNonNull(table, "table was not FXML-injected correctly");
         Objects.requireNonNull(chooseLang, "chooseLang was not FXML-injected correctly");
 
-        save.setOnAction(evt -> {
-            saveRequestListeners.forEach(Runnable::run);
-        });
-        chooseLang.setOnAction(evt -> {
-            langChoiceRequestListeners.forEach(Runnable::run);
-        });
+        save.setOnAction(evt -> saveRequestListeners.forEach(Runnable::run));
+        chooseLang.setOnAction(evt -> langChoiceRequestListeners.forEach(Runnable::run));
+
         // FIXME bind Table Rendering and Selection models
-        // FIXME window close request listeners!!
         // FIXME row selection listeners for Return and Double-Click
     }
 }

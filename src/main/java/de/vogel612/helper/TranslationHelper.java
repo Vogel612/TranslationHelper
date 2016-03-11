@@ -5,7 +5,6 @@ import de.vogel612.helper.ui.*;
 import de.vogel612.helper.ui.jfx.JFXOverviewView;
 import de.vogel612.helper.ui.jfx.JFXResxChooserView;
 import de.vogel612.helper.ui.jfx.JFXTranslationView;
-import de.vogel612.helper.ui.swing.SwingTranslationView;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

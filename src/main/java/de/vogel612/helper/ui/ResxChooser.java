@@ -16,5 +16,4 @@ public interface ResxChooser {
     void show();
 
     void addCompletionListener(Consumer<ResxChooserEvent> listener);
-
 }
