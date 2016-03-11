@@ -36,7 +36,7 @@ public class JFXOverviewView implements OverviewView {
         ui = new Scene(loader.load());
         controller = loader.getController();
 
-        // FIXME windowClosing should be bound to our stage
+        stage.setOnCloseRequest(evt -> controller.triggerCloseRequest());
     }
 
     @Override

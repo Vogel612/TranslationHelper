@@ -88,4 +88,9 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         // FIXME bind Table Rendering and Selection models
         // FIXME row selection listeners for Return and Double-Click
     }
+
+    // FIXME this is fugly
+    void triggerCloseRequest() {
+        windowCloseListeners.forEach(Runnable::run);
+    }
 }
