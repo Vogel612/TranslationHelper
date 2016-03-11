@@ -10,7 +10,7 @@ import java.util.function.Consumer;
  * Created by vogel612 on 02.03.16.
  */
 public interface OverviewView {
-    void addWindowClosingListener(Consumer<WindowEvent> listener);
+    void addWindowClosingListener(Runnable listener);
 
     void addLanguageRequestListener(Runnable listener);
 
@@ -27,4 +27,6 @@ public interface OverviewView {
     void displayError(String title, String errorMessage);
 
     void hide();
+
+    void showPrompt(String title, String promptText, Runnable okCallback);
 }

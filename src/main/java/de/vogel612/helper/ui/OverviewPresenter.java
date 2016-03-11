@@ -1,13 +1,10 @@
 package de.vogel612.helper.ui;
 
-import static javax.swing.JOptionPane.*;
-
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
 
-import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -101,36 +98,29 @@ public class OverviewPresenter {
         }
     }
 
-    public void onWindowCloseRequest(WindowEvent windowEvent) {
+    public void onWindowCloseRequest() {
         if (model.isNotSaved()) {
-            // prompt to save changes
-            int choice = JOptionPane.showConfirmDialog(windowEvent.getWindow(),
-              "You have unsaved changes. Do you wish to save before exiting?",
-              "Unsaved Changes",
-              YES_NO_CANCEL_OPTION);
-            switch (choice) {
-                case YES_OPTION:
-                    onSaveRequest();
-                    //FIXME: What if saving fails?
-                    // fallthrough intended
-                case NO_OPTION:
-                    view.hide();
-                    System.exit(0);
-                    break;
-                case CANCEL_OPTION:
-                    // do nothing
-                    break;
-            }
-        } else {
-            System.exit(0);
+            view.showPrompt("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
+              this::onSaveRequest
+            );
         }
+        // FIXME allow preventing to close
+        view.hide();
+        System.exit(0);
     }
 
     /**
-     * Allows the user to choose an arbitrary *.regex file and asks them to choose out of the available locales for Left
+     * Allows the user to choose an arbitrary *.regex file and asks them to choose out of the available locales for
+     * Left
      * and Right in the view.
      */
     public void fileChoosing() {
+        if (model.isNotSaved()) {
+            view.showPrompt("Unsaved Changes",
+              "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
+              this::onSaveRequest
+            );
+        }
         resxChooser.show();
     }
 }

@@ -1,5 +1,8 @@
 package de.vogel612.helper.ui.jfx;
 
+
+import static javafx.scene.control.ButtonType.*;
+
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewView;
 
@@ -7,11 +10,16 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Created by vogel612 on 02.03.16.
@@ -27,10 +35,12 @@ public class JFXOverviewView implements OverviewView {
         FXMLLoader loader = new FXMLLoader(fxml);
         ui = new Scene(loader.load());
         controller = loader.getController();
+
+        // FIXME windowClosing should be bound to our stage
     }
 
     @Override
-    public void addWindowClosingListener(Consumer<WindowEvent> listener) {
+    public void addWindowClosingListener(Runnable listener) {
         controller.addWindowClosingListener(listener);
     }
 
@@ -73,5 +83,26 @@ public class JFXOverviewView implements OverviewView {
     @Override
     public void hide() {
         stage.hide();
+    }
+
+    @Override
+    public void showPrompt(String title, String promptText, Runnable okCallback) {
+        Dialog<ButtonType> d = new Dialog<>();
+        d.setTitle(title);
+        d.setContentText(promptText);
+        d.initModality(Modality.APPLICATION_MODAL);
+        d.initOwner(stage);
+        d.initStyle(StageStyle.UNIFIED);
+
+        d.getDialogPane().getButtonTypes().addAll(YES, NO);
+
+        Optional<ButtonType> res = d.showAndWait();
+        if (res.isPresent()) {
+            // no switch because ButtonTypes aren't constant
+            if (res.get() == YES) {
+                okCallback.run();
+            }
+        }
+
     }
 }

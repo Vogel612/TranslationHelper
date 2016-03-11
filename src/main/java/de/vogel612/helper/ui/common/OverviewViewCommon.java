@@ -2,7 +2,6 @@ package de.vogel612.helper.ui.common;
 
 import de.vogel612.helper.ui.OverviewView;
 
-import java.awt.event.WindowEvent;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -10,12 +9,12 @@ import java.util.function.Consumer;
 public abstract class OverviewViewCommon implements OverviewView {
 
     protected final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
-    protected final Set<Consumer<WindowEvent>> windowCloseListeners = new HashSet<>();
+    protected final Set<Runnable> windowCloseListeners = new HashSet<>();
     protected final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
     protected final Set<Runnable> saveRequestListeners = new HashSet<>();
 
     @Override
-    public final void addWindowClosingListener(Consumer<WindowEvent> listener) {
+    public final void addWindowClosingListener(Runnable listener) {
         windowCloseListeners.add(listener);
     }
 

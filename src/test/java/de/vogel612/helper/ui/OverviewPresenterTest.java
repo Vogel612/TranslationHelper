@@ -121,6 +121,7 @@ public class OverviewPresenterTest {
         verify(m).getTranslations(DEFAULT_TARGET_LOCALE);
         verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
         verify(v).rebuildWith(leftSide, list);
+        verify(v).show();
         verify(p).hide();
         verifyNoMoreInteractions(m, v, p, rc);
     }

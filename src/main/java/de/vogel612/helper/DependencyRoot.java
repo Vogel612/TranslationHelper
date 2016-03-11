@@ -13,10 +13,13 @@ public final class DependencyRoot {
 
     public static void inject(OverviewModel model, OverviewView overview, OverviewPresenter presenter,
       TranslationView translations, ResxChooser resxChooser) {
+
+        // FIXME unsaved changes checker??
+
+        overview.addWindowClosingListener(presenter::onWindowCloseRequest);
         overview.addLanguageRequestListener(presenter::fileChoosing);
         overview.addSaveRequestListener(presenter::onSaveRequest);
         overview.addTranslationRequestListener(presenter::onTranslateRequest);
-        overview.addWindowClosingListener(presenter::onWindowCloseRequest);
         model.addParseCompletionListener(presenter::onParseCompletion);
         translations.addTranslationAbortListener(presenter::onTranslationAbort);
         translations.addTranslationSubmitListener(presenter::onTranslationSubmit);

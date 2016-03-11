@@ -2,8 +2,8 @@ package de.vogel612.helper.ui.swing;
 
 import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
-import static java.awt.event.KeyEvent.*;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static java.awt.event.KeyEvent.VK_ENTER;
+import static javax.swing.JOptionPane.*;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.data.TranslationTable;
@@ -49,7 +49,7 @@ public class SwingOverviewView extends OverviewViewCommon {
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent windowEvent) {
-                windowCloseListeners.forEach(l -> l.accept(windowEvent));
+                windowCloseListeners.forEach(Runnable::run);
             }
         });
     }
@@ -158,4 +158,11 @@ public class SwingOverviewView extends OverviewViewCommon {
     public void hide() {
         window.setVisible(false);
     }
+
+    @Override
+    public void showPrompt(String title, String promptText, Runnable okCallback) {
+        int choice = JOptionPane.showConfirmDialog(window, promptText, title, YES_NO_OPTION);
+        if (choice == YES_OPTION) { okCallback.run(); }
+    }
 }
+

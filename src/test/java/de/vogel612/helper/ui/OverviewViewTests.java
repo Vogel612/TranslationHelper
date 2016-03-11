@@ -2,7 +2,6 @@ package de.vogel612.helper.ui;
 
 import static junit.framework.Assert.assertEquals;
 import static org.assertj.swing.finder.WindowFinder.findFrame;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -19,7 +18,6 @@ import de.vogel612.helper.ui.swing.SwingOverviewView;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -39,7 +37,7 @@ public class OverviewViewTests extends AssertJSwingJUnitTestCase {
     private OverviewView cut;
 
     private Runnable saveReqListener;
-    private Consumer<WindowEvent> windowClosingListener;
+    private Runnable windowClosingListener;
     private Consumer<String> translationReqListener;
     private Runnable langReqListener;
 
@@ -49,7 +47,7 @@ public class OverviewViewTests extends AssertJSwingJUnitTestCase {
         FailOnThreadViolationRepaintManager.uninstall(); // FUCK YOU!
 
         saveReqListener = mock(Runnable.class);
-        windowClosingListener = mock(Consumer.class);
+        windowClosingListener = mock(Runnable.class);
         translationReqListener = mock(Consumer.class);
         langReqListener = mock(Runnable.class);
 
@@ -98,7 +96,7 @@ public class OverviewViewTests extends AssertJSwingJUnitTestCase {
     public void closingWindow_firesWindowClosingListener() {
         frame.close();
 
-        verify(windowClosingListener).accept(any(WindowEvent.class));
+        verify(windowClosingListener).run();
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
     }
 

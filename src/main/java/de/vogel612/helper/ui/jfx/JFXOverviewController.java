@@ -71,6 +71,11 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
     }
 
     @Override
+    public void showPrompt(String title, String promptText, Runnable okCallback) {
+        throw new UnsupportedOperationException(); // done in the View Class
+    }
+
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         Objects.requireNonNull(save, "save was not FXML-injected correctly");

@@ -119,4 +119,5 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
             Platform.runLater(() -> rightTranslation.setText("Right: " + result));
         }));
     }
+
 }
