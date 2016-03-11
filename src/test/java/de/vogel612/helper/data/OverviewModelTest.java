@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui;
+package de.vogel612.helper.data;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -47,7 +47,7 @@ public class OverviewModelTest {
         Path testFile;
         try {
             testFile = Paths.get(
-              getClass().getResource("RubberduckUI.resx").toURI()
+              getClass().getResource("/RubberduckUI.resx").toURI()
             );
         } catch (URISyntaxException e) {
             throw new AssertionError(
@@ -91,7 +91,7 @@ public class OverviewModelTest {
         Path testFile;
         try {
             testFile = Paths.get(
-              getClass().getResource("RubberduckUI.resx").toURI()
+              getClass().getResource("/RubberduckUI.resx").toURI()
             );
         } catch (URISyntaxException e) {
             throw new AssertionError(

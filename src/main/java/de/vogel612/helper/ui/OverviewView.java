@@ -2,7 +2,6 @@ package de.vogel612.helper.ui;
 
 import de.vogel612.helper.data.Translation;
 
-import java.awt.event.WindowEvent;
 import java.util.List;
 import java.util.function.Consumer;
 

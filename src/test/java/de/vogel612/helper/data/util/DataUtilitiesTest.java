@@ -52,7 +52,7 @@ public class DataUtilitiesTest {
     @Test
     public void filesetStream() throws URISyntaxException, IOException {
         Set<String> actual = DataUtilities.streamFileset(
-          Paths.get(getClass().getResource("/de/vogel612/helper/ui/RubberduckUI.resx").toURI()).getParent(),
+          Paths.get(getClass().getResource("/RubberduckUI.resx").toURI()).getParent(),
           "RubberduckUI").map(
           Path::getFileName).map(Path::toString).collect(Collectors.toSet());
         assertTrue(actual.containsAll(Arrays.asList("RubberduckUI.resx", "RubberduckUI.ts.resx")));

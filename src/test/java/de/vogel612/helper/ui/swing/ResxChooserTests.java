@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui;
+package de.vogel612.helper.ui.swing;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.mockito.Mockito.mock;
@@ -10,8 +10,8 @@ import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
+import de.vogel612.helper.ui.ResxChooser;
 import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
-import de.vogel612.helper.ui.swing.SwingResxChooser;
 
 import java.awt.*;
 import java.nio.file.Paths;
@@ -40,7 +40,7 @@ public class ResxChooserTests extends AssertJSwingJUnitTestCase {
     public void before() {
         cut = new SwingResxChooser();
         cut.addCompletionListener(listener);
-        cut.setFileset(Paths.get(getClass().getResource("RubberduckUI.resx").getFile()));
+        cut.setFileset(Paths.get(getClass().getResource("/RubberduckUI.resx").getFile()));
         cut.show();
 
         frame = findFrame(new GenericTypeMatcher<Frame>(Frame.class){

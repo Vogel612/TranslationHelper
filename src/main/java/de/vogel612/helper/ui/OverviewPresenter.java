@@ -5,7 +5,6 @@ import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
 
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.EnumMap;

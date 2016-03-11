@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui;
+package de.vogel612.helper.ui.swing;
 
 import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.mockito.Matchers.any;
@@ -12,7 +12,6 @@ import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.swing.SwingTranslationView;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;

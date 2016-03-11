@@ -6,7 +6,6 @@ import static javafx.scene.control.ButtonType.*;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewView;
 
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
