@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javafx.application.Platform;
+
 /**
  * Encapsulates common functionality for {@link ResxChooser Resx Choosers} into an abstract class.<br/>
  * <p>
@@ -45,7 +47,7 @@ public abstract class ResxChooserCommon implements ResxChooser {
             throw new IllegalArgumentException("File does not exist");
         }
         this.filesetBacking = fileset;
-        onFilesetChange();
+        Platform.runLater(this::onFilesetChange);
     }
 
     /**

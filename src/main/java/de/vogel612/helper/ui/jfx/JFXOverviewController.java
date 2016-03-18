@@ -9,13 +9,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.util.Pair;
 
 /**
  * Created by vogel612 on 01.03.16.
@@ -29,7 +31,7 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
     private Button chooseLang;
 
     @FXML
-    private TableView<Pair<Translation, Translation>> table;
+    private TableView<TranslationPair> table;
 
     public JFXOverviewController() {
 
@@ -47,15 +49,20 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
 
     @Override
     public void rebuildWith(List<Translation> left, List<Translation> right) {
-        // FIXME get this into a cleaner format, preferrably wrapping the Translations into clean and simple Observables
+        if (left.isEmpty() || right.isEmpty()) {
+            return;
+        }
         table.setItems(buildObservableList(left, right));
+        table.getColumns().get(0).setText(left.get(0).getLocale());
+        table.getColumns().get(1).setText(right.get(0).getLocale());
     }
 
-    private static ObservableList<Pair<Translation, Translation>> buildObservableList(List<Translation> left, List<Translation> right) {
-        List<Pair<Translation, Translation>> result = new ArrayList<>();
+    private static ObservableList<TranslationPair> buildObservableList(List<Translation> left,
+      List<Translation> right) {
+        List<TranslationPair> result = new ArrayList<>();
         final int limit = Math.min(left.size(), right.size());
         for (int i = 0; i < limit; i++) {
-            result.add(new Pair<>(left.get(i), right.get(i)));
+            result.add(new TranslationPair(left.get(i), right.get(i)));
         }
         return FXCollections.observableList(result);
     }
@@ -85,11 +92,34 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         save.setOnAction(evt -> saveRequestListeners.forEach(Runnable::run));
         chooseLang.setOnAction(evt -> langChoiceRequestListeners.forEach(Runnable::run));
 
-        // FIXME bind Table Rendering and Selection models
-        // FIXME row selection listeners for Return and Double-Click
-    }
+        TableColumn<TranslationPair, String> leftColumn = new TableColumn<>("");
+        leftColumn.setCellValueFactory(data -> new ObservableValueBase<String>() {
+            @Override
+            public String getValue() {
+                return data.getValue().getLeft().getValue();
+            }
+        });
+        TableColumn<TranslationPair, String> rightColumn = new TableColumn<>("");
+        rightColumn.setCellValueFactory(data -> new ObservableValueBase<String>() {
+            @Override
+            public String getValue() {
+                return data.getValue().getRight().getValue();
+            }
+        });
+        table.getColumns().clear();
+        table.getColumns().add(leftColumn);
+        table.getColumns().add(rightColumn);
 
-    // FIXME this is fugly
+        table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+//        table
+            // FIXME bind Table Rendering and Selection models
+            // FIXME row selection listeners for Return and Double-Click
+        }
+
+          // FIXME this is fugly
+
     void triggerCloseRequest() {
         windowCloseListeners.forEach(Runnable::run);
     }

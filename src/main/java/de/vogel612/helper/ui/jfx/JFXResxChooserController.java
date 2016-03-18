@@ -108,7 +108,9 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
             // FIXME unsaved changes??
             // FIXME need the owner window for proper modal behaviour
             final File resxFile = fileChooser.showOpenDialog(null);
-            setFileset(resxFile.toPath()); // updates UI for us
+            if (resxFile != null) {
+                setFileset(resxFile.toPath()); // updates UI for us
+            }
         });
         leftChoose.setOnAction(evt -> showLocaleDialog(result -> {
             left = result;

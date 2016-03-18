@@ -1,7 +1,8 @@
 package de.vogel612.helper.ui.jfx;
 
 
-import static javafx.scene.control.ButtonType.*;
+import static javafx.scene.control.ButtonType.NO;
+import static javafx.scene.control.ButtonType.YES;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.OverviewView;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
@@ -65,8 +67,10 @@ public class JFXOverviewView implements OverviewView {
 
     @Override
     public void show() {
-        stage.setScene(ui);
-        stage.show();
+        Platform.runLater(() -> {
+            stage.setScene(ui);
+            stage.show();
+        });
     }
 
     @Override

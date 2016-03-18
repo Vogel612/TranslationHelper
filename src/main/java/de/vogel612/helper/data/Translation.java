@@ -3,15 +3,17 @@ package de.vogel612.helper.data;
 import org.jdom2.Element;
 import de.vogel612.helper.data.util.DataUtilities;
 
+import javafx.beans.value.ObservableValueBase;
+
 /**
  * <p> A simple data holder class to organize Translations. This class exposes an immutable {@link #key},
  * an immutable {@link #locale} and  a
  * {@link #value}. For simplicity it allows changing the translation, instead of requiring the creation of a
  * new instance </p>
- *
+ * <p>To integrate better with JavaFX it also extends {@link ObservableValueBase ObservableValueBase&lt;String&gt; }</p>
  * @author vogel612
  */
-public class Translation {
+public class Translation extends ObservableValueBase<String> {
     /**
      * The Key identifying the Translation in the resx file. Immutable for rather obvious purposes
      */
@@ -54,6 +56,7 @@ public class Translation {
         return key;
     }
 
+    @Override
     public String getValue() {
         return value;
     }

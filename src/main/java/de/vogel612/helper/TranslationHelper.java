@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class TranslationHelper extends Application {
@@ -39,12 +40,11 @@ public class TranslationHelper extends Application {
         OverviewView v = new JFXOverviewView(primaryStage, getClass().getResource("/OverviewView.fxml"));
 
         OverviewModel m = new OverviewModel();
-        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc); // just to stop the compiler from screaming at me
-
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc);
         // Wire up all the crap
         DependencyRoot.inject(m, v, p, tv, rc);
 
-        p.show();
-        p.fileChoosing();
+        Platform.runLater(p::show);
+        Platform.runLater(p::fileChoosing);
     }
 }

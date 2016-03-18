@@ -8,6 +8,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -35,13 +36,15 @@ public class JFXResxChooserView implements ResxChooser {
 
     @Override
     public void hide() {
-        stage.hide();
+        Platform.runLater(stage::hide);
     }
 
     @Override
     public void show() {
-        stage.setScene(ui);
-        stage.show();
+        Platform.runLater(() -> {
+            stage.setScene(ui);
+            stage.show();
+        });
     }
 
     @Override
