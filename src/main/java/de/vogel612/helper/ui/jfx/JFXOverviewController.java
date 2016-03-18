@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
 
 /**
  * Created by vogel612 on 01.03.16.
@@ -113,13 +114,19 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-//        table
-            // FIXME bind Table Rendering and Selection models
-            // FIXME row selection listeners for Return and Double-Click
-        }
+        table.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                translationRequestListeners.forEach(listener -> {
+                    listener.accept(table.getSelectionModel().getSelectedItem().getRight().getKey());
+                });
+            }
+        });
 
-          // FIXME this is fugly
+        // FIXME row selection listeners for Return and Double-Click
+    }
 
+
+    // FIXME this is fugly
     void triggerCloseRequest() {
         windowCloseListeners.forEach(Runnable::run);
     }
