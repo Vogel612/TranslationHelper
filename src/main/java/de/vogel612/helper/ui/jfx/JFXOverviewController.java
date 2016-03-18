@@ -12,13 +12,13 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 /**
  * Created by vogel612 on 01.03.16.
@@ -93,6 +93,24 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         save.setOnAction(evt -> saveRequestListeners.forEach(Runnable::run));
         chooseLang.setOnAction(evt -> langChoiceRequestListeners.forEach(Runnable::run));
 
+        Callback<TableColumn<TranslationPair,String>, TableCell<TranslationPair, String>> cellRenderer =
+          column -> {
+              TableCell<TranslationPair, String> cell = new TableCell<TranslationPair, String>() {
+                  @Override
+                  protected void updateItem(String item, boolean empty) {
+                      super.updateItem(item, empty);
+                      setText(item);
+                  }
+              };
+              cell.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
+                  // assume the double-click selected the relevant row....
+                  translationRequestListeners.forEach(listener -> {
+                      listener.accept(table.getSelectionModel().getSelectedItem().getRight().getKey());
+                  });
+              });
+              return cell;
+          };
+
         TableColumn<TranslationPair, String> leftColumn = new TableColumn<>("");
         leftColumn.setCellValueFactory(data -> new ObservableValueBase<String>() {
             @Override
@@ -100,6 +118,8 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
                 return data.getValue().getLeft().getValue();
             }
         });
+        leftColumn.setCellFactory(cellRenderer);
+
         TableColumn<TranslationPair, String> rightColumn = new TableColumn<>("");
         rightColumn.setCellValueFactory(data -> new ObservableValueBase<String>() {
             @Override
@@ -107,6 +127,8 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
                 return data.getValue().getRight().getValue();
             }
         });
+        rightColumn.setCellFactory(cellRenderer);
+
         table.getColumns().clear();
         table.getColumns().add(leftColumn);
         table.getColumns().add(rightColumn);
@@ -122,7 +144,8 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
             }
         });
 
-        // FIXME row selection listeners for Return and Double-Click
+        table.setEditable(false);
+        // FIXME row selection listeners for Double-Click
     }
 
 
