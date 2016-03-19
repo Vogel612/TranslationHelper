@@ -1,24 +1,31 @@
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<GridPane fx:controller="de.vogel612.helper.ui.jfx.JFXTranslationController"
-          xmlns:fx="http://javafx.com/fxml"
-          minWidth="400" minHeight="200">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane fx:controller="de.vogel612.helper.ui.jfx.JFXTranslationController"
+            xmlns:fx="http://javafx.com/fxml"
+            minWidth="400" minHeight="200">
     <padding>
-        <Insets top="10" bottom="10" left="10" right="10" />
+        <Insets top="10" bottom="10" left="10" right="10"/>
     </padding>
-    <children>
-        <Label fx:id="header" GridPane.columnSpan="2" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <Label fx:id="original" GridPane.columnSpan="2" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <TextField fx:id="input" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-        <Button fx:id="cancel" text="Cancel" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-        <Button fx:id="submit" text="Okay" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-    </children>
-    <columnConstraints>
-        <ColumnConstraints minWidth="200" fillWidth="true" hgrow="SOMETIMES" />
-        <ColumnConstraints minWidth="200" fillWidth="true" hgrow="SOMETIMES" />
-    </columnConstraints>
-</GridPane>
+    <top>
+        <Label fx:id="header"/>
+    </top>
+    <center>
+        <BorderPane>
+            <left>
+                <TextArea fx:id="original" editable="false" minWidth="200" maxWidth="Infinity"/>
+            </left>
+            <right>
+                <TextArea fx:id="input" minWidth="200" maxWidth="Infinity"/>
+            </right>
+        </BorderPane>
+    </center>
+    <bottom>
+        <ButtonBar minHeight="30">
+            <buttons>
+                <Button fx:id="cancel" text="Cancel" minHeight="20"/>
+                <Button fx:id="submit" text="Okay" minHeight="20"/>
+            </buttons>
+        </ButtonBar>
+    </bottom>
+</BorderPane>

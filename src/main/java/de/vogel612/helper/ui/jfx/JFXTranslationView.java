@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -39,8 +40,11 @@ public class JFXTranslationView implements TranslationView {
 
     @Override
     public void show() {
-        stage.setScene(ui);
-        stage.show();
+        Platform.runLater(() -> {
+            stage.setScene(ui);
+            controller.show();
+            stage.show();
+        });
     }
 
     @Override

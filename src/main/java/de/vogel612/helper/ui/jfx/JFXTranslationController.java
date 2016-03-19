@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 
@@ -23,10 +24,10 @@ public class JFXTranslationController extends TranslationViewCommon implements I
     Label header;
 
     @FXML
-    Label original;
+    TextArea original;
 
     @FXML
-    TextField input;
+    TextArea input;
 
     @FXML
     Button cancel;
@@ -38,7 +39,7 @@ public class JFXTranslationController extends TranslationViewCommon implements I
 
     @Override
     public void show() {
-        // nothing
+        input.requestFocus();
     }
 
     @Override
@@ -68,10 +69,10 @@ public class JFXTranslationController extends TranslationViewCommon implements I
             translationSubmitListeners.forEach(c -> c.accept(translation));
         });
         cancel.setOnAction(evt -> translationAbortListeners.forEach(Runnable::run));
-        input.setOnKeyTyped((evt) -> {
+        input.setOnKeyPressed((evt) -> {
             if (evt.getCode() == KeyCode.ENTER) {
                 if (evt.isShiftDown()) {
-                    input.setText(input.getText() + "\r\n");
+                    input.appendText("\r\n");
                 } else {
                     submit.fire();
                 }
