@@ -80,7 +80,13 @@ public class JFXOverviewView implements OverviewView {
 
     @Override
     public void displayError(String title, String errorMessage) {
-        controller.displayError(title, errorMessage);
+//        Dialog errorDialog = new Dialog();
+//        errorDialog.setTitle(title);
+//        errorDialog.setContentText(errorMessage);
+//        errorDialog.initModality(Modality.APPLICATION_MODAL);
+//        errorDialog.initStyle(StageStyle.UNDECORATED);
+//        errorDialog.initOwner(stage);
+//        Platform.runLater(errorDialog::show);
     }
 
     @Override

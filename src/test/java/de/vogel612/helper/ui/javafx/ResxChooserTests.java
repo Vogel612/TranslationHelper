@@ -1,44 +1,35 @@
 package de.vogel612.helper.ui.javafx;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
-import com.sun.javafx.application.PlatformImpl;
-import com.sun.javafx.tk.Toolkit;
-import javafx.application.Platform;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mock;
+import org.testfx.framework.junit.ApplicationTest;
 import de.vogel612.helper.ui.jfx.JFXResxChooserView;
 
-import java.io.IOException;
+
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 import javafx.stage.Stage;
 
 /**
  * Created by vogel612 on 17.03.16.
  */
-public class ResxChooserTests {
+public class ResxChooserTests extends ApplicationTest {
 
     private JFXResxChooserView cut;
 
-    @Mock
-    Stage stage;
-
-    @Before
-    public void start() throws IOException {
-        stage = mock(Stage.class);
+    @Override
+    public void start(Stage stage) throws Exception {
         cut = new JFXResxChooserView(stage, getClass().getResource("/ResxChooser.fxml"));
+        cut.show();
     }
 
     @Test
-    @Ignore("JFX Testing needs more work")
-    public void show_setsSceneOnStage() {
-        cut.show();
+    public void show_setsSceneOnStage() throws URISyntaxException {
+        cut.setFileset(Paths.get(getClass().getResource("/RubberduckUI.resx").toURI()));
 
-        verify(stage).setScene(any());
-        verify(stage).show();
-        verifyNoMoreInteractions(stage);
+        verifyThat("#fileset", hasText("RubberduckUI"));
     }
 }
