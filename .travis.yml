@@ -11,6 +11,7 @@ jdk:
 script:
  - sudo apt-get update && sudo apt-get install oracle-java8-installer
  - java -version
+ - ./gradlew check jacocoTestReport
 
 #UI tests need UI
 before_script:
@@ -19,4 +20,4 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 after_success:
- - "./gradlew test jacocoTestReport coveralls"
+ - "./gradlew coveralls"
