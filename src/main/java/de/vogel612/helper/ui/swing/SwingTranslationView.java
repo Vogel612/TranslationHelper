@@ -37,21 +37,22 @@ public class SwingTranslationView extends TranslationViewCommon {
 
     private static final Dimension WINDOW_SIZE = new Dimension(600, 200);
     private final JFrame window;
-    private final JTextField input;
+    private final JTextArea rootValue;
+    private final JTextArea input;
     private final JButton submit;
-    private final JButton cancel;
 
-    private final JLabel rootValueLabel;
+    private final JButton cancel;
 
     private Translation translation;
 
     public SwingTranslationView() {
         window = new JFrame("Translate:");
-        input = new JTextField();
+        input = new JTextArea();
         submit = new JButton("okay");
         cancel = new JButton("cancel");
 
-        rootValueLabel = new JLabel();
+        rootValue = new JTextArea();
+        rootValue.setEditable(false);
         cancel.addActionListener(event -> translationAbortListeners.forEach(Runnable::run));
         submit.addActionListener(event -> {
             translation.setValue(input.getText());
@@ -59,6 +60,8 @@ public class SwingTranslationView extends TranslationViewCommon {
             translationSubmitListeners.forEach(l -> l.accept(translation));
         });
 
+        input.setName("input");
+        rootValue.setName("rootValue");
         submit.setName("submit");
         cancel.setName("abort");
 
@@ -83,8 +86,8 @@ public class SwingTranslationView extends TranslationViewCommon {
         constraints.insets = new Insets(15, 15, 15, 15);
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 1;
-        constraints.gridy = 2;
-        constraints.weighty = 0.33;
+        constraints.gridy = 1;
+        constraints.weighty = 0.0;
         window.add(submit, constraints);
     }
 
@@ -94,21 +97,20 @@ public class SwingTranslationView extends TranslationViewCommon {
         constraints.insets = new Insets(15, 15, 15, 15);
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.weighty = 0.33;
+        constraints.gridy = 1;
+        constraints.weighty = 0.0;
         constraints.gridwidth = 1;
         window.add(cancel, constraints);
     }
 
     private void addInputText() {
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.weightx = 1.0;
+        constraints.weightx = .5;
         constraints.insets = new Insets(15, 15, 15, 15);
         constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = GridBagConstraints.REMAINDER;
-        constraints.weighty = 0.33;
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.weighty = 1.0;
         window.add(input, constraints);
 
         input.addKeyListener(new KeyAdapter() {
@@ -134,6 +136,7 @@ public class SwingTranslationView extends TranslationViewCommon {
                     newValue = newValue.substring(0, caret) + "\r\n"
                       + newValue.substring(caret);
                     input.setText(newValue);
+                    input.setCaretPosition(caret + 2);
                 } else {
                     submit.doClick();
                 }
@@ -143,15 +146,14 @@ public class SwingTranslationView extends TranslationViewCommon {
 
     private void addRootValueLabel() {
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.weightx = 1.0;
+        constraints.weightx = .5;
         constraints.insets = new Insets(15, 15, 15, 15);
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = GridBagConstraints.REMAINDER;
-        constraints.weighty = 0.33;
+        constraints.weighty = 1.0;
 
-        window.add(rootValueLabel, constraints);
+        window.add(rootValue, constraints);
     }
 
     @Override
@@ -167,7 +169,7 @@ public class SwingTranslationView extends TranslationViewCommon {
     @Override
     public void setRequestedTranslation(Translation left, Translation right) {
         this.translation = right;
-        this.rootValueLabel.setText(left.getValue());
+        this.rootValue.setText(left.getValue());
         input.setText(translation.getValue());
         window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
     }

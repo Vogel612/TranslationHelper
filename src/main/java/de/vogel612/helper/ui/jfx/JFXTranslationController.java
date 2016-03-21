@@ -72,7 +72,12 @@ public class JFXTranslationController extends TranslationViewCommon implements I
         input.setOnKeyPressed((evt) -> {
             if (evt.getCode() == KeyCode.ENTER) {
                 if (evt.isShiftDown()) {
-                    input.appendText("\r\n");
+                    int caret = input.getCaretPosition();
+                    String newValue = input.getText();
+                    newValue = newValue.substring(0, caret) + "\r\n"
+                      + newValue.substring(caret);
+                    input.setText(newValue);
+                    input.positionCaret(caret + 1);
                 } else {
                     submit.fire();
                 }

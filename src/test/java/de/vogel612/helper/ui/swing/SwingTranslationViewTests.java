@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 /**
  * Created by vogel612 on 26.01.16.
  */
-public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
+public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
 
     private SwingTranslationView cut;
 
@@ -69,9 +69,10 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
         cut.setRequestedTranslation(new Translation("src", "key", "original"),
           new Translation("target", "key", "current"));
 
-        frame.textBox().requireText("current");
-        frame.textBox().requireEditable();
-        frame.label().requireText("original");
+        frame.textBox("input").requireText("current");
+        frame.textBox("input").requireEditable();
+        frame.textBox("rootValue").requireText("original");
+        frame.textBox("rootValue").requireNotEditable();
         // FIXME verify title
         verifyNoMoreInteractions(abortListener, submitListener);
     }
@@ -87,11 +88,12 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
 
     @Test
     public void changingTextInput_changesTranslationValue() {
-        frame.textBox().pressAndReleaseKeys(KeyEvent.VK_T, KeyEvent.VK_E, KeyEvent.VK_S, KeyEvent.VK_T);
+        frame.textBox("input").pressAndReleaseKeys(KeyEvent.VK_T, KeyEvent.VK_E, KeyEvent.VK_S, KeyEvent.VK_T);
         frame.button("submit").click();
 
         frame.requireVisible();
-        frame.textBox().requireEditable();
+        frame.textBox("input").requireEditable();
+        frame.textBox("rootValue").requireNotEditable();
         verify(submitListener).accept(eq(new Translation("", "", "test")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
@@ -99,21 +101,22 @@ public class TranslationPresenterTests extends AssertJSwingJUnitTestCase {
     @Test
     public void pressingEnter_inTextField_firesSubmitListener() {
         robot().settings().delayBetweenEvents(20);
-        frame.textBox().pressAndReleaseKeys(KeyEvent.VK_T,
+        frame.textBox("input").pressAndReleaseKeys(KeyEvent.VK_T,
           KeyEvent.VK_E,
           KeyEvent.VK_S,
           KeyEvent.VK_T,
           KeyEvent.VK_ENTER);
 
         frame.requireVisible();
-        frame.textBox().requireEditable();
+        frame.textBox("input").requireEditable();
+        frame.textBox("rootValue").requireNotEditable();
         verify(submitListener).accept(eq(new Translation("", "", "test")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 
     @Test
     public void pressingEsc_firesAbortListener() {
-        frame.textBox().pressAndReleaseKeys(KeyEvent.VK_ESCAPE);
+        frame.textBox("input").pressAndReleaseKeys(KeyEvent.VK_ESCAPE);
 
         frame.requireVisible();
         verify(abortListener).run();
