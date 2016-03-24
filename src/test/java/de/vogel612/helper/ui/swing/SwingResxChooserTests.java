@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 /**
  * Created by vogel612 on 26.01.16.
  */
-public class ResxChooserTests extends AssertJSwingJUnitTestCase {
+public class SwingResxChooserTests extends AssertJSwingJUnitTestCase {
 
     private ResxChooser cut;
 

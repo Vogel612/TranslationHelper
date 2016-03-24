@@ -1,7 +1,7 @@
 package de.vogel612.helper.ui.swing;
 
-import static junit.framework.Assert.assertEquals;
 import static org.assertj.swing.finder.WindowFinder.findFrame;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 /**
  * Created by vogel612 on 26.01.16.
  */
-public class OverviewViewTests extends AssertJSwingJUnitTestCase {
+public class SwingOverviewViewTests extends AssertJSwingJUnitTestCase {
 
     private static final Translation[] dataLeft = new Translation[]{
       new Translation("", "key", "value"), new Translation("", "another_key", "some better value")
