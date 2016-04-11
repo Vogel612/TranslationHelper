@@ -4,6 +4,7 @@ import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.sleep;
 
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.core.KeyPressInfo;
@@ -19,6 +20,7 @@ import de.vogel612.helper.ui.OverviewView;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -78,6 +80,7 @@ public class SwingOverviewViewTests extends AssertJSwingJUnitTestCase {
     public void saveButton_firesSaveRequestLister() {
         frame.button("save").click();
 
+        sleep(500, TimeUnit.MILLISECONDS);
         frame.requireVisible();
         verify(saveReqListener).run();
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
@@ -87,6 +90,7 @@ public class SwingOverviewViewTests extends AssertJSwingJUnitTestCase {
     public void languageRequestButton_firesLanguageRequestListener() {
         frame.button("chooseLang").click();
 
+        sleep(500, TimeUnit.MILLISECONDS);
         frame.requireVisible();
         verify(langReqListener).run();
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
@@ -118,6 +122,7 @@ public class SwingOverviewViewTests extends AssertJSwingJUnitTestCase {
     public void tableDoubleClick_firesTranslationReqListener() {
         frame.table().cell(TableCell.row(0).column(1)).doubleClick();
 
+        sleep(500, TimeUnit.MILLISECONDS);
         verify(translationReqListener).accept(eq("key"));
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);
     }
@@ -126,6 +131,8 @@ public class SwingOverviewViewTests extends AssertJSwingJUnitTestCase {
     public void keyBasedTranslation_firesTranslationReqListener() {
         frame.table().cell(TableCell.row(0).column(1)).click();
         frame.table().pressAndReleaseKey(KeyPressInfo.keyCode(KeyEvent.VK_ENTER));
+
+        sleep(500, TimeUnit.MILLISECONDS);
 
         verify(translationReqListener).accept(eq("key"));
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);

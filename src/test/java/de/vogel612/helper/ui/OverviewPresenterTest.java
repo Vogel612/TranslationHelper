@@ -6,7 +6,6 @@ import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
 import static org.mockito.Mockito.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.data.Translation;
@@ -19,30 +18,30 @@ import java.util.List;
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class OverviewPresenterTest {
 
-    private OverviewView v;
-    private OverviewModel m;
-    private TranslationView p;
-    private ResxChooser rc;
+    private OverviewView overviewView;
+    private OverviewModel overviewModel;
+    private TranslationView translationView;
+    private ResxChooser resxChooser;
 
     private OverviewPresenter cut;
 
     @Before
     public void beforeTest() {
-        v = mock(OverviewViewCommon.class);
-        m = mock(OverviewModel.class);
-        p = mock(TranslationView.class);
-        rc = mock(ResxChooser.class);
+        overviewView = mock(OverviewView.class);
+        overviewModel = mock(OverviewModel.class);
+        translationView = mock(TranslationView.class);
+        resxChooser = mock(ResxChooser.class);
 
-        cut = new OverviewPresenter(m, v, p, rc);
-        reset(v, m, p, rc);
+        cut = new OverviewPresenter(overviewModel, overviewView, translationView, resxChooser);
+        reset(overviewView, overviewModel, translationView, resxChooser);
     }
 
 
     @Test
     public void show_callsShow_onView() {
         cut.show();
-        verify(v).show();
-        verifyNoMoreInteractions(m, v, p, rc);
+        verify(overviewView).show();
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
@@ -51,12 +50,12 @@ public class OverviewPresenterTest {
 
         cut.loadFiles(mock);
         try {
-            verify(m).loadResxFileset(mock);
+            verify(overviewModel).loadResxFileset(mock);
         } catch (IOException e) {
             // shouldn't ever actually happen
             throw new AssertionError("Error when loading all files in the model", e);
         }
-        verifyNoMoreInteractions(m, v, p, rc);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
@@ -68,42 +67,42 @@ public class OverviewPresenterTest {
 
         cut.onException(e, message);
 
-        verify(v).displayError(message, errorMessage);
+        verify(overviewView).displayError(message, errorMessage);
         verify(e).getMessage();
-        verifyNoMoreInteractions(m, v, p, rc);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
-    @Ignore("dependencies aren't wired in presenter anymore")
     public void onParseCompletion_rebuildsView() {
         List<Translation> rootList = mock(List.class);
-        doReturn(rootList).when(m).getTranslations(DEFAULT_ROOT_LOCALE);
+        doReturn(rootList).when(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
         List<Translation> targetList = mock(List.class);
-        doReturn(targetList).when(m).getTranslations(DEFAULT_TARGET_LOCALE);
+        doReturn(targetList).when(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
 
         cut.onParseCompletion();
 
-        verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
-        verify(m).getTranslations(DEFAULT_TARGET_LOCALE);
-        verify(v).rebuildWith(rootList, targetList);
-        verifyNoMoreInteractions(m, v, p, rc);
+        verify(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(overviewView).rebuildWith(rootList, targetList);
+        verify(overviewView).show();
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
     public void onTranslateRequest_delegatesToTranslationPresenter() {
         final String key = "Key";
         Translation fakeRoot = mock(Translation.class);
-        doReturn(fakeRoot).when(m).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        doReturn(fakeRoot).when(overviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
         Translation fakeTarget = mock(Translation.class);
-        doReturn(fakeTarget).when(m).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        doReturn(fakeTarget).when(overviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
 
         cut.onTranslateRequest(key);
 
-        verify(m).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
-        verify(m).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
-        verify(p).setRequestedTranslation(fakeRoot, fakeTarget);
-        verify(p).show();
-        verifyNoMoreInteractions(m, v, p, rc);
+        verify(overviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        verify(overviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        verify(translationView).setRequestedTranslation(fakeRoot, fakeTarget);
+        verify(translationView).show();
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
@@ -111,26 +110,26 @@ public class OverviewPresenterTest {
         final Translation t = new Translation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
         final List<Translation> list = mock(List.class);
         final List<Translation> leftSide = mock(List.class);
-        doReturn(list).when(m).getTranslations(DEFAULT_TARGET_LOCALE);
-        doReturn(leftSide).when(m).getTranslations(DEFAULT_ROOT_LOCALE);
+        doReturn(list).when(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        doReturn(leftSide).when(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
 
         cut.onTranslationSubmit(t);
 
-        verify(m).updateTranslation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
-        verify(m).getTranslations(DEFAULT_TARGET_LOCALE);
-        verify(m).getTranslations(DEFAULT_ROOT_LOCALE);
-        verify(v).rebuildWith(leftSide, list);
-        verify(v).show();
-        verify(p).hide();
-        verifyNoMoreInteractions(m, v, p, rc);
+        verify(overviewModel).updateTranslation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
+        verify(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(overviewView).rebuildWith(leftSide, list);
+        verify(overviewView).show();
+        verify(translationView).hide();
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
     public void onTranslationAbort_hidesTranslationView() {
         cut.onTranslationAbort();
 
-        verify(p).hide();
-        verifyNoMoreInteractions(m, v, p, rc);
+        verify(translationView).hide();
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
     @Test
@@ -138,11 +137,11 @@ public class OverviewPresenterTest {
         cut.onSaveRequest();
 
         try {
-            verify(m).saveAll();
+            verify(overviewModel).saveAll();
         } catch (IOException e) {
             // shouldn't ever actually happen
             throw new AssertionError("IOException when trying to save", e);
         }
-        verifyNoMoreInteractions(m, v, p, rc);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 }

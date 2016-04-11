@@ -4,6 +4,7 @@ import static org.assertj.swing.finder.WindowFinder.findFrame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.sleep;
 
 import org.assertj.swing.core.GenericTypeMatcher;
 import org.assertj.swing.edt.FailOnThreadViolationRepaintManager;
@@ -15,6 +16,7 @@ import de.vogel612.helper.data.Translation;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -59,6 +61,7 @@ public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
     public void abortButton_firesAbortListener() {
         frame.button("abort").click();
 
+        sleep(500, TimeUnit.MILLISECONDS);
         frame.requireVisible();
         verify(abortListener).run();
         verifyNoMoreInteractions(abortListener, submitListener);
@@ -81,6 +84,7 @@ public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
     public void submitButton_firesSubmitListener() {
         frame.button("submit").click();
 
+        sleep(500, TimeUnit.MILLISECONDS);
         frame.requireVisible();
         verify(submitListener).accept(any());
         verifyNoMoreInteractions(abortListener, submitListener);
