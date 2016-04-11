@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'eclipse'
     id 'jacoco'
     id 'com.github.kt3k.coveralls' version '2.0.1'
     id 'sonar-runner'
@@ -35,7 +34,6 @@ repositories {
 }
 
 dependencies {
-//    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile group: 'org.jdom', name: 'jdom2', version: '2.0.6'
     // xPath dependency
     compile group: 'jaxen', name: 'jaxen', version: '1.1.6'
@@ -84,6 +82,14 @@ sonarRunner {
         property "sonar.jdbc.password", System.env.PG_SONAR_PASSWORD
     }
 }
+
+// Workaround for IntelliJ classpath-problems
+task copyTestResources(type: Copy) {
+    from "${projectDir}/src/test/resources"
+    from "${projectDir}/src/main/resources"
+    into "${buildDir}/classes/test"
+}
+processTestResources.dependsOn copyTestResources
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
