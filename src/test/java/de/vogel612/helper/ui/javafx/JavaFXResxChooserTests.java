@@ -17,9 +17,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
-/**
- * Created by vogel612 on 17.03.16.
- */
 public class JavaFXResxChooserTests extends ApplicationTest {
 
     private JFXResxChooserView cut;
