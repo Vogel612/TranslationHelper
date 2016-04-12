@@ -41,8 +41,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile 'org.mockito:mockito-core:2.0.2-beta'
     testCompile 'org.assertj:assertj-swing-junit:3.0.2'
-    testCompile 'org.testfx:testfx-core:4.0.+'
-    testCompile 'org.testfx:testfx-junit:4.0.+'
+    testCompile 'org.testfx:testfx-core:4.0.1-alpha'
+    testCompile 'org.testfx:testfx-junit:4.0.1-alpha'
 }
 
 jacocoTestReport {
