@@ -1,11 +1,11 @@
-package de.vogel612.helper.data;
+package de.vogel612.helper.ui.swing.components;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import de.vogel612.helper.ui.swing.components.TranslationTable;
+import de.vogel612.helper.data.Translation;
 
 import javax.swing.*;
 import java.util.Arrays;
