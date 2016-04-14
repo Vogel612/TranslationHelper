@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
@@ -130,6 +131,9 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
               };
               cell.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
                   // assume the double-click selected the relevant row....
+                  if (evt.getButton() != MouseButton.PRIMARY || evt.getClickCount() != 2) {
+                      return;
+                  }
                   translationRequestListeners.forEach(listener -> {
                       listener.accept(table.getSelectionModel().getSelectedItem().getRight().getKey());
                   });
