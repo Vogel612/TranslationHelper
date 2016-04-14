@@ -3,6 +3,7 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="de.vogel612.helper.ui.jfx.JFXOverviewController"
             minHeight="300" minWidth="600">

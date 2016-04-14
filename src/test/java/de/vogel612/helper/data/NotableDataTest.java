@@ -2,7 +2,6 @@ package de.vogel612.helper.data;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -14,9 +13,7 @@ import de.vogel612.helper.ui.jfx.TranslationPair;
 import java.util.Arrays;
 import java.util.Collection;
 
-/**
- * Created by vogel612 on 14.04.16.
- */
+
 @RunWith(Parameterized.class)
 public class NotableDataTest {
 

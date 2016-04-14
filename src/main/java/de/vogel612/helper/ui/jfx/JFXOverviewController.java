@@ -1,6 +1,7 @@
 package de.vogel612.helper.ui.jfx;
 
 import de.vogel612.helper.data.NotableData;
+import de.vogel612.helper.data.NotableData.Notability;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.common.OverviewViewCommon;
 

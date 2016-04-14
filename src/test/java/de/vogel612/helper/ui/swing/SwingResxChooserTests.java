@@ -17,9 +17,6 @@ import java.awt.*;
 import java.nio.file.Paths;
 import java.util.function.Consumer;
 
-/**
- * Created by vogel612 on 26.01.16.
- */
 public class SwingResxChooserTests extends AssertJSwingJUnitTestCase {
 
     private ResxChooser cut;

@@ -9,9 +9,9 @@ public final class UiBuilder {
       final Container container, final Dimension dimensions,
       final GridBagConstraints constraints) {
         Objects.requireNonNull(component,
-          "It's kinda hard to add a component without having one");
+          "It's kinda hard to add a components without having one");
         Objects.requireNonNull(container,
-          "It's kinda hard to add a component without something to add it to");
+          "It's kinda hard to add a components without something to add it to");
 
         if (dimensions != null) {
             component.setMinimumSize(dimensions);
