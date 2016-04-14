@@ -6,9 +6,9 @@ import static java.awt.event.KeyEvent.VK_ENTER;
 import static javax.swing.JOptionPane.*;
 
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.data.TranslationTable;
-import de.vogel612.helper.data.TranslationTableRenderer;
-import de.vogel612.helper.data.TranslationTableSelectionModel;
+import de.vogel612.helper.ui.swing.components.TranslationTable;
+import de.vogel612.helper.ui.swing.components.TranslationTableRenderer;
+import de.vogel612.helper.ui.swing.components.TranslationTableSelectionModel;
 import de.vogel612.helper.ui.common.OverviewViewCommon;
 
 import javax.swing.*;

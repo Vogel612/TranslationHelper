@@ -1,4 +1,7 @@
-package de.vogel612.helper.data;
+package de.vogel612.helper.ui.swing.components;
+
+import de.vogel612.helper.data.Side;
+import de.vogel612.helper.data.Translation;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.*;

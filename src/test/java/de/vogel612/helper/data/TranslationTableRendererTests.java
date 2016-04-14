@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import de.vogel612.helper.ui.swing.components.TranslationTableRenderer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,7 @@ import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class TranslationTableRendererTests {
-
+    // FIXME rewrite for NotableData
     private final TranslationTableRenderer cut = new TranslationTableRenderer();
 
     private JTable table;

@@ -1,4 +1,4 @@
-package de.vogel612.helper.data;
+package de.vogel612.helper.ui.swing.components;
 
 import javax.swing.*;
 

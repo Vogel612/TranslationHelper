@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.vogel612.helper.ui.swing.components.TranslationTable;
+
 import javax.swing.*;
 import java.util.Arrays;
 
