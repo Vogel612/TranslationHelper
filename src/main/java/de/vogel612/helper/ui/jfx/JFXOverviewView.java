@@ -35,6 +35,10 @@ public class JFXOverviewView implements OverviewView {
         this.stage = stage;
         FXMLLoader loader = new FXMLLoader(fxml);
         ui = new Scene(loader.load());
+        ui.getStylesheets().clear();
+        // this works fine
+        ui.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
         controller = loader.getController();
 
         stage.setOnCloseRequest(evt -> controller.triggerCloseRequest());

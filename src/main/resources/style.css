@@ -1,0 +1,21 @@
+.default {
+	-fx-background-color: lightgrey;
+	-fx-accent: derive(-fx-control-inner-background, -40%);
+	-fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+}
+
+.warn {
+	-fx-background-color: #aaaa00;
+	-fx-accent: derive(-fx-control-inner-background, -40%);
+	-fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+}
+
+.error {
+	-fx-background-color: orangered;
+	-fx-accent: derive(-fx-control-inner-background, -40%);
+	-fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+}
+
+.button {
+    -fx-background-color: gray;
+}

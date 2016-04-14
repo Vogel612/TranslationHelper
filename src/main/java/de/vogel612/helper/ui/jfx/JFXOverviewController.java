@@ -102,6 +102,30 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
                   protected void updateItem(String item, boolean empty) {
                       super.updateItem(item, empty);
                       setText(item);
+                      // FIXME doesn't correctly highlight relevant rows
+                      TranslationPair rowValue = (TranslationPair) getTableRow().getItem();
+                      if (rowValue != null) {
+                          assignHighlightClasses(rowValue);
+                      }
+                  }
+
+                  private void assignHighlightClasses(TranslationPair rowValue) {
+                      getStyleClass().remove("default");
+                      getStyleClass().remove("warn");
+                      getStyleClass().remove("error");
+
+                      switch (NotableData.assessNotability(rowValue)) {
+                          case INFO:
+                          case DEFAULT:
+                              getStyleClass().add("default");
+                              break;
+                          case WARNING:
+                              getStyleClass().add("warn");
+                              break;
+                          case ERROR:
+                              getStyleClass().add("error");
+                              break;
+                      }
                   }
               };
               cell.addEventFilter(MouseEvent.MOUSE_CLICKED, evt -> {
@@ -130,6 +154,8 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
             }
         });
         rightColumn.setCellFactory(cellRenderer);
+
+        // FIXME row highlighting
 
         table.getColumns().clear();
         table.getColumns().add(leftColumn);
