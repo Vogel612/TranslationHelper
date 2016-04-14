@@ -22,9 +22,9 @@ task fatJar(type: Jar, dependsOn: 'classes') {
 }
 
 
-task run(type: JavaExec, dependsOn: 'test') {
+task run(type: JavaExec, dependsOn: 'classes') {
     classpath sourceSets.main.runtimeClasspath
-    main 'de.vogel612.helper.Main'
+    main 'de.vogel612.helper.TranslationHelper'
     args("${System.env.RUBBERDUCK_PATH}/RetailCoder.VBE/UI/RubberduckUI.resx")
 }
 
