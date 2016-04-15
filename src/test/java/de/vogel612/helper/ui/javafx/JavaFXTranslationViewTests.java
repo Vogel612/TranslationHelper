@@ -117,6 +117,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
     public void pressingEsc_firesAbortListener() {
         clickOn("#input");
         type(KeyCode.ESCAPE);
+        sleep(200, TimeUnit.MILLISECONDS);
 
         verify(abortListener).run();
         verifyNoMoreInteractions(abortListener, submitListener);
