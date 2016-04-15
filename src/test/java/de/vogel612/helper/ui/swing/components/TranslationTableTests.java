@@ -40,14 +40,14 @@ public class TranslationTableTests {
 
     @Test
     public void columnZero_isRootValues() {
-        assertEquals("root1", cut.getValueAt(0, 0));
-        assertEquals("root2", cut.getValueAt(1, 0));
+        assertEquals(leftSide[0], cut.getValueAt(0, 0));
+        assertEquals(leftSide[1], cut.getValueAt(1, 0));
     }
 
     @Test
     public void columnOne_isTranslationValue() {
-        assertEquals("translation1", cut.getValueAt(0, 1));
-        assertEquals("translation2", cut.getValueAt(1, 1));
+        assertEquals(rightSide[0], cut.getValueAt(0, 1));
+        assertEquals(rightSide[1], cut.getValueAt(1, 1));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TranslationTableTests {
 
     @Test
     public void getLastRow() {
-        assertEquals("root2", cut.getValueAt(cut.getRowCount() - 1, 0));
+        assertEquals(leftSide[1], cut.getValueAt(cut.getRowCount() - 1, 0));
     }
 
     @Test

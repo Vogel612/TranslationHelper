@@ -10,6 +10,8 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 import org.mockito.Mockito;
 
+import de.vogel612.helper.data.Translation;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Arrays;
@@ -17,7 +19,6 @@ import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class TranslationTableRendererTests {
-    // FIXME rewrite for NotableData
     private final TranslationTableRenderer cut = new TranslationTableRenderer();
 
     private JTable table;
@@ -63,10 +64,10 @@ public class TranslationTableRendererTests {
 
     @Test
     public void checkBackgroundColors() {
-        Mockito.doReturn(leftSide).when(table).getValueAt(0, 0);
-        Mockito.doReturn(rightSide).when(table).getValueAt(0, 1);
+        Mockito.doReturn(new Translation("", "", leftSide)).when(table).getValueAt(0, 0);
+        Mockito.doReturn(new Translation("", "", rightSide)).when(table).getValueAt(0, 1);
         Mockito.doReturn(selectedRow).when(table).getSelectedRow();
-        Component actual = cut.getTableCellRendererComponent(table, null, false, false, 0, 0);
+        Component actual = cut.getTableCellRendererComponent(table, new Translation("", "", leftSide), false, false, 0, 0);
         assertEquals(expected, actual.getBackground());
     }
 }

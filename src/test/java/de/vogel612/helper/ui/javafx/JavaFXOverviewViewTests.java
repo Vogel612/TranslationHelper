@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
@@ -50,7 +51,10 @@ public class JavaFXOverviewViewTests extends ApplicationTest {
         final List<Translation> left = Arrays.asList(new Translation("","key","value"), new Translation("", "key2", "value2"));
         final List<Translation> right = Arrays.asList(new Translation("de", "key", "wert"), new Translation("", "key2", "wert2"));
 
-        cut.rebuildWith(left, right);
+        Platform.runLater(() -> {
+            cut.rebuildWith(left, right);
+        });
+        sleep(200, TimeUnit.MILLISECONDS);
 
         TableView<TranslationPair> table = lookup("#table").queryFirst();
         ObservableList<TranslationPair> items = table.getItems();
@@ -62,8 +66,6 @@ public class JavaFXOverviewViewTests extends ApplicationTest {
         assertEquals("key2", items.get(1).getLeft().getKey());
         assertEquals("value2", items.get(1).getLeft().getValue());
         assertEquals("wert2", items.get(1).getRight().getValue());
-
-        //FIXME: verify display behavior!!
     }
 
     // FIXME implement and verify row-highlighting!

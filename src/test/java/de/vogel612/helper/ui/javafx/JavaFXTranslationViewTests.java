@@ -16,6 +16,7 @@ import de.vogel612.helper.ui.jfx.JFXTranslationView;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -66,9 +67,11 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
 
     @Test
     public void settingTranslation_fillsRelevantUI() {
-        cut.setRequestedTranslation(new Translation("src", "key", "original"),
-          new Translation("target", "key", "current"));
-
+        Platform.runLater(() -> {
+            cut.setRequestedTranslation(new Translation("src", "key", "original"),
+              new Translation("target", "key", "current"));
+        });
+        sleep(200, TimeUnit.MILLISECONDS);
         verifyThat("#input", hasText("current"));
         verifyThat("#input", TextInputControl::isEditable);
         verifyThat("#original", hasText("original"));

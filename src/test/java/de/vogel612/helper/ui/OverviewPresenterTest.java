@@ -128,6 +128,7 @@ public class OverviewPresenterTest {
         cut.onTranslationAbort();
 
         verify(translationView).hide();
+        verify(overviewView).show();
         verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
     }
 
