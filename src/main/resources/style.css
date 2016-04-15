@@ -1,21 +1,47 @@
+.root {
+	warn: #aaaa00;
+	error: orangered;
+	default: #eee;
+}
+
+.cell {
+	-fx-insets: 4px;
+	-fx-margin: 2px;
+}
+
 .default {
-	-fx-background-color: lightgrey;
-	-fx-accent: derive(-fx-control-inner-background, -40%);
-	-fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+	-fx-background-color: default;
+	-fx-border-width: 5px;
+	-fx-border-style: solid outside;
 }
 
 .warn {
-	-fx-background-color: #aaaa00;
-	-fx-accent: derive(-fx-control-inner-background, -40%);
-	-fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+	-fx-background-color: warn;
+	-fx-border-width: 5px;
+	-fx-border-style: solid outside;
 }
 
 .error {
-	-fx-background-color: orangered;
-	-fx-accent: derive(-fx-control-inner-background, -40%);
-	-fx-cell-hover-color: derive(-fx-control-inner-background, -20%);
+	-fx-background-color: error;
+	-fx-border-width: 5px;
+	-fx-border-style: solid outside;
+}
+
+.default:selected {
+	-fx-border-color: derive(default, -20%);
+	-fx-text-fill: black;
+}
+
+.warn:selected{
+	-fx-border-color: derive(warn, -20%);
+	-fx-text-fill:black;
+}
+
+.error:selected {
+	-fx-border-color: derive(error, -20%);
+	-fx-text-fill: black;
 }
 
 .button {
-    -fx-background-color: gray;
+    -fx-background-color: lightgrey;
 }

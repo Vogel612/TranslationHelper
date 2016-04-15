@@ -103,7 +103,6 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
                   protected void updateItem(String item, boolean empty) {
                       super.updateItem(item, empty);
                       setText(item);
-                      // FIXME doesn't correctly highlight relevant rows
                       TranslationPair rowValue = (TranslationPair) getTableRow().getItem();
                       if (rowValue != null) {
                           assignHighlightClasses(rowValue);
@@ -159,8 +158,6 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         });
         rightColumn.setCellFactory(cellRenderer);
 
-        // FIXME row highlighting
-
         table.getColumns().clear();
         table.getColumns().add(leftColumn);
         table.getColumns().add(rightColumn);
@@ -169,15 +166,15 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         table.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
+            if (event.getCode() == KeyCode.ENTER && table.getSelectionModel().getSelectedItem() != null) {
                 translationRequestListeners.forEach(listener -> {
+                    // so many assumptions :/
                     listener.accept(table.getSelectionModel().getSelectedItem().getRight().getKey());
                 });
             }
         });
 
         table.setEditable(false);
-        // FIXME row selection listeners for Double-Click
     }
 
 
