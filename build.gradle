@@ -91,6 +91,13 @@ task copyTestResources(type: Copy) {
 }
 processTestResources.dependsOn copyTestResources
 
+// Workaround for IntelliJ classpath-problems
+task copyResources(type: Copy) {
+    from "${projectDir}/src/main/resources"
+    into "${buildDir}/classes/main"
+}
+processResources.dependsOn copyResources
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.12'
 }
