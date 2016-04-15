@@ -50,8 +50,8 @@ public class TranslationTable extends AbstractTableModel {
               "Negative Row / Column values or Column values greater than 2 are not allowed");
         }
         return column == 0
-               ? data.get(Side.LEFT).get(row).getValue()
-               : data.get(Side.RIGHT).get(row).getValue();
+               ? data.get(Side.LEFT).get(row)
+               : data.get(Side.RIGHT).get(row);
     }
 
     public String getKeyAt(final int row) {

@@ -5,6 +5,7 @@ import de.vogel612.helper.data.Translation;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.text.TableView.TableCell;
 import java.awt.*;
 
 /**
@@ -18,7 +19,7 @@ public class TranslationTableRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(final JTable table,
       final Object value, final boolean isSelected,
       final boolean hasFocus, final int row, final int column) {
-        Component c = super.getTableCellRendererComponent(table, value,
+        Component c = super.getTableCellRendererComponent(table, ((Translation)value).getValue(),
           isSelected, hasFocus, row, column);
         if (table == null) {
             return c;
@@ -44,6 +45,7 @@ public class TranslationTableRenderer extends DefaultTableCellRenderer {
                 c.setForeground(Color.BLACK);
                 break;
         }
+
         return c;
     }
 }
