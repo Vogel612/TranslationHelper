@@ -89,8 +89,8 @@ public class SwingOverviewViewTests extends AssertJSwingJUnitTestCase {
     @Test
     public void languageRequestButton_firesLanguageRequestListener() {
         frame.button("chooseLang").click();
-
         sleep(500, TimeUnit.MILLISECONDS);
+
         frame.requireVisible();
         verify(langReqListener).run();
         verifyNoMoreInteractions(saveReqListener, windowClosingListener, translationReqListener, langReqListener);

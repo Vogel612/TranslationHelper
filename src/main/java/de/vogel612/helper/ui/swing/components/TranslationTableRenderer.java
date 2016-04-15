@@ -19,7 +19,7 @@ public class TranslationTableRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(final JTable table,
       final Object value, final boolean isSelected,
       final boolean hasFocus, final int row, final int column) {
-        Component c = super.getTableCellRendererComponent(table, ((Translation)value).getValue(),
+        Component c = super.getTableCellRendererComponent(table, value == null ? null : ((Translation)value).getValue(),
           isSelected, hasFocus, row, column);
         if (table == null) {
             return c;

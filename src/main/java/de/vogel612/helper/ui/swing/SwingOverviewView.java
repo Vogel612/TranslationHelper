@@ -90,7 +90,12 @@ public class SwingOverviewView extends OverviewViewCommon {
             public void keyPressed(KeyEvent keyEvent) {
                 switch (keyEvent.getKeyCode()) {
                     case VK_ENTER:
-                        translateRow(translationContainer.getSelectedRow());
+                        final int selectedRow = translationContainer.getSelectedRow();
+                        if (selectedRow < 0) {
+                            super.keyPressed(keyEvent);
+                            return;
+                        }
+                        translateRow(selectedRow);
                         keyEvent.consume();
                         break;
                     default:
