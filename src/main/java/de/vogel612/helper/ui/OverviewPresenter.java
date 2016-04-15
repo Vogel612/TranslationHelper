@@ -78,6 +78,7 @@ public class OverviewPresenter {
 
     public void onTranslationAbort() {
         translationPresenter.hide();
+        view.show();
     }
 
     public void onTranslateRequest(final String key) {

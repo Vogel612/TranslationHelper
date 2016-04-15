@@ -14,9 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 
-/**
- * Created by vogel612 on 02.03.16.
- */
 public class JFXTranslationController extends TranslationViewCommon implements Initializable {
 
     @FXML
@@ -52,7 +49,6 @@ public class JFXTranslationController extends TranslationViewCommon implements I
         this.original.setText(left.getValue());
         input.setText(translation.getValue());
         header.setText(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
-
     }
 
     @Override

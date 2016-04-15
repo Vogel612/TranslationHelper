@@ -42,14 +42,13 @@ public class JFXTranslationView implements TranslationView {
     public void show() {
         Platform.runLater(() -> {
             stage.setScene(ui);
-            controller.show();
             stage.show();
+            controller.show();
         });
     }
 
     @Override
-    public void hide() {
-        stage.hide();
+    public void hide(){
     }
 
     @Override
