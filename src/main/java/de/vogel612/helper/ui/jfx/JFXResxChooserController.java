@@ -48,7 +48,7 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
 
     public JFXResxChooserController() {
         fileChooser.setTitle("Choose RESX file");
-        fileChooser.getExtensionFilters().add(new ExtensionFilter("Resx Files", "resx"));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Resx Files", "*.resx"));
     }
 
     @Override
@@ -67,6 +67,8 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
                 right = null;
                 Platform.runLater(() -> rightTranslation.setText("(none)"));
             }
+            leftChoose.setDisable(false);
+            rightChoose.setDisable(false);
         }
     }
 
@@ -102,6 +104,8 @@ public class JFXResxChooserController extends ResxChooserCommon implements Initi
         Objects.requireNonNull(filesetChoose, "filesetChoose was not correctly FXML-injected");
         Objects.requireNonNull(submit, "submit was not correctly FXML-injected");
 
+        leftChoose.setDisable(true);
+        rightChoose.setDisable(true);
         submit.setOnAction(evt -> completeChoice());
         filesetChoose.setOnAction(evt -> {
             evt.consume();
