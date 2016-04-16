@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class TranslationHelper extends Application {
 
@@ -30,13 +31,18 @@ public class TranslationHelper extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ResxChooser rc = new JFXResxChooserView(primaryStage, getClass().getResource("/ResxChooser.fxml"));
+
+        Stage rcStage = new Stage(StageStyle.UTILITY);
+        rcStage.initOwner(primaryStage);
+        ResxChooser rc = new JFXResxChooserView(rcStage, getClass().getResource("/ResxChooser.fxml"));
         Parameters params = getParameters();
         if (params.getUnnamed().size() != 0) { // should be 1..
             final Path resxFile = Paths.get(params.getUnnamed().get(0));
             rc.setFileset(resxFile);
         }
-        TranslationView tv = new JFXTranslationView(primaryStage, getClass().getResource("/TranslationView.fxml"));
+        Stage translationStage = new Stage(StageStyle.UTILITY);
+        translationStage.initOwner(primaryStage);
+        TranslationView tv = new JFXTranslationView(translationStage, getClass().getResource("/TranslationView.fxml"));
         OverviewView v = new JFXOverviewView(primaryStage, getClass().getResource("/OverviewView.fxml"));
 
         OverviewModel m = new OverviewModel();
