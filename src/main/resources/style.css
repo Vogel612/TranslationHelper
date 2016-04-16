@@ -4,41 +4,41 @@
 	default: #eee;
 }
 
-.cell {
-	-fx-insets: 4px;
-	-fx-margin: 2px;
-}
-
 .default {
 	-fx-background-color: default;
-	-fx-border-width: 5px;
-	-fx-border-style: solid outside;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
 }
 
 .warn {
 	-fx-background-color: warn;
-	-fx-border-width: 5px;
-	-fx-border-style: solid outside;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
 }
 
 .error {
 	-fx-background-color: error;
-	-fx-border-width: 5px;
-	-fx-border-style: solid outside;
+	-fx-background-insets: 0;
+	-fx-background-radius: 0;
 }
 
-.default:selected {
-	-fx-border-color: derive(default, -20%);
+.table-row-cell:selected{
+    -fx-effect: dropshadow( gaussian, black, 10, .2, 4, 4);
+    -fx-background-color: transparent;
+}
+
+.default:hover, .table-row-cell:selected .default {
+	-fx-background-radius: 10;
 	-fx-text-fill: black;
 }
 
-.warn:selected{
-	-fx-border-color: derive(warn, -20%);
+.warn:hover, .table-row-cell:selected .warn{
+	-fx-background-radius: 10;
 	-fx-text-fill:black;
 }
 
-.error:selected {
-	-fx-border-color: derive(error, -20%);
+.error:hover, .table-row-cell:selected .error {
+	-fx-background-radius: 10;
 	-fx-text-fill: black;
 }
 
