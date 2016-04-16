@@ -16,7 +16,7 @@ task fatJar(type: Jar, dependsOn: 'classes') {
     manifest {
         attributes 'Implementation-Title': 'Translation Helper',
                 'Implementation-Version': version,
-                'main-class': 'de.vogel612.helper.Main'
+                'main-class': 'de.vogel612.helper.TranslationHelper'
     }
     with jar
 }
