@@ -122,14 +122,12 @@ public class OverviewPresenter {
         if (model.isNotSaved()) {
             dialog.warn("Unsaved Changes",
                     "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
-                    () -> {
-                        this.onSaveRequest();
-                        resxChooser.show();
-                    },
-                    () -> {
-                        resxChooser.show();
-                    }
+                    this::onSaveRequest,
+                    () -> {}
             );
+            resxChooser.show();
+        } else {
+            resxChooser.show();
         }
     }
 }
