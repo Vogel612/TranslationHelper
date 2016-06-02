@@ -92,6 +92,7 @@ public class OverviewPresenter {
     public void onSaveRequest() {
         try {
             model.saveAll();
+            view.showPrompt("Save success!", "Saving your changes to all resx files completed successfully", () -> {});
         } catch (IOException e) {
             e.printStackTrace(System.err);
             onException(e, "Could not save File");
