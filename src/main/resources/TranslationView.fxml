@@ -13,10 +13,10 @@
     <center>
         <BorderPane>
             <left>
-                <TextArea fx:id="original" editable="false" minWidth="200" maxWidth="Infinity"/>
+                <TextArea fx:id="original" editable="false" prefWidth="Infinity" />
             </left>
             <right>
-                <TextArea fx:id="input" minWidth="200" maxWidth="Infinity"/>
+                <TextArea fx:id="input" prefWidth="Infinity"/>
             </right>
         </BorderPane>
     </center>
