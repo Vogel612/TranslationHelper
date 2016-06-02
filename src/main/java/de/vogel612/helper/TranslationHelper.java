@@ -2,6 +2,7 @@ package de.vogel612.helper;
 
 import de.vogel612.helper.data.OverviewModel;
 import de.vogel612.helper.ui.*;
+import de.vogel612.helper.ui.jfx.JFXDialog;
 import de.vogel612.helper.ui.jfx.JFXOverviewView;
 import de.vogel612.helper.ui.jfx.JFXResxChooserView;
 import de.vogel612.helper.ui.jfx.JFXTranslationView;
@@ -46,7 +47,8 @@ public class TranslationHelper extends Application {
         OverviewView v = new JFXOverviewView(primaryStage, getClass().getResource("/OverviewView.fxml"));
 
         OverviewModel m = new OverviewModel();
-        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc);
+        Dialog d = new JFXDialog();
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, d);
         // Wire up all the crap
         DependencyRoot.inject(m, v, p, tv, rc);
 

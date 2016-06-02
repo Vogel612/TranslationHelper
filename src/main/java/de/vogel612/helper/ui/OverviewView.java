@@ -23,9 +23,5 @@ public interface OverviewView {
 
     void rebuildWith(List<Translation> left, List<Translation> right);
 
-    void displayError(String title, String errorMessage);
-
     void hide();
-
-    void showPrompt(String title, String promptText, Runnable okCallback);
 }

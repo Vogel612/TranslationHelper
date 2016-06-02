@@ -21,6 +21,7 @@ public class OverviewPresenterTest {
     private OverviewModel overviewModel;
     private TranslationView translationView;
     private ResxChooser resxChooser;
+    private Dialog dialog;
 
     private OverviewPresenter cut;
 
@@ -30,9 +31,10 @@ public class OverviewPresenterTest {
         overviewModel = mock(OverviewModel.class);
         translationView = mock(TranslationView.class);
         resxChooser = mock(ResxChooser.class);
+        dialog = mock(Dialog.class);
 
-        cut = new OverviewPresenter(overviewModel, overviewView, translationView, resxChooser);
-        reset(overviewView, overviewModel, translationView, resxChooser);
+        cut = new OverviewPresenter(overviewModel, overviewView, translationView, resxChooser, dialog);
+        reset(overviewView, overviewModel, translationView, resxChooser, dialog);
     }
 
 
@@ -40,7 +42,7 @@ public class OverviewPresenterTest {
     public void show_callsShow_onView() {
         cut.show();
         verify(overviewView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -54,7 +56,7 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("Error when loading all files in the model", e);
         }
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -66,9 +68,9 @@ public class OverviewPresenterTest {
 
         cut.onException(e, message);
 
-        verify(overviewView).displayError(message, errorMessage);
+        verify(dialog).info(message, errorMessage);
         verify(e).getMessage();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -84,7 +86,7 @@ public class OverviewPresenterTest {
         verify(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
         verify(overviewView).rebuildWith(rootList, targetList);
         verify(overviewView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -101,7 +103,7 @@ public class OverviewPresenterTest {
         verify(overviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
         verify(translationView).setRequestedTranslation(fakeRoot, fakeTarget);
         verify(translationView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -120,7 +122,7 @@ public class OverviewPresenterTest {
         verify(overviewView).rebuildWith(leftSide, list);
         verify(overviewView).show();
         verify(translationView).hide();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -129,7 +131,7 @@ public class OverviewPresenterTest {
 
         verify(translationView).hide();
         verify(overviewView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -142,6 +144,7 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("IOException when trying to save", e);
         }
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser);
+        verify(dialog).info(any(String.class), any(String.class));
+        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
     }
 }

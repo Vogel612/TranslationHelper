@@ -71,10 +71,6 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
         return FXCollections.observableList(result);
     }
 
-    @Override
-    public void displayError(String title, String errorMessage) {
-        // FIXME do this, too
-    }
 
     @Override
     public void hide() {
@@ -82,20 +78,13 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
     }
 
     @Override
-    public void showPrompt(String title, String promptText, Runnable okCallback) {
-        throw new UnsupportedOperationException(); // done in the View Class
-    }
-
-    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         Objects.requireNonNull(save, "save was not FXML-injected correctly");
         Objects.requireNonNull(table, "table was not FXML-injected correctly");
         Objects.requireNonNull(chooseLang, "chooseLang was not FXML-injected correctly");
 
         save.setOnAction(evt -> saveRequestListeners.forEach(Runnable::run));
         chooseLang.setOnAction(evt -> langChoiceRequestListeners.forEach(Runnable::run));
-
         Callback<TableColumn<TranslationPair,String>, TableCell<TranslationPair, String>> cellRenderer =
           column -> {
               TableCell<TranslationPair, String> cell = new TableCell<TranslationPair, String>() {

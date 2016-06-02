@@ -2,6 +2,7 @@ package de.vogel612.helper;
 
 import de.vogel612.helper.ui.*;
 import de.vogel612.helper.data.OverviewModel;
+import de.vogel612.helper.ui.swing.SwingDialog;
 import de.vogel612.helper.ui.swing.SwingOverviewView;
 import de.vogel612.helper.ui.swing.SwingResxChooser;
 import de.vogel612.helper.ui.swing.SwingTranslationView;
@@ -34,7 +35,8 @@ public class Main {
 
         OverviewModel m = new OverviewModel();
         OverviewView v = new SwingOverviewView();
-        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc);
+        Dialog d = new SwingDialog();
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, d);
 
         DependencyRoot.inject(m, v, p, tv, rc);
 

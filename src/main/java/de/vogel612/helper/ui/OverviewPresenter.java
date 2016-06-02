@@ -21,12 +21,14 @@ public class OverviewPresenter {
     private final OverviewView view;
     private final TranslationView translationPresenter;
     private final ResxChooser resxChooser;
+    private final Dialog dialog;
 
-    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc) {
+    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, final Dialog d) {
         model = m;
         view = v;
         translationPresenter = p;
         resxChooser = rc;
+        dialog = d;
 
         view.initialize();
     }
@@ -37,8 +39,9 @@ public class OverviewPresenter {
     }
 
     public void onException(final Exception e, final String message) {
+        dialog.info(message, e.getMessage());
         // FIXME: Allow termination for unrecoverable exception
-        view.displayError(message, e.getMessage());
+//        view.displayError(message, e.getMessage());
     }
 
     public void onParseCompletion() {
@@ -64,7 +67,7 @@ public class OverviewPresenter {
             model.loadResxFileset(resxFile);
         } catch (IOException ex) {
             String errorMessage = String.format(
-              "Could not access %s due to %s", resxFile, ex);
+                    "Could not access %s due to %s", resxFile, ex);
             System.err.println(errorMessage);
             onException(ex, errorMessage);
         }
@@ -83,8 +86,8 @@ public class OverviewPresenter {
 
     public void onTranslateRequest(final String key) {
         translationPresenter.setRequestedTranslation(
-          model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
-          model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
+                model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
+                model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
         );
         translationPresenter.show();
     }
@@ -92,7 +95,8 @@ public class OverviewPresenter {
     public void onSaveRequest() {
         try {
             model.saveAll();
-            view.showPrompt("Save success!", "Saving your changes to all resx files completed successfully", () -> {});
+            dialog.info("Save success!", "Saving your changes to all resx files completed successfully");
+//            view.showPrompt("Save success!", "Saving your changes to all resx files completed successfully", () -> {});
         } catch (IOException e) {
             e.printStackTrace(System.err);
             onException(e, "Could not save File");
@@ -101,13 +105,14 @@ public class OverviewPresenter {
 
     public void onWindowCloseRequest() {
         if (model.isNotSaved()) {
-            view.showPrompt("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
-              this::onSaveRequest
+            dialog.warn("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
+                    this::onSaveRequest, () -> {
+                        view.hide();
+                        System.exit(0);
+                    }
             );
         }
         // FIXME allow preventing to close
-        view.hide();
-        System.exit(0);
     }
 
     /**
@@ -117,11 +122,16 @@ public class OverviewPresenter {
      */
     public void fileChoosing() {
         if (model.isNotSaved()) {
-            view.showPrompt("Unsaved Changes",
-              "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
-              this::onSaveRequest
+            dialog.warn("Unsaved Changes",
+                    "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
+                    () -> {
+                        this.onSaveRequest();
+                        resxChooser.show();
+                    },
+                    () -> {
+                        resxChooser.show();
+                    }
             );
         }
-        resxChooser.show();
     }
 }

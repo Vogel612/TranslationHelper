@@ -82,8 +82,8 @@ public class JFXOverviewView implements OverviewView {
         controller.rebuildWith(left, right);
     }
 
-    @Override
-    public void displayError(String title, String errorMessage) {
+//    @Override
+//    public void displayError(String title, String errorMessage) {
 //        Dialog errorDialog = new Dialog();
 //        errorDialog.setTitle(title);
 //        errorDialog.setContentText(errorMessage);
@@ -91,31 +91,30 @@ public class JFXOverviewView implements OverviewView {
 //        errorDialog.initStyle(StageStyle.UNDECORATED);
 //        errorDialog.initOwner(stage);
 //        Platform.runLater(errorDialog::show);
-    }
+//    }
 
     @Override
     public void hide() {
         stage.hide();
     }
 
-    @Override
-    public void showPrompt(String title, String promptText, Runnable okCallback) {
-        Dialog<ButtonType> d = new Dialog<>();
-        d.setTitle(title);
-        d.setContentText(promptText);
-        d.initModality(Modality.APPLICATION_MODAL);
-        d.initOwner(stage);
-        d.initStyle(StageStyle.UNIFIED);
-
-        d.getDialogPane().getButtonTypes().addAll(YES, NO);
-
-        Optional<ButtonType> res = d.showAndWait();
-        if (res.isPresent()) {
-            // no switch because ButtonTypes aren't constant
-            if (res.get() == YES) {
-                okCallback.run();
-            }
-        }
-
-    }
+//    @Override
+//    public void showPrompt(String title, String promptText, Runnable okCallback) {
+//        Dialog<ButtonType> d = new Dialog<>();
+//        d.setTitle(title);
+//        d.setContentText(promptText);
+//        d.initModality(Modality.APPLICATION_MODAL);
+//        d.initOwner(stage);
+//        d.initStyle(StageStyle.UNIFIED);
+//
+//        d.getDialogPane().getButtonTypes().addAll(YES, NO);
+//
+//        Optional<ButtonType> res = d.showAndWait();
+//        if (res.isPresent()) {
+//            // no switch because ButtonTypes aren't constant
+//            if (res.get() == YES) {
+//                okCallback.run();
+//            }
+//        }
+//    }
 }

@@ -149,10 +149,10 @@ public class SwingOverviewView extends OverviewViewCommon {
         translationContainer.setModel(new TranslationTable(left, right));
     }
 
-    @Override
-    public void displayError(final String title, final String errorMessage) {
-        JOptionPane.showMessageDialog(window, errorMessage, title, ERROR_MESSAGE);
-    }
+//    @Override
+//    public void displayError(final String title, final String errorMessage) {
+//        JOptionPane.showMessageDialog(window, errorMessage, title, ERROR_MESSAGE);
+//    }
 
     @Override
     public void show() {
@@ -164,10 +164,10 @@ public class SwingOverviewView extends OverviewViewCommon {
         window.setVisible(false);
     }
 
-    @Override
-    public void showPrompt(String title, String promptText, Runnable okCallback) {
-        int choice = JOptionPane.showConfirmDialog(window, promptText, title, YES_NO_OPTION);
-        if (choice == YES_OPTION) { okCallback.run(); }
-    }
+//    @Override
+//    public void showPrompt(String title, String promptText, Runnable okCallback) {
+//        int choice = JOptionPane.showConfirmDialog(window, promptText, title, YES_NO_OPTION);
+//        if (choice == YES_OPTION) { okCallback.run(); }
+//    }
 }
 
