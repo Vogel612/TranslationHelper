@@ -21,7 +21,6 @@ public class TranslationHelper extends Application {
 
 
     public static void main(String[] args) {
-
         if (args.length > 1) {
             // don't even bother!
             System.out.println(ARGUMENT_MISMATCH);

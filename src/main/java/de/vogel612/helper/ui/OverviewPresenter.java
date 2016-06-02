@@ -41,7 +41,6 @@ public class OverviewPresenter {
     public void onException(final Exception e, final String message) {
         dialog.info(message, e.getMessage());
         // FIXME: Allow termination for unrecoverable exception
-//        view.displayError(message, e.getMessage());
     }
 
     public void onParseCompletion() {
@@ -96,7 +95,6 @@ public class OverviewPresenter {
         try {
             model.saveAll();
             dialog.info("Save success!", "Saving your changes to all resx files completed successfully");
-//            view.showPrompt("Save success!", "Saving your changes to all resx files completed successfully", () -> {});
         } catch (IOException e) {
             e.printStackTrace(System.err);
             onException(e, "Could not save File");

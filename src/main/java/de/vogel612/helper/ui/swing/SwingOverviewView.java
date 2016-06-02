@@ -3,12 +3,10 @@ package de.vogel612.helper.ui.swing;
 import static de.vogel612.helper.ui.util.UiBuilder.addToGridBag;
 import static java.awt.GridBagConstraints.BOTH;
 import static java.awt.event.KeyEvent.VK_ENTER;
-import static javax.swing.JOptionPane.*;
 
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.swing.components.TranslationTable;
 import de.vogel612.helper.ui.swing.components.TranslationTableRenderer;
-import de.vogel612.helper.ui.swing.components.TranslationTableSelectionModel;
 import de.vogel612.helper.ui.common.OverviewViewCommon;
 
 import javax.swing.*;
@@ -82,7 +80,7 @@ public class SwingOverviewView extends OverviewViewCommon {
         bindEventListener();
 
         translationContainer.setDefaultRenderer(Object.class, new TranslationTableRenderer());
-        translationContainer.setSelectionModel(new TranslationTableSelectionModel());
+        translationContainer.setSelectionModel(new DefaultListSelectionModel());
         translationContainer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         translationContainer.addKeyListener(new KeyAdapter() {
@@ -149,11 +147,6 @@ public class SwingOverviewView extends OverviewViewCommon {
         translationContainer.setModel(new TranslationTable(left, right));
     }
 
-//    @Override
-//    public void displayError(final String title, final String errorMessage) {
-//        JOptionPane.showMessageDialog(window, errorMessage, title, ERROR_MESSAGE);
-//    }
-
     @Override
     public void show() {
         window.setVisible(true);
@@ -163,11 +156,5 @@ public class SwingOverviewView extends OverviewViewCommon {
     public void hide() {
         window.setVisible(false);
     }
-
-//    @Override
-//    public void showPrompt(String title, String promptText, Runnable okCallback) {
-//        int choice = JOptionPane.showConfirmDialog(window, promptText, title, YES_NO_OPTION);
-//        if (choice == YES_OPTION) { okCallback.run(); }
-//    }
 }
 
