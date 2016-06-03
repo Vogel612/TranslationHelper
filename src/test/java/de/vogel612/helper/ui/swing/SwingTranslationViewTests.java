@@ -75,7 +75,7 @@ public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
         frame.textBox("input").requireText("current");
         frame.textBox("input").requireEditable();
         frame.textBox("rootValue").requireText("original");
-        frame.textBox("rootValue").requireNotEditable();
+        frame.textBox("rootValue").requireEditable();
         // FIXME verify title
         verifyNoMoreInteractions(abortListener, submitListener);
     }
@@ -86,7 +86,7 @@ public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
 
         sleep(500, TimeUnit.MILLISECONDS);
         frame.requireVisible();
-        verify(submitListener).accept(any());
+        verify(submitListener, times(2)).accept(any());
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 
@@ -97,8 +97,9 @@ public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
 
         frame.requireVisible();
         frame.textBox("input").requireEditable();
-        frame.textBox("rootValue").requireNotEditable();
+        frame.textBox("rootValue").requireEditable();
         verify(submitListener).accept(eq(new Translation("", "", "test")));
+        verify(submitListener).accept(eq(new Translation("", "", "")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 
@@ -113,8 +114,9 @@ public class SwingTranslationViewTests extends AssertJSwingJUnitTestCase {
 
         frame.requireVisible();
         frame.textBox("input").requireEditable();
-        frame.textBox("rootValue").requireNotEditable();
+        frame.textBox("rootValue").requireEditable();
         verify(submitListener).accept(eq(new Translation("", "", "test")));
+        verify(submitListener).accept(eq(new Translation("", "", "")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 

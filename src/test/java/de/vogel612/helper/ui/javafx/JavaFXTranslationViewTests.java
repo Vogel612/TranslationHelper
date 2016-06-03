@@ -75,7 +75,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
         verifyThat("#input", hasText("current"));
         verifyThat("#input", TextInputControl::isEditable);
         verifyThat("#original", hasText("original"));
-        verifyThat("#original", (Predicate<TextInputControl>) ctrl -> !ctrl.isEditable());
+        verifyThat("#original", TextInputControl::isEditable);
         // FIXME verify title
         verifyNoMoreInteractions(abortListener, submitListener);
     }
@@ -84,9 +84,8 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
     public void submitButton_firesSubmitListener() {
         clickOn("#submit");
 
-        // FIXME: require frame stays visible
-//        verifyThat(window(0), (Predicate<Window>)wnd -> wnd.isShowing());
-        verify(submitListener).accept(any());
+
+        verify(submitListener, times(2)).accept(any());
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 
@@ -97,8 +96,9 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
         clickOn("#submit");
 
         verifyThat("#input", TextInputControl::isEditable);
-        verifyThat("#original", (Predicate<TextInputControl>) ctrl -> !ctrl.isEditable());
+        verifyThat("#original", TextInputControl::isEditable);
         verify(submitListener).accept(eq(new Translation("", "", "test")));
+        verify(submitListener).accept(eq(new Translation("", "", "")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 
@@ -108,8 +108,9 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
         type(KeyCode.T, KeyCode.E, KeyCode.S, KeyCode.T, KeyCode.ENTER);
 
         verifyThat("#input", TextInputControl::isEditable);
-        verifyThat("#original", (Predicate<TextInputControl>) ctrl -> !ctrl.isEditable());
+        verifyThat("#original", TextInputControl::isEditable);
         verify(submitListener).accept(eq(new Translation("", "", "test")));
+        verify(submitListener).accept(eq(new Translation("", "", "")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 
