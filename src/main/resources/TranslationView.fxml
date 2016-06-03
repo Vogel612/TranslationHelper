@@ -1,6 +1,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <BorderPane fx:controller="de.vogel612.helper.ui.jfx.JFXTranslationController"
             xmlns:fx="http://javafx.com/fxml"
             minWidth="400" minHeight="200">
@@ -13,10 +14,14 @@
     <center>
         <BorderPane>
             <left>
-                <TextArea fx:id="original" editable="false" prefWidth="Infinity" />
+                <TextArea fx:id="original" />
             </left>
+            <center>
+                <!-- glue -->
+                <HBox prefWidth="-Infinity" minWidth="0"/>
+            </center>
             <right>
-                <TextArea fx:id="input" prefWidth="Infinity"/>
+                <TextArea fx:id="input" />
             </right>
         </BorderPane>
     </center>

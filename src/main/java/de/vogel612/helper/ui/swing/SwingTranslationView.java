@@ -44,6 +44,7 @@ public class SwingTranslationView extends TranslationViewCommon {
     private final JButton cancel;
 
     private Translation translation;
+    private Translation leftSide;
 
     public SwingTranslationView() {
         window = new JFrame("Translate:");
@@ -52,12 +53,13 @@ public class SwingTranslationView extends TranslationViewCommon {
         cancel = new JButton("cancel");
 
         rootValue = new JTextArea();
-        rootValue.setEditable(false);
         cancel.addActionListener(event -> translationAbortListeners.forEach(Runnable::run));
         submit.addActionListener(event -> {
             translation.setValue(input.getText());
             // binding could be a problem here :(
             translationSubmitListeners.forEach(l -> l.accept(translation));
+            leftSide.setValue(rootValue.getText());
+            translationSubmitListeners.forEach(l -> l.accept(leftSide));
         });
 
         input.setName("input");
@@ -169,6 +171,7 @@ public class SwingTranslationView extends TranslationViewCommon {
     @Override
     public void setRequestedTranslation(Translation left, Translation right) {
         this.translation = right;
+        this.leftSide = left;
         this.rootValue.setText(left.getValue());
         input.setText(translation.getValue());
         window.setTitle(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));

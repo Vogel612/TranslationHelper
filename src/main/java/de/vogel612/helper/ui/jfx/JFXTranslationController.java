@@ -32,6 +32,7 @@ public class JFXTranslationController extends TranslationViewCommon implements I
     Button submit;
 
     private Translation translation;
+    private Translation leftSide;
 
     @Override
     public void show() {
@@ -46,6 +47,7 @@ public class JFXTranslationController extends TranslationViewCommon implements I
     @Override
     public void setRequestedTranslation(Translation left, Translation right) {
         this.translation = right;
+        this.leftSide = left;
         this.original.setText(left.getValue());
         input.setText(translation.getValue());
         header.setText(String.format(TITLE_FORMAT, translation.getKey(), translation.getLocale()));
@@ -62,6 +64,8 @@ public class JFXTranslationController extends TranslationViewCommon implements I
         submit.setOnAction(evt -> {
             translation.setValue(input.getText());
             translationSubmitListeners.forEach(c -> c.accept(translation));
+            leftSide.setValue(original.getText());
+            translationSubmitListeners.forEach(c -> c.accept(leftSide));
         });
         cancel.setOnAction(evt -> translationAbortListeners.forEach(Runnable::run));
         input.setOnKeyPressed((evt) -> {
