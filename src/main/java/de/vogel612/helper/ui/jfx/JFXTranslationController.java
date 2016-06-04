@@ -9,6 +9,8 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Orientation;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -30,6 +32,9 @@ public class JFXTranslationController extends TranslationViewCommon implements I
 
     @FXML
     Button submit;
+
+    @FXML
+    SplitPane pane;
 
     private Translation translation;
     private Translation leftSide;
@@ -60,6 +65,10 @@ public class JFXTranslationController extends TranslationViewCommon implements I
         Objects.requireNonNull(input, "input was not correctly FXML-Injected");
         Objects.requireNonNull(cancel, "cancel was not correctly FXML-Injected");
         Objects.requireNonNull(submit, "submit was not correctly FXML-Injected");
+        Objects.requireNonNull(pane, "pane was not correctly FXML-Injected");
+
+        pane.setDividerPosition(0, 0.5);
+        pane.setOrientation(Orientation.HORIZONTAL);
 
         submit.setOnAction(evt -> {
             translation.setValue(input.getText());
