@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.io.PrintStream;
 
-public class MainTests {
+public class TranslationHelperTests {
 
     private PrintStream outMock;
 
@@ -21,11 +21,11 @@ public class MainTests {
 
     @Test
     public void main_rejectsTwoArgumentCall() {
-        Main.main(new String[]{
+        TranslationHelper.main(new String[]{
           "/random/test/path", "de"
         });
 
-        verify(outMock).println(Main.ARGUMENT_MISMATCH);
+        verify(outMock).println(TranslationHelper.ARGUMENT_MISMATCH);
         verifyNoMoreInteractions(outMock);
     }
 
