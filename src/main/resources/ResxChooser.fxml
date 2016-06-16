@@ -8,12 +8,12 @@
         <Insets bottom="10" top="10" left="10" right="10" />
     </padding>
     <children>
-        <Label fx:id="leftTranslation" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <Button fx:id="leftChoose" GridPane.columnIndex="1" GridPane.rowIndex="0" text="Choose Left"/>
-        <Label fx:id="rightTranslation" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <Button fx:id="rightChoose" GridPane.columnIndex="1" GridPane.rowIndex="1" text="Choose Right"/>
-        <Label fx:id="fileset" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <Button fx:id="filesetChoose" GridPane.columnIndex="1" GridPane.rowIndex="2" text="Choose RESX File"/>
+        <Label fx:id="fileset" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Button fx:id="filesetChoose" GridPane.columnIndex="1" GridPane.rowIndex="0" text="Choose RESX File"/>
+        <Label fx:id="leftTranslation" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button fx:id="leftChoose" GridPane.columnIndex="1" GridPane.rowIndex="1" text="Choose Left"/>
+        <Label fx:id="rightTranslation" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Button fx:id="rightChoose" GridPane.columnIndex="1" GridPane.rowIndex="2" text="Choose Right"/>
         <Button fx:id="submit" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" text="Okay"/>
     </children>
     <columnConstraints>
