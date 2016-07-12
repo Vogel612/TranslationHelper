@@ -61,13 +61,7 @@ public class OverviewModel {
         }
 
         this.currentPath = file.getParent();
-        // TODO investigate move
-        final Matcher filesetMatcher = FILENAME_PATTERN.matcher(file.getFileName().toString());
-        if (filesetMatcher.matches()) { // should always be true
-            this.currentFileset = filesetMatcher.group(1); // group is not optional
-        } else {
-            throw new IllegalArgumentException("The resx file does not match our permissive regex");
-        }
+        this.currentFileset = DataUtilities.getFilesetIdentifier(file);
         translations.clear();
 
         try (Stream<Path> resxFiles = DataUtilities.streamFileset(currentPath, currentFileset)) {
