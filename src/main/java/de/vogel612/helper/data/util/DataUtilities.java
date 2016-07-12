@@ -11,6 +11,7 @@ import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -54,16 +55,21 @@ public class DataUtilities {
     }
 
     /**
-     * Creates a new <tt>data</tt>-entry for a given key with an empty value child attached
+     * Creates a new <tt>data</tt>-entry for a given key and a given value. Neither may be null
      *
      * @param key The key for the new element
+     * @param value The value for the new element
      *
      * @return The element itself
      */
-    public static Element createNewElement(String key) {
+    public static Element createNewElement(String key, String value) {
+        Objects.requireNonNull(key, "Key");
+        Objects.requireNonNull(value, "value");
+
         Element newElement = new Element(ELEMENT_NAME);
         Element valueContainer = new Element(VALUE_NAME);
-        valueContainer.setText("");
+        valueContainer.addContent(value);
+        //valueContainer.setText(value);
 
         newElement.setAttribute(KEY_NAME, key);
         newElement.addContent(valueContainer);

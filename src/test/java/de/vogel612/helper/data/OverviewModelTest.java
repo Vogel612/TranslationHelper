@@ -66,7 +66,7 @@ public class OverviewModelTest {
 
         Translation[] normalizedTranslations;
         normalizedTranslations  = cut.getTranslations("ts").toArray(new Translation[0]);
-        assertArrayEquals(expectedNormalized, normalizedTranslations);
+        assertArrayEquals(expected2, normalizedTranslations);
     }
 
     @Test

@@ -31,7 +31,6 @@ public class TranslationHelper extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         Stage rcStage = new Stage(StageStyle.UTILITY);
         rcStage.initOwner(primaryStage);
         ResxChooser rc = new JFXResxChooserView(rcStage, getClass().getResource("/ResxChooser.fxml"));

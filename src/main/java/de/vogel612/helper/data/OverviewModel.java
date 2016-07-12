@@ -109,7 +109,10 @@ public class OverviewModel {
 
         singleTruth.stream()
           .filter(key -> !localeKeys.contains(key))
-          .map(DataUtilities::createNewElement)
+          .map(key -> {
+              final String val = getSingleTranslation(SINGLE_TRUTH_LOCALE, key).getValue();
+              return DataUtilities.createNewElement(key, val);
+          })
           .forEach(doc.getRootElement()::addContent);
     }
 
