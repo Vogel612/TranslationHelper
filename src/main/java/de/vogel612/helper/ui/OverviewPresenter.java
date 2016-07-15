@@ -1,6 +1,6 @@
 package de.vogel612.helper.ui;
 
-import de.vogel612.helper.data.OverviewModel;
+import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
@@ -17,13 +17,13 @@ public class OverviewPresenter {
     public static final String DEFAULT_ROOT_LOCALE = "";
 
     private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
-    private final OverviewModel model;
+    private final FilesetOverviewModel model;
     private final OverviewView view;
     private final TranslationView translationPresenter;
     private final ResxChooser resxChooser;
     private final Dialog dialog;
 
-    public OverviewPresenter(final OverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, final Dialog d) {
+    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, final Dialog d) {
         model = m;
         view = v;
         translationPresenter = p;

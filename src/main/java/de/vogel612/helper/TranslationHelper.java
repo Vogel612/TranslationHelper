@@ -1,9 +1,9 @@
 package de.vogel612.helper;
 
-import de.vogel612.helper.data.OverviewModel;
+import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.ui.*;
 import de.vogel612.helper.ui.jfx.JFXDialog;
-import de.vogel612.helper.ui.jfx.JFXOverviewView;
+import de.vogel612.helper.ui.jfx.JFXFilesetOverviewView;
 import de.vogel612.helper.ui.jfx.JFXResxChooserView;
 import de.vogel612.helper.ui.jfx.JFXTranslationView;
 
@@ -42,9 +42,9 @@ public class TranslationHelper extends Application {
         Stage translationStage = new Stage(StageStyle.UTILITY);
         translationStage.initOwner(primaryStage);
         TranslationView tv = new JFXTranslationView(translationStage, getClass().getResource("/TranslationView.fxml"));
-        OverviewView v = new JFXOverviewView(primaryStage, getClass().getResource("/OverviewView.fxml"));
+        OverviewView v = new JFXFilesetOverviewView(primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
 
-        OverviewModel m = new OverviewModel();
+        FilesetOverviewModel m = new FilesetOverviewModel();
         Dialog d = new JFXDialog();
         OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, d);
         // Wire up all the crap

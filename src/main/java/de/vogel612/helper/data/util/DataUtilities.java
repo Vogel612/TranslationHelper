@@ -1,35 +1,21 @@
 package de.vogel612.helper.data.util;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
+import de.vogel612.helper.data.FilesetOverviewModel;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * Centralizes access to data processing for {@link de.vogel612.helper.data.OverviewModel} and other classes that
+ * Centralizes access to data processing for {@link FilesetOverviewModel} and other classes that
  * benefit from the abstraction
  */
 public class DataUtilities {
     public static final String SINGLE_TRUTH_LOCALE = "";
-
-    public static final String VALUE_NAME = "value";
-    public static final String KEY_NAME = "name";
-    public static final String ELEMENT_NAME = "data";
-    private static final XPathFactory X_PATH_FACTORY = XPathFactory.instance();
-    public static final XPathExpression<Element> VALUE_EXPRESSION = X_PATH_FACTORY.compile("/*/"
-            + ELEMENT_NAME + "[@" + KEY_NAME + "=$key]/"
-            + VALUE_NAME, Filters.element(), Collections.singletonMap("key", ""));
 
     public static final String FILE_NAME_FORMAT = "%s%s.resx";
     private static final String FILENAME_REGEX = "^.*?([a-z]*)\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
@@ -53,46 +39,6 @@ public class DataUtilities {
                     : localeMatcher.group(2);
         }
         throw new IllegalArgumentException("Argument was not a conform resx file");
-    }
-
-    /**
-     * Creates a new <tt>data</tt>-entry for a given key and a given value. Neither may be null
-     *
-     * @param key
-     *         The key for the new element
-     * @param value
-     *         The value for the new element
-     *
-     * @return The element itself
-     */
-    public static Element createNewElement(String key, String value) {
-        Objects.requireNonNull(key, "Key");
-        Objects.requireNonNull(value, "value");
-
-        Element newElement = new Element(ELEMENT_NAME);
-        Element valueContainer = new Element(VALUE_NAME);
-        valueContainer.addContent(value);
-        //valueContainer.setText(value);
-
-        newElement.setAttribute(KEY_NAME, key);
-        newElement.addContent(valueContainer);
-        return newElement;
-    }
-
-    /**
-     * Grabs the <tt>value</tt> subelement of a resx <tt>data</tt>-entry with a specified key from a given {@link
-     * Document}
-     *
-     * @param doc
-     *         The document to search for the ELement
-     * @param key
-     *         The key of the associated <tt>data</tt>-entry
-     *
-     * @return The element, if it exists, null otherwise
-     */
-    public static Element getValueElement(Document doc, final String key) {
-        VALUE_EXPRESSION.setVariable("key", key);
-        return VALUE_EXPRESSION.evaluateFirst(doc);
     }
 
     /**

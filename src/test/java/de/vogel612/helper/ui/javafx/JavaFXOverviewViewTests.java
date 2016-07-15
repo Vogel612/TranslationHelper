@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.jfx.JFXOverviewView;
+import de.vogel612.helper.ui.jfx.JFXFilesetOverviewView;
 import de.vogel612.helper.ui.jfx.TranslationPair;
 
 import java.util.Arrays;
@@ -24,11 +24,11 @@ import javafx.stage.Stage;
 
 public class JavaFXOverviewViewTests extends ApplicationTest {
 
-    private JFXOverviewView cut;
+    private JFXFilesetOverviewView cut;
 
     @Override
     public void start (Stage stage) throws Exception {
-        cut = new JFXOverviewView(stage, getClass().getResource("/OverviewView.fxml"));
+        cut = new JFXFilesetOverviewView(stage, getClass().getResource("/FilesetOverviewView.fxml"));
         cut.show();
     }
 

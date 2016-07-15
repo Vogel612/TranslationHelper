@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class OverviewModelTest {
+public class FilesetOverviewModelTest {
 
     private static final Translation[] expected = {
       new Translation("", "TestKey1", "TestValue"),
@@ -30,12 +30,12 @@ public class OverviewModelTest {
       new Translation("test", "TestKey2", "")
     };
 
-    private OverviewModel cut;
+    private FilesetOverviewModel cut;
     private Runnable parseCallback;
 
     @Before
     public void setup() {
-        cut = new OverviewModel();
+        cut = new FilesetOverviewModel();
         parseCallback = mock(Runnable.class);
         cut.addParseCompletionListener(parseCallback);
     }

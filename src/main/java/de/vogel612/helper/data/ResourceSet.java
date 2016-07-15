@@ -3,6 +3,7 @@ package de.vogel612.helper.data;
 import de.vogel612.helper.data.util.DataUtilities;
 
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,9 +16,17 @@ public class ResourceSet {
     private final Set<String> locales = new HashSet<>();
     private final String name;
 
-    public ResourceSet(Path file) {
-        folder = file.getParent();
-        name = DataUtilities.getFilesetIdentifier(file);
+    public static ResourceSet create(Path file) {
+        final Path folder = file.getParent();
+        final String name = DataUtilities.getFilesetIdentifier(file);
+        // TODO get locales
+        return new ResourceSet(name, folder, Collections.emptySet());
+    }
+
+    public ResourceSet(String name, Path folder, Set<String> locales) {
+        this.folder = folder;
+        this.name = name;
+        this.locales.addAll(locales);
     }
 
     public void addLocale(String locale) {

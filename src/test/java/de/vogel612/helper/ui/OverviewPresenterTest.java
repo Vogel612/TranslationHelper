@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import de.vogel612.helper.data.OverviewModel;
+import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.data.Translation;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.List;
 public class OverviewPresenterTest {
 
     private OverviewView overviewView;
-    private OverviewModel overviewModel;
+    private FilesetOverviewModel filesetOverviewModel;
     private TranslationView translationView;
     private ResxChooser resxChooser;
     private Dialog dialog;
@@ -28,13 +28,13 @@ public class OverviewPresenterTest {
     @Before
     public void beforeTest() {
         overviewView = mock(OverviewView.class);
-        overviewModel = mock(OverviewModel.class);
+        filesetOverviewModel = mock(FilesetOverviewModel.class);
         translationView = mock(TranslationView.class);
         resxChooser = mock(ResxChooser.class);
         dialog = mock(Dialog.class);
 
-        cut = new OverviewPresenter(overviewModel, overviewView, translationView, resxChooser, dialog);
-        reset(overviewView, overviewModel, translationView, resxChooser, dialog);
+        cut = new OverviewPresenter(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        reset(overviewView, filesetOverviewModel, translationView, resxChooser, dialog);
     }
 
 
@@ -42,7 +42,7 @@ public class OverviewPresenterTest {
     public void show_callsShow_onView() {
         cut.show();
         verify(overviewView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -51,12 +51,12 @@ public class OverviewPresenterTest {
 
         cut.loadFiles(mock);
         try {
-            verify(overviewModel).loadResxFileset(mock);
+            verify(filesetOverviewModel).loadResxFileset(mock);
         } catch (IOException e) {
             // shouldn't ever actually happen
             throw new AssertionError("Error when loading all files in the model", e);
         }
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -70,40 +70,40 @@ public class OverviewPresenterTest {
 
         verify(dialog).info(message, errorMessage);
         verify(e).getMessage();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
     public void onParseCompletion_rebuildsView() {
         List<Translation> rootList = mock(List.class);
-        doReturn(rootList).when(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        doReturn(rootList).when(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
         List<Translation> targetList = mock(List.class);
-        doReturn(targetList).when(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        doReturn(targetList).when(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
 
         cut.onParseCompletion();
 
-        verify(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
-        verify(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
         verify(overviewView).rebuildWith(rootList, targetList);
         verify(overviewView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
     public void onTranslateRequest_delegatesToTranslationPresenter() {
         final String key = "Key";
         Translation fakeRoot = mock(Translation.class);
-        doReturn(fakeRoot).when(overviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        doReturn(fakeRoot).when(filesetOverviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
         Translation fakeTarget = mock(Translation.class);
-        doReturn(fakeTarget).when(overviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        doReturn(fakeTarget).when(filesetOverviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
 
         cut.onTranslateRequest(key);
 
-        verify(overviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
-        verify(overviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        verify(filesetOverviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        verify(filesetOverviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
         verify(translationView).setRequestedTranslation(fakeRoot, fakeTarget);
         verify(translationView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -111,18 +111,18 @@ public class OverviewPresenterTest {
         final Translation t = new Translation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
         final List<Translation> list = mock(List.class);
         final List<Translation> leftSide = mock(List.class);
-        doReturn(list).when(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
-        doReturn(leftSide).when(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        doReturn(list).when(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        doReturn(leftSide).when(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
 
         cut.onTranslationSubmit(t);
 
-        verify(overviewModel).updateTranslation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
-        verify(overviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
-        verify(overviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(filesetOverviewModel).updateTranslation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
+        verify(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
         verify(overviewView).rebuildWith(leftSide, list);
         verify(overviewView).show();
         verify(translationView).hide();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class OverviewPresenterTest {
 
         verify(translationView).hide();
         verify(overviewView).show();
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 
     @Test
@@ -139,12 +139,12 @@ public class OverviewPresenterTest {
         cut.onSaveRequest();
 
         try {
-            verify(overviewModel).saveAll();
+            verify(filesetOverviewModel).saveAll();
         } catch (IOException e) {
             // shouldn't ever actually happen
             throw new AssertionError("IOException when trying to save", e);
         }
         verify(dialog).info(any(String.class), any(String.class));
-        verifyNoMoreInteractions(overviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
     }
 }

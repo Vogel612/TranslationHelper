@@ -1,6 +1,6 @@
 package de.vogel612.helper;
 
-import de.vogel612.helper.data.OverviewModel;
+import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.ui.OverviewPresenter;
 import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.ResxChooser;
@@ -11,8 +11,8 @@ import de.vogel612.helper.ui.TranslationView;
  */
 public final class DependencyRoot {
 
-    public static void inject(OverviewModel model, OverviewView overview, OverviewPresenter presenter,
-      TranslationView translations, ResxChooser resxChooser) {
+    public static void inject(FilesetOverviewModel model, OverviewView overview, OverviewPresenter presenter,
+                              TranslationView translations, ResxChooser resxChooser) {
         overview.addWindowClosingListener(presenter::onWindowCloseRequest);
         overview.addLanguageRequestListener(presenter::fileChoosing);
         overview.addSaveRequestListener(presenter::onSaveRequest);

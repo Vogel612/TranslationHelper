@@ -1,11 +1,8 @@
 package de.vogel612.helper.data;
 
+import de.vogel612.helper.data.util.Serialization;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 import static de.vogel612.helper.data.util.DataUtilities.*;
 
@@ -13,22 +10,19 @@ import de.vogel612.helper.data.util.DataUtilities;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Overview model. Provides in-memory caching, parsing and writing of resx file data for Rubberduck files
+ * Overview model. Provides in-memory caching, parsing and writing of resx files
  */
-public class OverviewModel {
+public class FilesetOverviewModel {
 
-    public static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
     private final Set<Runnable> parseCompletionListeners = new HashSet<>();
     private final Map<String, Document> translations = new HashMap<>();
 
@@ -66,7 +60,7 @@ public class OverviewModel {
 
         try (Stream<Path> resxFiles = DataUtilities.streamFileset(currentPath, currentFileset)) {
             translations.putAll(resxFiles.collect(Collectors.toMap(
-                DataUtilities::parseLocale, this::parseFile)
+                DataUtilities::parseLocale, Serialization::parseFile)
             ));
         }
         normalizeDocuments();
@@ -77,9 +71,9 @@ public class OverviewModel {
         final Set<String> singleTruth = translations
           .get(SINGLE_TRUTH_LOCALE)
           .getRootElement()
-          .getChildren(ELEMENT_NAME)
+          .getChildren(Serialization.ELEMENT_NAME)
           .stream()
-          .map(el -> el.getAttribute(KEY_NAME).getValue())
+          .map(el -> el.getAttribute(Serialization.KEY_NAME).getValue())
           .collect(Collectors.toSet());
 
         translations.values().forEach(
@@ -88,41 +82,26 @@ public class OverviewModel {
     }
 
     private void normalizeDocument(final Document doc, final Set<String> singleTruth) {
-        final List<Element> localeElements = doc.getRootElement().getChildren(ELEMENT_NAME);
+        final List<Element> localeElements = doc.getRootElement().getChildren(Serialization.ELEMENT_NAME);
         Set<String> localeKeys = new HashSet<>();
 
         // remove keys not present in the Single truth
         for (Iterator<Element> it = localeElements.iterator(); it.hasNext(); ) {
             final Element el = it.next();
-            if (!singleTruth.contains(el.getAttribute(KEY_NAME).getValue())) {
+            if (!singleTruth.contains(el.getAttribute(Serialization.KEY_NAME).getValue())) {
                 it.remove();
                 continue;
             }
-            localeKeys.add(el.getAttribute(KEY_NAME).getValue());
+            localeKeys.add(el.getAttribute(Serialization.KEY_NAME).getValue());
         }
 
         singleTruth.stream()
           .filter(key -> !localeKeys.contains(key))
           .map(key -> {
               final String val = getSingleTranslation(SINGLE_TRUTH_LOCALE, key).getValue();
-              return DataUtilities.createNewElement(key, val);
+              return Serialization.createNewElement(key, val);
           })
           .forEach(doc.getRootElement()::addContent);
-    }
-
-    private Document parseFile(final Path path) {
-        final Path xmlFile = path.getFileName();
-        final SAXBuilder documentBuilder = new SAXBuilder();
-
-        final Document doc;
-        try {
-            doc = documentBuilder.build(path.toFile());
-            return doc;
-        } catch (JDOMException e) {
-            throw new IllegalStateException("Unable to parse " + xmlFile, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException("Unable to read" + xmlFile, e);
-        }
     }
 
     /**
@@ -135,7 +114,7 @@ public class OverviewModel {
     public List<Translation> getTranslations(final String locale) {
         Document document = translations.get(locale);
         final List<Element> translationElements = document.getRootElement()
-          .getChildren(ELEMENT_NAME);
+          .getChildren(Serialization.ELEMENT_NAME);
 
         return translationElements.stream()
           .map(el -> new Translation(locale, el))
@@ -152,7 +131,7 @@ public class OverviewModel {
      */
     public void updateTranslation(final String locale, final String key,
       final String newTranslation) {
-        getValueElement(translations.get(locale), key).setText(newTranslation);
+        Serialization.getValueElement(translations.get(locale), key).setText(newTranslation);
     }
 
     /**
@@ -167,7 +146,7 @@ public class OverviewModel {
             try (OutputStream outStream = Files.newOutputStream(outFile,
               StandardOpenOption.TRUNCATE_EXISTING,
               StandardOpenOption.WRITE)) {
-                XML_PRETTY_PRINT.output(entry.getValue(), outStream);
+                Serialization.XML_PRETTY_PRINT.output(entry.getValue(), outStream);
                 saved.lazySet(true);
             }
         }
@@ -183,7 +162,7 @@ public class OverviewModel {
      */
     public Translation getSingleTranslation(final String locale,
       final String key) {
-        final String currentValue = getValueElement(translations.get(locale), key).getText();
+        final String currentValue = Serialization.getValueElement(translations.get(locale), key).getText();
         return new Translation(locale, key, currentValue);
     }
 

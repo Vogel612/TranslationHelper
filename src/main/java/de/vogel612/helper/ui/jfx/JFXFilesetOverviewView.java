@@ -16,13 +16,13 @@ import java.util.function.Consumer;
 /**
  * Created by vogel612 on 02.03.16.
  */
-public class JFXOverviewView implements OverviewView {
+public class JFXFilesetOverviewView implements OverviewView {
 
-    private final JFXOverviewController controller;
+    private final JFXFilesetOverviewController controller;
     private final Scene ui;
     private final Stage stage;
 
-    public JFXOverviewView(Stage stage, URL fxml) throws IOException {
+    public JFXFilesetOverviewView(Stage stage, URL fxml) throws IOException {
         this.stage = stage;
         FXMLLoader loader = new FXMLLoader(fxml);
         ui = new Scene(loader.load());

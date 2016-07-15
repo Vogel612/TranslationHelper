@@ -1,7 +1,8 @@
 package de.vogel612.helper.data;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -10,10 +11,15 @@ import java.util.List;
 public class Project {
 
     private String name;
-    private final List<ResourceSet> associatedResources = new ArrayList<ResourceSet>;
+    private final List<ResourceSet> associatedResources = new ArrayList<>();
 
-    public Project(Path saveLocation) {
-        // parse given file into Project
+    public Project(String name) {
+        this(name, Collections.emptySet());
+    }
+
+    public Project(String name, Collection<ResourceSet> associatedResources) {
+        this.name = name;
+        this.associatedResources.addAll(associatedResources);
     }
 
     public void associate(ResourceSet resource) {

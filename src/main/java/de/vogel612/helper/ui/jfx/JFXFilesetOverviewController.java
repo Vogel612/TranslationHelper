@@ -26,7 +26,7 @@ import javafx.util.Callback;
 /**
  * Created by vogel612 on 01.03.16.
  */
-public class JFXOverviewController extends OverviewViewCommon implements Initializable {
+public class JFXFilesetOverviewController extends OverviewViewCommon implements Initializable {
 
     @FXML
     private Button save;
@@ -37,7 +37,7 @@ public class JFXOverviewController extends OverviewViewCommon implements Initial
     @FXML
     private TableView<TranslationPair> table;
 
-    public JFXOverviewController() {
+    public JFXFilesetOverviewController() {
 
     }
 
