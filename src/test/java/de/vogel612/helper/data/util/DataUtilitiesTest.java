@@ -16,24 +16,24 @@ public class DataUtilitiesTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void parseFileName_illegalFile_isRejected() {
-        DataUtilities.parseLocale(Paths.get("/", "some", "random", "file.foo"));
+        DataUtilities.getFileLocale(Paths.get("/", "some", "random", "file.foo"));
     }
 
     @Test
     public void parseFileName_langLocale_parsesProperly() {
-        String result = DataUtilities.parseLocale(Paths.get("/", "some", "random", "set.LN-lc.resx"));
+        String result = DataUtilities.getFileLocale(Paths.get("/", "some", "random", "set.LN-lc.resx"));
         assertEquals("LN-lc", result);
     }
 
     @Test
     public void parseFileName_languageOnly_parsesProperly() {
-        String result = DataUtilities.parseLocale(Paths.get("/", "some", "randome", "set.LN.resx"));
+        String result = DataUtilities.getFileLocale(Paths.get("/", "some", "randome", "set.LN.resx"));
         assertEquals("LN", result);
     }
 
     @Test
     public void parseFileName_noLanguageOrLocale_returnsSingleTruth() {
-        String result = DataUtilities.parseLocale(Paths.get("/", "set.resx"));
+        String result = DataUtilities.getFileLocale(Paths.get("/", "set.resx"));
         assertSame(DataUtilities.SINGLE_TRUTH_LOCALE, result);
     }
 

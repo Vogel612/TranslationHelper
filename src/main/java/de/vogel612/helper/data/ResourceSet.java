@@ -2,10 +2,12 @@ package de.vogel612.helper.data;
 
 import de.vogel612.helper.data.util.DataUtilities;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Created by vogel612 on 12.07.16.
@@ -18,7 +20,7 @@ public class ResourceSet {
 
     public static ResourceSet create(Path file) {
         final Path folder = file.getParent();
-        final String name = DataUtilities.getFilesetIdentifier(file);
+        final String name = DataUtilities.getFileIdentifier(file);
         // TODO get locales
         return new ResourceSet(name, folder, Collections.emptySet());
     }
@@ -47,5 +49,9 @@ public class ResourceSet {
 
     public String getName() {
         return name;
+    }
+
+    public Stream<Path> files() throws IOException {
+        return DataUtilities.streamFileset(folder, name).filter(path -> locales.contains(DataUtilities.getFileLocale(path)));
     }
 }

@@ -62,7 +62,7 @@ public abstract class ResxChooserCommon implements ResxChooser {
             try (final Stream<Path> filesetFiles = streamFileset(filesetBacking.getParent(), filesetName)) {
                 localeOptionCache.clear();
                 localeOptionCache.addAll(filesetFiles.map(
-                  DataUtilities::parseLocale).collect(
+                  DataUtilities::getFileLocale).collect(
                   Collectors.toSet()));
             } catch (IOException e1) {
                 // FIXME handle

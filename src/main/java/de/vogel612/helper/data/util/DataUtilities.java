@@ -31,7 +31,7 @@ public class DataUtilities {
      *
      * @return The Language-Locale for the given file
      */
-    public static String parseLocale(final Path path) {
+    public static String getFileLocale(final Path path) {
         final Matcher localeMatcher = FILENAME_PATTERN.matcher(path.getFileName().toString());
         if (localeMatcher.find()) { // should always be true, since we check beforehand
             return localeMatcher.group(2) == null
@@ -85,7 +85,7 @@ public class DataUtilities {
      *
      * @return The fileset identifier, if present. Otherwise <tt>IllegalArgumentException</tt> is thrown.
      */
-    public static String getFilesetIdentifier(Path file) {
+    public static String getFileIdentifier(Path file) {
         final Matcher filesetMatcher = FILENAME_PATTERN.matcher(file.getFileName().toString());
         if (filesetMatcher.matches()) { // should always be true
             return filesetMatcher.group(1); // group is not optional
