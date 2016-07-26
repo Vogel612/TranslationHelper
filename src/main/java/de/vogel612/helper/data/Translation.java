@@ -39,17 +39,22 @@ public class Translation extends ObservableValueBase<String> {
         this.key = key;
         this.value = value;
     }
+//
+//    /**
+//     * Creates a new translation from a DOM element in a resx file
+//     *
+//     * @param locale The locale that this translation represents
+//     * @param el     The DOM element representing a Translation
+//     */
+//    @Deprecated
+//    public Translation(final String locale, final Element el) {
+//        this.key = el.getAttribute(ResourceFileSerializer.KEY_NAME).getValue();
+//        this.value = el.getChildText(ResourceFileSerializer.VALUE_NAME);
+//        this.locale = locale;
+//    }
 
-    /**
-     * Creates a new translation from a DOM element in a resx file
-     *
-     * @param locale The locale that this translation represents
-     * @param el     The DOM element representing a Translation
-     */
-    public Translation(final String locale, final Element el) {
-        this.key = el.getAttribute(ResourceFileSerializer.KEY_NAME).getValue();
-        this.value = el.getChildText(ResourceFileSerializer.VALUE_NAME);
-        this.locale = locale;
+    public String getLocale() {
+        return locale;
     }
 
     public String getKey() {
@@ -92,9 +97,5 @@ public class Translation extends ObservableValueBase<String> {
             if (other.value != null) { return false; }
         } else if (!value.equals(other.value)) { return false; }
         return true;
-    }
-
-    public String getLocale() {
-        return locale;
     }
 }
