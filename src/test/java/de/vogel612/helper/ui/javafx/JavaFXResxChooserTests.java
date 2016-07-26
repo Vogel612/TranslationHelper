@@ -7,6 +7,8 @@ import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
 
 import com.google.common.base.Predicate;
+import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -71,9 +73,6 @@ public class JavaFXResxChooserTests extends ApplicationTest {
         assertTrue(cb.getItems().containsAll(Arrays.asList("", "ts")));
 
         verifyNoMoreInteractions(listener);
-
-        // cleanup by closing the dialog
-        type(KeyCode.ESCAPE);
     }
 
     @Test
@@ -86,8 +85,6 @@ public class JavaFXResxChooserTests extends ApplicationTest {
         assertTrue(cb.getItems().containsAll(Arrays.asList("", "ts")));
 
         verifyNoMoreInteractions(listener);
-        // cleanup by closing the dialog
-        type(KeyCode.ESCAPE);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -100,5 +97,11 @@ public class JavaFXResxChooserTests extends ApplicationTest {
     public void setFileset_withInexistantFile_throws() {
         cut.setFileset(Paths.get("/", "some", "stupid", "file", "that", "does", "not", "exist.resx"));
         verifyNoMoreInteractions(listener);
+    }
+
+    @After
+    public void cleanupIsh() {
+        type(KeyCode.ESCAPE);
+        type(KeyCode.ESCAPE);
     }
 }
