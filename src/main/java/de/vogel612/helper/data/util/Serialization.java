@@ -25,73 +25,42 @@ import java.util.Objects;
 public class Serialization {
 
     public static final XMLOutputter XML_PRETTY_PRINT = new XMLOutputter(Format.getPrettyFormat());
-    private static final XPathFactory X_PATH_FACTORY = XPathFactory.instance();
-    public static final String ELEMENT_NAME = "data";
-    public static final String KEY_NAME = "name";
-    public static final String VALUE_NAME = "value";
-    private static final XPathExpression<Element> VALUE_EXPRESSION = X_PATH_FACTORY.compile("/*/"
-            + ELEMENT_NAME + "[@" + KEY_NAME + "=$key]/"
-            + VALUE_NAME, Filters.element(), Collections.singletonMap("key", ""));
-
-    /**
-     * Creates a new <tt>data</tt>-entry for a given key and a given value. Neither may be null
-     *
-     * @param key
-     *         The key for the new element
-     * @param value
-     *         The value for the new element
-     *
-     * @return The element itself
-     */
-    public static Element createNewElement(final String key, final String value) {
-        Objects.requireNonNull(key, "Key");
-        Objects.requireNonNull(value, "value");
-
-        Element newElement = new Element(ELEMENT_NAME);
-        Element valueContainer = new Element(VALUE_NAME);
-        valueContainer.addContent(value);
-
-        newElement.setAttribute(KEY_NAME, key);
-        newElement.addContent(valueContainer);
-        return newElement;
-    }
-
-    /**
-     * Grabs the <tt>value</tt> subelement of a resx <tt>data</tt>-entry with a specified key from a given {@link
-     * Document}
-     *
-     * @param doc
-     *         The document to search for the ELement
-     * @param key
-     *         The key of the associated <tt>data</tt>-entry
-     *
-     * @return The element, if it exists, null otherwise
-     */
-    public static Element getValueElement(final Document doc, final String key) {
-        VALUE_EXPRESSION.setVariable("key", key);
-        return VALUE_EXPRESSION.evaluateFirst(doc);
-    }
 
     /**
      * Deserializes the XML document at the given path into a Document
-     * @param path
-     * @return
+     *
+     * @param file
+     *         The Path where the Document is to be retrieved from.
+     *
+     * @return a document instance built from the file at the given path
+     *
+     * @throws IOException
+     *         When reading the file failed
+     * @throws IllegalStateException
+     *         When the file could not be parsed into a document
      */
-    public static Document parseFile(final Path path) {
-        final Path xmlFile = path.getFileName();
+    public static Document parseFile(final Path file) throws IOException {
+        final Path xmlFile = file.getFileName();
         final SAXBuilder documentBuilder = new SAXBuilder();
 
-        final Document doc;
         try {
-            doc = documentBuilder.build(path.toFile());
-            return doc;
+            return documentBuilder.build(file.toFile());
         } catch (JDOMException e) {
             throw new IllegalStateException("Unable to parse " + xmlFile, e);
-        } catch (IOException e) {
-            throw new UncheckedIOException("Unable to read" + xmlFile, e);
         }
     }
 
+    /**
+     * Serializes the given JDOM Document to the given Path
+     *
+     * @param doc
+     *         The document to serialize.
+     * @param file
+     *         The path to serialize the document to
+     *
+     * @throws IOException
+     *         When serializing the Document failed because of an IOException
+     */
     public static void serializeDocument(final Document doc, final Path file) throws IOException {
         try (OutputStream output = Files.newOutputStream(file, StandardOpenOption.TRUNCATE_EXISTING,
                 StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {

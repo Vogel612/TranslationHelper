@@ -6,12 +6,12 @@ import de.vogel612.helper.data.util.Serialization;
 import org.jdom2.Document;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -27,22 +27,49 @@ public class ResourceFile {
     private final Path folder;
     private final Map<String, String> entries = new HashMap<>();
 
-    public ResourceFile(Path filepath) {
-        folder = filepath.getParent();
-        name = DataUtilities.getFileIdentifier(filepath);
-        locale = DataUtilities.getFileLocale(filepath);
-        associatedDocument = Serialization.parseFile(filepath);
-
+    public ResourceFile(final Path filePath) {
+        folder = filePath.getParent();
+        name = DataUtilities.getFileIdentifier(filePath);
+        locale = DataUtilities.getFileLocale(filePath);
+        try {
+            associatedDocument = Serialization.parseFile(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UncheckedIOException(e);
+        }
         entries.putAll(ResourceFileSerializer.deserializeToMap(associatedDocument));
-        // FIXME init entries
-    }
-
-    public String getTranslation(String key) {
-        return entries.get(key);
     }
 
     public void updateTranslation(String key, String value) {
         entries.put(key, value);
+        backgroundPropagator.submit(() -> ResourceFileSerializer.getValueElement(associatedDocument, key).setText(value));
+    }
+
+    public List<Translation> orderedTranslations() {
+        return entries.entrySet().stream()
+                .map(entry -> new Translation(locale, entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparing(Translation::getKey))
+                .collect(Collectors.toList());
+    }
+
+    public void normalize(Set<String> keys, ResourceFile canonical) {
+        if (canonical == this) {
+            return;
+        }
+        entries.keySet().stream().filter(key -> !keys.contains(key)).forEach(entries::remove);
+        keys.stream().filter(key -> !entries.containsKey(key))
+                .forEach(missing -> {
+                    associatedDocument.getRootElement().addContent(ResourceFileSerializer.createNewElement(missing, canonical.getTranslation(missing)));
+                    updateTranslation(missing, canonical.getTranslation(missing));
+                });
+    }
+
+    public void save() throws IOException {
+        Serialization.serializeDocument(associatedDocument, folder.resolve(DataUtilities.fileNameString(name, locale)));
+    }
+
+    public String getTranslation(String key) {
+        return entries.get(key);
     }
 
     public String getName() {
@@ -57,11 +84,15 @@ public class ResourceFile {
         return folder;
     }
 
-    public static Stream<ResourceFile> getResourceFiles(ResourceSet resourceSet) throws IOException {
-        return resourceSet.files().map(ResourceFile::new);
+    public Set<String> getKeys() {
+        return entries.keySet();
     }
 
     public static Stream<ResourceFile> getResourceFiles(Path folder, String name) throws IOException {
         return DataUtilities.streamFileset(folder, name).map(ResourceFile::new);
+    }
+
+    public static Stream<ResourceFile> getResourceFiles(ResourceSet resourceSet) throws IOException {
+        return resourceSet.files().map(ResourceFile::new);
     }
 }

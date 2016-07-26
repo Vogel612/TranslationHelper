@@ -66,7 +66,7 @@ public final class ProjectSerializer {
      *
      * @return A Project-instance that's equivalent to the Project instance originally serialized into the file
      */
-    public static Project deserialize(Path file) {
+    public static Project deserialize(Path file) throws IOException {
         Document projectDocument = Serialization.parseFile(file);
         Element root = projectDocument.getRootElement();
         final String projectName = root.getAttribute("name").getValue();

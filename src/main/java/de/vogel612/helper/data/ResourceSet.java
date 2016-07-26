@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 public class ResourceSet {
 
     private final Path folder;
-    private final Set<String> locales = new HashSet<>();
     private final String name;
+    private final Set<String> locales = new HashSet<>();
 
     public static ResourceSet create(Path file) {
         final Path folder = file.getParent();
@@ -53,5 +53,26 @@ public class ResourceSet {
 
     public Stream<Path> files() throws IOException {
         return DataUtilities.streamFileset(folder, name).filter(path -> locales.contains(DataUtilities.getFileLocale(path)));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResourceSet that = (ResourceSet) o;
+
+        return folder.equals(that.folder)
+                && locales.equals(that.locales)
+                && name.equals(that.name);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = folder.hashCode();
+        result = 31 * result + locales.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 }

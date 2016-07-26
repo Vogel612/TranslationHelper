@@ -1,6 +1,6 @@
 package de.vogel612.helper.data;
 
-import de.vogel612.helper.data.util.Serialization;
+import de.vogel612.helper.data.util.ResourceFileSerializer;
 import org.jdom2.Element;
 
 import javafx.beans.value.ObservableValueBase;
@@ -47,8 +47,8 @@ public class Translation extends ObservableValueBase<String> {
      * @param el     The DOM element representing a Translation
      */
     public Translation(final String locale, final Element el) {
-        this.key = el.getAttribute(Serialization.KEY_NAME).getValue();
-        this.value = el.getChildText(Serialization.VALUE_NAME);
+        this.key = el.getAttribute(ResourceFileSerializer.KEY_NAME).getValue();
+        this.value = el.getChildText(ResourceFileSerializer.VALUE_NAME);
         this.locale = locale;
     }
 

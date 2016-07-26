@@ -1,9 +1,5 @@
 package de.vogel612.helper.data;
 
-import de.vogel612.helper.data.util.Serialization;
-import org.jdom2.Document;
-import org.jdom2.Element;
-
 import static de.vogel612.helper.data.util.DataUtilities.*;
 
 import de.vogel612.helper.data.util.DataUtilities;
@@ -12,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,9 +16,8 @@ import java.util.stream.Stream;
  * Overview model. Provides in-memory caching, parsing and writing of resx files
  */
 public class FilesetOverviewModel {
-
     private final Set<Runnable> parseCompletionListeners = new HashSet<>();
-    private final Map<String, Document> translations = new HashMap<>();
+    private final Map<String, ResourceFile> resources = new HashMap<>();
 
     private final AtomicBoolean saved = new AtomicBoolean(true);
     private Path currentPath;
@@ -54,55 +50,28 @@ public class FilesetOverviewModel {
         if (file.toFile().isDirectory()) {
             throw new IllegalArgumentException("We need to work with an actual file");
         }
-
         this.currentPath = file.getParent();
         this.currentFileset = DataUtilities.getFileIdentifier(file);
-        translations.clear();
+        loadResourceFiles(ResourceFile.getResourceFiles(currentPath, currentFileset));
+    }
 
-        try (Stream<Path> resxFiles = DataUtilities.streamFileset(currentPath, currentFileset)) {
-            translations.putAll(resxFiles.collect(Collectors.toMap(
-                    DataUtilities::getFileLocale, Serialization::parseFile)
-            ));
-        }
-        normalizeDocuments();
+    public void loadResxFileset(final ResourceSet resourceSet) throws IOException {
+        this.currentPath = resourceSet.getFolder();
+        this.currentFileset = resourceSet.getName();
+        loadResourceFiles(ResourceFile.getResourceFiles(resourceSet));
+    }
+
+    private void loadResourceFiles(Stream<ResourceFile> resourceFiles) {
+        resources.clear();
+        resources.putAll(resourceFiles.collect(Collectors.toMap(ResourceFile::getLocale, Function.identity())));
+        normalizeResourceFiles();
         parseCompletionListeners.forEach(Runnable::run);
     }
 
-    private void normalizeDocuments() {
-        final Set<String> singleTruth = translations
-                .get(SINGLE_TRUTH_LOCALE)
-                .getRootElement()
-                .getChildren(Serialization.ELEMENT_NAME)
-                .stream()
-                .map(el -> el.getAttribute(Serialization.KEY_NAME).getValue())
-                .collect(Collectors.toSet());
-
-        translations.values().forEach(
-                doc -> normalizeDocument(doc, singleTruth));
+    private void normalizeResourceFiles() {
+        final Set<String> singleTruth = resources.get(SINGLE_TRUTH_LOCALE).getKeys();
+        resources.values().forEach(file -> file.normalize(singleTruth, resources.get(SINGLE_TRUTH_LOCALE)));
         saved.lazySet(false);
-    }
-
-    private void normalizeDocument(final Document doc, final Set<String> singleTruth) {
-        final List<Element> localeElements = doc.getRootElement().getChildren(Serialization.ELEMENT_NAME);
-        Set<String> localeKeys = new HashSet<>();
-
-        // remove keys not present in the Single truth
-        for (Iterator<Element> it = localeElements.iterator(); it.hasNext(); ) {
-            final Element el = it.next();
-            if (!singleTruth.contains(el.getAttribute(Serialization.KEY_NAME).getValue())) {
-                it.remove();
-                continue;
-            }
-            localeKeys.add(el.getAttribute(Serialization.KEY_NAME).getValue());
-        }
-
-        singleTruth.stream()
-                .filter(key -> !localeKeys.contains(key))
-                .map(key -> {
-                    final String val = getSingleTranslation(SINGLE_TRUTH_LOCALE, key).getValue();
-                    return Serialization.createNewElement(key, val);
-                })
-                .forEach(doc.getRootElement()::addContent);
     }
 
     /**
@@ -114,14 +83,7 @@ public class FilesetOverviewModel {
      * @return A list of {@link Translation Translations} ordered alphabetically by their {@link Translation#key}
      */
     public List<Translation> getTranslations(final String locale) {
-        Document document = translations.get(locale);
-        final List<Element> translationElements = document.getRootElement()
-                .getChildren(Serialization.ELEMENT_NAME);
-
-        return translationElements.stream()
-                .map(el -> new Translation(locale, el))
-                .sorted(Comparator.comparing(Translation::getKey))
-                .collect(Collectors.toList());
+        return resources.get(locale).orderedTranslations();
     }
 
     /**
@@ -136,7 +98,7 @@ public class FilesetOverviewModel {
      */
     public void updateTranslation(final String locale, final String key,
                                   final String newTranslation) {
-        Serialization.getValueElement(translations.get(locale), key).setText(newTranslation);
+        resources.get(locale).updateTranslation(key, newTranslation);
     }
 
     /**
@@ -146,9 +108,8 @@ public class FilesetOverviewModel {
      *         In case saving the changes fails
      */
     public void saveAll() throws IOException {
-        for (Map.Entry<String, Document> entry : translations.entrySet()) {
-            final Path outFile = currentPath.resolve(fileNameString(currentFileset, entry.getKey()));
-            Serialization.serializeDocument(entry.getValue(), outFile);
+        for (ResourceFile file : resources.values()) {
+            file.save();
         }
         saved.lazySet(true);
     }
@@ -163,9 +124,8 @@ public class FilesetOverviewModel {
      *
      * @return The translation for the given locale at the given key
      */
-    public Translation getSingleTranslation(final String locale,
-                                            final String key) {
-        final String currentValue = Serialization.getValueElement(translations.get(locale), key).getText();
+    public Translation getSingleTranslation(final String locale, final String key) {
+        final String currentValue = resources.get(locale).getTranslation(key);
         return new Translation(locale, key, currentValue);
     }
 
