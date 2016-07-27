@@ -28,6 +28,8 @@ public class ResourceFile {
     private final Map<String, String> entries = new HashMap<>();
 
     public ResourceFile(final Path filePath) {
+        Objects.requireNonNull(filePath, "filePath");
+
         folder = filePath.getParent();
         name = DataUtilities.getFileIdentifier(filePath);
         locale = DataUtilities.getFileLocale(filePath);
@@ -56,11 +58,17 @@ public class ResourceFile {
         if (canonical == this) {
             return;
         }
-        entries.keySet().stream().filter(key -> !keys.contains(key)).forEach(entries::remove);
+        for (Iterator<String> it = entries.keySet().iterator(); it.hasNext();){
+            final String key = it.next();
+            if (!keys.contains(key)) {
+                it.remove();
+            }
+        }
         keys.stream().filter(key -> !entries.containsKey(key))
                 .forEach(missing -> {
-                    associatedDocument.getRootElement().addContent(ResourceFileSerializer.createNewElement(missing, canonical.getTranslation(missing)));
-                    updateTranslation(missing, canonical.getTranslation(missing));
+                    final String canonicalTranslation = canonical.getTranslation(missing);
+                    associatedDocument.getRootElement().addContent(ResourceFileSerializer.createNewElement(missing, canonicalTranslation));
+                    updateTranslation(missing, canonicalTranslation);
                 });
     }
 

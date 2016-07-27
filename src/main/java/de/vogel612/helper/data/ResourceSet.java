@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -18,7 +19,8 @@ public class ResourceSet {
     private final String name;
     private final Set<String> locales = new HashSet<>();
 
-    public static ResourceSet create(Path file) {
+    public static ResourceSet create(final Path file) {
+        Objects.requireNonNull(file, "file");
         final Path folder = file.getParent();
         final String name = DataUtilities.getFileIdentifier(file);
         // TODO get locales
@@ -26,6 +28,9 @@ public class ResourceSet {
     }
 
     public ResourceSet(String name, Path folder, Set<String> locales) {
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(folder, "folder");
+        Objects.requireNonNull(locales, "locales");
         this.folder = folder;
         this.name = name;
         this.locales.addAll(locales);
