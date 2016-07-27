@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 public class ProjectSerializerTests {
 
     private final Path canonicalFile = Paths.get(getClass().getResource("/ProjectSerialization.thp").getFile());
-    private final Path tempFile = Paths.get(getClass().getResource("/temp.thp").getFile());
+    private final Path tempFile = canonicalFile.resolveSibling("temp.thp");
 
     @Test
     public void testProjectDeserialization() throws IOException {
@@ -34,6 +34,7 @@ public class ProjectSerializerTests {
 
     @Test
     public void testProjectSerialization() throws IOException {
+
         ResourceSet resourceSet = new ResourceSet("Set1", Paths.get("path/to/somewhere"), new HashSet<>(Arrays.asList("de-DE", "fr-CA", "en-EN")));
         Project toSerialize = new Project("Testproject", Collections.singletonList(resourceSet));
 
