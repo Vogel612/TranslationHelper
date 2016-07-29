@@ -36,7 +36,7 @@ public class ResourceFile {
         try {
             associatedDocument = Serialization.parseFile(filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
             throw new UncheckedIOException(e);
         }
         entries.putAll(ResourceFileSerializer.deserializeToMap(associatedDocument));
@@ -58,7 +58,7 @@ public class ResourceFile {
         if (canonical == this) {
             return;
         }
-        for (Iterator<String> it = entries.keySet().iterator(); it.hasNext();){
+        for (Iterator<String> it = entries.keySet().iterator(); it.hasNext(); ) {
             final String key = it.next();
             if (!keys.contains(key)) {
                 it.remove();

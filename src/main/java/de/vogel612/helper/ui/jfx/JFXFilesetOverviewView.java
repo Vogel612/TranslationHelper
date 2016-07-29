@@ -75,6 +75,6 @@ public class JFXFilesetOverviewView implements OverviewView {
 
     @Override
     public void hide() {
-        stage.hide();
+        Platform.runLater(stage::hide);
     }
 }

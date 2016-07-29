@@ -57,7 +57,5 @@ public class Project {
 
         if (!name.equals(project.name)) return false;
         return associatedResources.equals(project.associatedResources);
-
-
     }
 }

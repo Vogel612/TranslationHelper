@@ -2,10 +2,7 @@ package de.vogel612.helper;
 
 import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.ui.*;
-import de.vogel612.helper.ui.jfx.JFXDialog;
-import de.vogel612.helper.ui.jfx.JFXFilesetOverviewView;
-import de.vogel612.helper.ui.jfx.JFXResxChooserView;
-import de.vogel612.helper.ui.jfx.JFXTranslationView;
+import de.vogel612.helper.ui.jfx.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -43,12 +40,12 @@ public class TranslationHelper extends Application {
         translationStage.initOwner(primaryStage);
         TranslationView tv = new JFXTranslationView(translationStage, getClass().getResource("/TranslationView.fxml"));
         OverviewView v = new JFXFilesetOverviewView(primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
-
+        ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
         FilesetOverviewModel m = new FilesetOverviewModel();
         Dialog d = new JFXDialog();
-        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, d);
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, d, pv);
         // Wire up all the crap
-        DependencyRoot.inject(m, v, p, tv, rc);
+        DependencyRoot.inject(m, v, p, tv, rc, pv);
 
         Platform.runLater(p::show);
         Platform.runLater(p::fileChoosing);

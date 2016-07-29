@@ -26,7 +26,12 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
         d.initStyle(StageStyle.UNDECORATED);
         return d;
     }
-
+    /**
+     * Displays an info dialog, which has a title, a message and an OK button. That button doesn't do jack
+     *
+     * @param title   The title to use for the dialog
+     * @param message The message of the dialog
+     */
     @Override
     public void info(String title, String message) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
@@ -34,6 +39,14 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
         d.show();
     }
 
+    /**
+     * Displays an info dialog, which has a title, a message and an OK button.
+     * The given callback is run when the OK button is pressed.
+     *
+     * @param title      The title to use for the dialog
+     * @param message    The message of the dialog
+     * @param okCallback Something to run when the user clicks OK
+     */
     @Override
     public void info(String title, String message, Runnable okCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
@@ -44,6 +57,15 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
         }
     }
 
+    /**
+     * Displays a warning dialog with title, message and the options "OK" and "Cancel". T
+     * The given callbacks are run when the respective buttons are pressed.
+     *
+     * @param title          The title to use for the dialog
+     * @param message        The message of the dialog
+     * @param okCallback     Something to run when the user clicks OK
+     * @param cancelCallback Something to run when the user clicks Cancel
+     */
     @Override
     public void warn(String title, String message, Runnable okCallback, Runnable cancelCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
@@ -58,6 +80,16 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
         }
     }
 
+    /**
+     * Displays a warning dialog with title, message and the options "OK", "Cancel" and "Ignore".
+     * The given callbacks are run when the respective buttons are pressed.
+     *
+     * @param title          The title to use for the dialog
+     * @param message        The message of the dialog
+     * @param okCallback     Something to run when the user clicks OK
+     * @param cancelCallback Something to run when the user clicks Cancel
+     * @param ignoreCallback Something to run when the user clicks Ignore
+     */
     @Override
     public void warn(String title, String message, Runnable okCallback, Runnable cancelCallback, Runnable ignoreCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);

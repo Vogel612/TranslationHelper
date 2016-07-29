@@ -23,7 +23,7 @@ public class OverviewPresenter {
     private final ResxChooser resxChooser;
     private final Dialog dialog;
 
-    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, final Dialog d) {
+    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, final Dialog d, ProjectView pv) {
         model = m;
         view = v;
         translationPresenter = p;

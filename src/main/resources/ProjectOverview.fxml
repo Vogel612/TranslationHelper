@@ -1,0 +1,29 @@
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="de.vogel612.helper.ui.jfx.JFXProjectController"
+            minHeight="300" minWidth="600">
+    <padding>
+        <Insets top="15" bottom="20" right="15" left="15"/>
+    </padding>
+    <top>
+        <FlowPane minHeight="30">
+            <padding>
+                <Insets top="10" bottom="10" right="10" left="10" />
+            </padding>
+            <children>
+                <TextField fx:id="name" />
+                <Button fx:id="save" text="Save Project" minWidth="60" minHeight="20"/>
+                <Button fx:id="chooser" text="Choose Fileset / Project" minWidth="60" minHeight="20"/>
+            </children>
+        </FlowPane>
+    </top>
+    <center>
+        <TableView fx:id="table"/>
+    </center>
+</BorderPane>
