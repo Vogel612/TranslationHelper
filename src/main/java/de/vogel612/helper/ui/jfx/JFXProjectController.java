@@ -35,6 +35,7 @@ public class JFXProjectController implements Initializable {
     public TextField name;
 
     private Project project;
+    private Path projectFilePath;
 
 
     @Override
@@ -47,6 +48,18 @@ public class JFXProjectController implements Initializable {
         table.getColumns().clear();
         table.getColumns().add(createTableColumn());
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        save.setOnAction(evt -> {
+            if (projectFilePath == null) {
+                return;
+            }
+            try {
+                ProjectSerializer.serialize(project, projectFilePath);
+                JFXDialog.info("Success", "Successfully saved TranslationHelper Project Configuration to " + projectFilePath);
+            } catch (IOException e) {
+                JFXDialog.info("Error during saving!", "Could not save project due to following exception: " + e.getMessage());
+            }
+        });
     }
 
     private static TableColumn<ResourceSet, Pane> createTableColumn() {
@@ -150,8 +163,10 @@ public class JFXProjectController implements Initializable {
 
     public void loadProject(final Path file) {
         table.getItems().clear();
+        projectFilePath = null;
         try {
             project = ProjectSerializer.deserialize(file);
+            projectFilePath = file;
         } catch (IOException e) {
             e.printStackTrace();
             name.setText("Error during load, please retry");

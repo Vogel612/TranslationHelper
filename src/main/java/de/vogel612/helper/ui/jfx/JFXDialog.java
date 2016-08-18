@@ -14,7 +14,7 @@ import static javafx.scene.control.ButtonType.OK;
 /**
  * Created by vogel612 on 02.06.16.
  */
-public class JFXDialog implements de.vogel612.helper.ui.Dialog {
+public class JFXDialog {
 
     private static final ButtonType IGNORE = new ButtonType("Ignore", ButtonBar.ButtonData.RIGHT);
 
@@ -32,8 +32,7 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
      * @param title   The title to use for the dialog
      * @param message The message of the dialog
      */
-    @Override
-    public void info(String title, String message) {
+    public static void info(String title, String message) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
         d.getDialogPane().getButtonTypes().addAll(OK);
         d.show();
@@ -47,8 +46,7 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
      * @param message    The message of the dialog
      * @param okCallback Something to run when the user clicks OK
      */
-    @Override
-    public void info(String title, String message, Runnable okCallback) {
+    public static void info(String title, String message, Runnable okCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
         d.getDialogPane().getButtonTypes().addAll(OK);
         Optional<ButtonType> result = d.showAndWait();
@@ -66,8 +64,7 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
      * @param okCallback     Something to run when the user clicks OK
      * @param cancelCallback Something to run when the user clicks Cancel
      */
-    @Override
-    public void warn(String title, String message, Runnable okCallback, Runnable cancelCallback) {
+    public static void warn(String title, String message, Runnable okCallback, Runnable cancelCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
         d.getDialogPane().getButtonTypes().addAll(OK, CANCEL);
         Optional<ButtonType> result = d.showAndWait();
@@ -90,8 +87,7 @@ public class JFXDialog implements de.vogel612.helper.ui.Dialog {
      * @param cancelCallback Something to run when the user clicks Cancel
      * @param ignoreCallback Something to run when the user clicks Ignore
      */
-    @Override
-    public void warn(String title, String message, Runnable okCallback, Runnable cancelCallback, Runnable ignoreCallback) {
+    public static void warn(String title, String message, Runnable okCallback, Runnable cancelCallback, Runnable ignoreCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
 
         d.getDialogPane().getButtonTypes().addAll(OK, CANCEL, IGNORE);

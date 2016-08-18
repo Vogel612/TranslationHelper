@@ -4,6 +4,7 @@ import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
+import de.vogel612.helper.ui.jfx.JFXDialog;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,14 +22,12 @@ public class OverviewPresenter {
     private final OverviewView view;
     private final TranslationView translationPresenter;
     private final ResxChooser resxChooser;
-    private final Dialog dialog;
 
-    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, final Dialog d, ProjectView pv) {
+    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc, ProjectView pv) {
         model = m;
         view = v;
         translationPresenter = p;
         resxChooser = rc;
-        dialog = d;
 
         view.initialize();
     }
@@ -39,7 +38,7 @@ public class OverviewPresenter {
     }
 
     public void onException(final Exception e, final String message) {
-        dialog.info(message, e.getMessage());
+        JFXDialog.info(message, e.getMessage());
         // FIXME: Allow termination for unrecoverable exception
     }
 
@@ -94,7 +93,7 @@ public class OverviewPresenter {
     public void onSaveRequest() {
         try {
             model.saveAll();
-            dialog.info("Save success!", "Saving your changes to all resx files completed successfully");
+            JFXDialog.info("Save success!", "Saving your changes to all resx files completed successfully");
         } catch (IOException e) {
             e.printStackTrace(System.err);
             onException(e, "Could not save File");
@@ -103,7 +102,7 @@ public class OverviewPresenter {
 
     public void onWindowCloseRequest() {
         if (model.isNotSaved()) {
-            dialog.warn("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
+            JFXDialog.warn("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
                     this::onSaveRequest, () -> {
                         view.hide();
                         System.exit(0);
@@ -120,7 +119,7 @@ public class OverviewPresenter {
      */
     public void fileChoosing() {
         if (model.isNotSaved()) {
-            dialog.warn("Unsaved Changes",
+            JFXDialog.warn("Unsaved Changes",
                     "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
                     this::onSaveRequest,
                     () -> {}

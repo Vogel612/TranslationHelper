@@ -42,8 +42,7 @@ public class TranslationHelper extends Application {
         OverviewView v = new JFXFilesetOverviewView(primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
         ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
         FilesetOverviewModel m = new FilesetOverviewModel();
-        Dialog d = new JFXDialog();
-        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, d, pv);
+        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc, pv);
         // Wire up all the crap
         DependencyRoot.inject(m, v, p, tv, rc, pv);
 
