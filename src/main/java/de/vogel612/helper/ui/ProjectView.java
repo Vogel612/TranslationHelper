@@ -9,6 +9,6 @@ public interface ProjectView {
 
     void loadProject(Path file);
 
-    public void show();
-    public void hide();
+    void show();
+    void hide();
 }

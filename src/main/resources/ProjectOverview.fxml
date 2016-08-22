@@ -14,13 +14,12 @@
     <top>
         <FlowPane minHeight="30">
             <padding>
-                <Insets top="10" bottom="10" right="10" left="10" />
+                <Insets top="10" bottom="10" right="10" left="10"/>
             </padding>
-            <children>
-                <TextField fx:id="name" />
-                <Button fx:id="save" text="Save Project" minWidth="60" minHeight="20"/>
-                <Button fx:id="chooser" text="Choose Fileset / Project" minWidth="60" minHeight="20"/>
-            </children>
+            <TextField fx:id="name"/>
+            <!-- TODO make spacer to align buttons to the right -->
+            <Button fx:id="save" text="Save Project" minWidth="60" minHeight="20"/>
+            <Button fx:id="chooser" text="Choose Fileset / Project" minWidth="60" minHeight="20"/>
         </FlowPane>
     </top>
     <center>

@@ -33,7 +33,7 @@ public class OverviewPresenterTest {
         resxChooser = mock(ResxChooser.class);
         dialog = mock(Dialog.class);
 
-        cut = new OverviewPresenter(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        cut = new OverviewPresenter(filesetOverviewModel, overviewView, translationView, resxChooser);
         reset(overviewView, filesetOverviewModel, translationView, resxChooser, dialog);
     }
 

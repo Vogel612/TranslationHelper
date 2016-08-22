@@ -18,13 +18,13 @@ import java.util.Collection;
 public class NotableDataTest {
 
     @Parameter(0)
-    public Translation leftSide;
+    private Translation leftSide;
 
     @Parameter(1)
-    public Translation rightSide;
+    private Translation rightSide;
 
     @Parameter(2)
-    public Notability expected;
+    private Notability expected;
 
     @Parameters
     public static Collection<Object[]> testData() {

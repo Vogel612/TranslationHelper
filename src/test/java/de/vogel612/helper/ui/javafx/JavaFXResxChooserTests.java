@@ -6,9 +6,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
 
-import com.google.common.base.Predicate;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -21,8 +19,6 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -31,7 +27,7 @@ public class JavaFXResxChooserTests extends ApplicationTest {
 
     private JFXResxChooserView cut;
 
-    private Consumer<ResxChooserEvent> listener;
+    private final Consumer<ResxChooserEvent> listener;
 
     public JavaFXResxChooserTests() {
         listener = mock(Consumer.class);

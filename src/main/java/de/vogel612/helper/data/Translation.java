@@ -1,8 +1,5 @@
 package de.vogel612.helper.data;
 
-import de.vogel612.helper.data.util.ResourceFileSerializer;
-import org.jdom2.Element;
-
 import javafx.beans.value.ObservableValueBase;
 
 /**

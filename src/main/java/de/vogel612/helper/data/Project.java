@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Project {
 
-    private String name;
+    private final String name;
     private final List<ResourceSet> associatedResources = new ArrayList<>();
 
     public Project(String name) {
@@ -55,7 +55,6 @@ public class Project {
 
         Project project = (Project) o;
 
-        if (!name.equals(project.name)) return false;
-        return associatedResources.equals(project.associatedResources);
+        return name.equals(project.name) && associatedResources.equals(project.associatedResources);
     }
 }

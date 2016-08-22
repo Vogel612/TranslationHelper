@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
  */
 public class ResourceFileSerializer {
 
-    public static final String ELEMENT_NAME = "data";
-    public static final String KEY_NAME = "name";
-    public static final String VALUE_NAME = "value";
+    private static final String ELEMENT_NAME = "data";
+    private static final String KEY_NAME = "name";
+    private static final String VALUE_NAME = "value";
 
     private static final XPathFactory X_PATH_FACTORY = XPathFactory.instance();
     private static final XPathExpression<Element> VALUE_EXPRESSION = X_PATH_FACTORY.compile("/*/"

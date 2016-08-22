@@ -1,12 +1,9 @@
 package de.vogel612.helper.ui.javafx;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
-import com.google.common.base.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -28,8 +25,8 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
 
     private JFXTranslationView cut;
 
-    private Runnable abortListener;
-    private Consumer<Translation> submitListener;
+    private final Runnable abortListener;
+    private final Consumer<Translation> submitListener;
 
     public JavaFXTranslationViewTests() {
         abortListener = mock(Runnable.class);
