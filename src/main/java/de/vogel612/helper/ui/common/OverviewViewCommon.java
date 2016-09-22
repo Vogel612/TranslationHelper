@@ -11,6 +11,7 @@ public abstract class OverviewViewCommon implements OverviewView {
     protected final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
     protected final Set<Runnable> windowCloseListeners = new HashSet<>();
     protected final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
+    protected final Set<Runnable> fileChoiceRequestListeners = new HashSet<>();
     protected final Set<Runnable> saveRequestListeners = new HashSet<>();
 
     @Override
@@ -21,6 +22,11 @@ public abstract class OverviewViewCommon implements OverviewView {
     @Override
     public final void addLanguageRequestListener(Runnable listener) {
         langChoiceRequestListeners.add(listener);
+    }
+
+    @Override
+    public final void addFileRequestListener(Runnable listener) {
+        fileChoiceRequestListeners.add(listener);
     }
 
     @Override

@@ -13,6 +13,8 @@ public interface OverviewView {
 
     void addLanguageRequestListener(Runnable listener);
 
+    void addFileRequestListener(Runnable listener);
+
     void addTranslationRequestListener(Consumer<String> listener);
 
     void addSaveRequestListener(Runnable listener);

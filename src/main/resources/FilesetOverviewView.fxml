@@ -1,8 +1,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="de.vogel612.helper.ui.jfx.JFXFilesetOverviewController"
@@ -11,12 +12,13 @@
         <Insets top="15" bottom="20" right="15" left="15"/>
     </padding>
     <top>
-        <ButtonBar minHeight="30">
-            <buttons>
-                <Button fx:id="save" text="Save" minWidth="60" minHeight="20"/>
-                <Button fx:id="chooseLang" text="Choose Languages" minWidth="60" minHeight="20"/>
-            </buttons>
-        </ButtonBar>
+        <HBox minHeight="30">
+            <Label fx:id="fileset"/>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Button fx:id="save" text="Save" minWidth="60" minHeight="20"/>
+            <Button fx:id="chooseFile" text="Choose a File" minWidth="60" minHeight="20"/>
+            <Button fx:id="chooseLang" text="Choose Languages" minWidth="60" minHeight="20"/>
+        </HBox>
     </top>
     <center>
         <TableView fx:id="table"/>

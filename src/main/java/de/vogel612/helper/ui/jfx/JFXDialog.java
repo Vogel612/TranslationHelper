@@ -3,9 +3,11 @@ package de.vogel612.helper.ui.jfx;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
+import java.nio.file.Path;
 import java.util.Optional;
 
 import static javafx.scene.control.ButtonType.CANCEL;
@@ -17,6 +19,14 @@ import static javafx.scene.control.ButtonType.OK;
 public class JFXDialog {
 
     private static final ButtonType IGNORE = new ButtonType("Ignore", ButtonBar.ButtonData.RIGHT);
+    private static final FileChooser fileChooser = new FileChooser();
+
+    public static Path chooseFile(final String title, final FileChooser.ExtensionFilter... extensions) {
+        fileChooser.setTitle(title);
+        fileChooser.getExtensionFilters().clear();
+        fileChooser.getExtensionFilters().addAll(extensions);
+        return fileChooser.showOpenDialog(null).toPath();
+    }
 
     private static Dialog<ButtonType> createBasicDialog(final String title, final String message) {
         Dialog<ButtonType> d = new Dialog<>();

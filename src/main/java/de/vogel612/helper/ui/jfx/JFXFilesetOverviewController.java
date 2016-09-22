@@ -28,7 +28,13 @@ import javafx.util.Callback;
 public class JFXFilesetOverviewController extends OverviewViewCommon implements Initializable {
 
     @FXML
+    private Label fileset;
+
+    @FXML
     private Button save;
+
+    @FXML
+    private Button chooseFile;
 
     @FXML
     private Button chooseLang;
@@ -81,9 +87,12 @@ public class JFXFilesetOverviewController extends OverviewViewCommon implements 
         Objects.requireNonNull(save, "save was not FXML-injected correctly");
         Objects.requireNonNull(table, "table was not FXML-injected correctly");
         Objects.requireNonNull(chooseLang, "chooseLang was not FXML-injected correctly");
+        Objects.requireNonNull(fileset, "fileset was not FXML-injected correctly");
+        Objects.requireNonNull(chooseFile, "chooseFile was not FXML-injected correctly");
 
         save.setOnAction(evt -> saveRequestListeners.forEach(Runnable::run));
         chooseLang.setOnAction(evt -> langChoiceRequestListeners.forEach(Runnable::run));
+        chooseFile.setOnAction(evt -> fileChoiceRequestListeners.forEach(Runnable::run));
 
         table.setEditable(false);
         table.getColumns().clear();

@@ -5,6 +5,7 @@ import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
 
 import static org.mockito.Mockito.*;
 
+import de.vogel612.helper.ui.jfx.JFXDialog;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.FilesetOverviewModel;
@@ -20,8 +21,8 @@ public class OverviewPresenterTest {
     private OverviewView overviewView;
     private FilesetOverviewModel filesetOverviewModel;
     private TranslationView translationView;
-    private ResxChooser resxChooser;
-    private Dialog dialog;
+    private LocaleChooser localeChooser;
+    private JFXDialog dialog;
 
     private OverviewPresenter cut;
 
@@ -30,11 +31,11 @@ public class OverviewPresenterTest {
         overviewView = mock(OverviewView.class);
         filesetOverviewModel = mock(FilesetOverviewModel.class);
         translationView = mock(TranslationView.class);
-        resxChooser = mock(ResxChooser.class);
-        dialog = mock(Dialog.class);
+        localeChooser = mock(LocaleChooser.class);
+        dialog = mock(JFXDialog.class);
 
-        cut = new OverviewPresenter(filesetOverviewModel, overviewView, translationView, resxChooser);
-        reset(overviewView, filesetOverviewModel, translationView, resxChooser, dialog);
+        cut = new OverviewPresenter(filesetOverviewModel, overviewView, translationView, localeChooser);
+        reset(overviewView, filesetOverviewModel, translationView, localeChooser, dialog);
     }
 
 
@@ -42,7 +43,7 @@ public class OverviewPresenterTest {
     public void show_callsShow_onView() {
         cut.show();
         verify(overviewView).show();
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -56,7 +57,7 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("Error when loading all files in the model", e);
         }
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -70,7 +71,7 @@ public class OverviewPresenterTest {
 
         verify(dialog).info(message, errorMessage);
         verify(e).getMessage();
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -86,7 +87,7 @@ public class OverviewPresenterTest {
         verify(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
         verify(overviewView).rebuildWith(rootList, targetList);
         verify(overviewView).show();
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -103,7 +104,7 @@ public class OverviewPresenterTest {
         verify(filesetOverviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
         verify(translationView).setRequestedTranslation(fakeRoot, fakeTarget);
         verify(translationView).show();
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -122,7 +123,7 @@ public class OverviewPresenterTest {
         verify(overviewView).rebuildWith(leftSide, list);
         verify(overviewView).show();
         verify(translationView).hide();
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -131,7 +132,7 @@ public class OverviewPresenterTest {
 
         verify(translationView).hide();
         verify(overviewView).show();
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
     @Test
@@ -145,6 +146,6 @@ public class OverviewPresenterTest {
             throw new AssertionError("IOException when trying to save", e);
         }
         verify(dialog).info(any(String.class), any(String.class));
-        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, resxChooser, dialog);
+        verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 }

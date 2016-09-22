@@ -30,19 +30,23 @@ public class TranslationHelper extends Application {
     public void start(Stage primaryStage) throws Exception {
         Stage rcStage = new Stage(StageStyle.UTILITY);
         rcStage.initOwner(primaryStage);
-        ResxChooser rc = new JFXResxChooserView(rcStage, getClass().getResource("/ResxChooser.fxml"));
+        LocaleChooser rc = new JFXLocaleChooserView(rcStage, getClass().getResource("/LocaleChooser.fxml"));
         Parameters params = getParameters();
         if (params.getUnnamed().size() != 0) { // should be 1..
             final Path resxFile = Paths.get(params.getUnnamed().get(0));
-            rc.setFileset(resxFile);
+            // FIXME show project or resx overview depending on argument
+//            rc.setFileset(resxFile);
         }
+
         Stage translationStage = new Stage(StageStyle.UTILITY);
         translationStage.initOwner(primaryStage);
         TranslationView tv = new JFXTranslationView(translationStage, getClass().getResource("/TranslationView.fxml"));
+
         OverviewView v = new JFXFilesetOverviewView(primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
-        ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
         FilesetOverviewModel m = new FilesetOverviewModel();
         OverviewPresenter p = new OverviewPresenter(m, v, tv, rc);
+
+        ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
         // Wire up all the crap
         DependencyRoot.inject(m, v, p, tv, rc);
 

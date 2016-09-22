@@ -9,7 +9,7 @@ import de.vogel612.helper.ui.*;
 public final class DependencyRoot {
 
     public static void inject(FilesetOverviewModel model, OverviewView overview, OverviewPresenter presenter,
-                              TranslationView translations, ResxChooser resxChooser) {
+                              TranslationView translations, LocaleChooser localeChooser) {
         overview.addWindowClosingListener(presenter::onWindowCloseRequest);
         overview.addLanguageRequestListener(presenter::fileChoosing);
         overview.addSaveRequestListener(presenter::onSaveRequest);
@@ -17,6 +17,6 @@ public final class DependencyRoot {
         model.addParseCompletionListener(presenter::onParseCompletion);
         translations.addTranslationAbortListener(presenter::onTranslationAbort);
         translations.addTranslationSubmitListener(presenter::onTranslationSubmit);
-        resxChooser.addCompletionListener(presenter::fileChoiceCompletion);
+        localeChooser.addCompletionListener(presenter::fileChoiceCompletion);
     }
 }

@@ -46,6 +46,9 @@ public class JFXFilesetOverviewView implements OverviewView {
     }
 
     @Override
+    public void addFileRequestListener(Runnable listener) { controller.addFileRequestListener(listener); }
+
+    @Override
     public void addTranslationRequestListener(Consumer<String> listener) {
         controller.addTranslationRequestListener(listener);
     }

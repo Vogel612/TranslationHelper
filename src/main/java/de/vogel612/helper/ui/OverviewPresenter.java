@@ -3,8 +3,9 @@ package de.vogel612.helper.ui;
 import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.common.ResxChooserCommon.ResxChooserEvent;
 import de.vogel612.helper.ui.jfx.JFXDialog;
+import de.vogel612.helper.ui.jfx.JFXLocaleChooserView.LocaleChoiceEvent;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,13 +22,13 @@ public class OverviewPresenter {
     private final FilesetOverviewModel model;
     private final OverviewView view;
     private final TranslationView translationPresenter;
-    private final ResxChooser resxChooser;
+    private final LocaleChooser localeChooser;
 
-    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final ResxChooser rc) {
+    public OverviewPresenter(final FilesetOverviewModel m, final OverviewView v, final TranslationView p, final LocaleChooser rc) {
         model = m;
         view = v;
         translationPresenter = p;
-        resxChooser = rc;
+        localeChooser = rc;
 
         view.initialize();
     }
@@ -46,11 +47,11 @@ public class OverviewPresenter {
         rebuildView();
     }
 
-    public void fileChoiceCompletion(ResxChooserEvent evt) {
-        resxChooser.hide();
+    public void fileChoiceCompletion(LocaleChoiceEvent evt) {
+        localeChooser.hide();
+
         chosenLocale.put(Side.LEFT, evt.getLeftLocale());
         chosenLocale.put(Side.RIGHT, evt.getRightLocale());
-        loadFiles(evt.getFileset());
     }
 
     private void rebuildView() {
@@ -122,11 +123,18 @@ public class OverviewPresenter {
             JFXDialog.warn("Unsaved Changes",
                     "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
                     this::onSaveRequest,
-                    () -> {}
+                    () -> {
+                    }
             );
-            resxChooser.show();
-        } else {
-            resxChooser.show();
         }
+        final Path chosenFile = JFXDialog.chooseFile("Select a resx or thp file",
+                new ExtensionFilter("Resource file", "resx"),
+                new ExtensionFilter("TranslationHelper Project file", "thp"));
+        // FIXME show project view in case this is a thp file,
+        // FIXME show a locale chooser otherwise
+
+        loadFiles(chosenFile);
+        localeChooser.show();
+
     }
 }
