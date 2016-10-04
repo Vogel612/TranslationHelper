@@ -72,7 +72,7 @@ public class OverviewPresenterTest extends ApplicationTest {
 
         cut.onException(e, message);
 
-        Platform.runLater(() -> verify(dialog).info(message, errorMessage));
+        Platform.runLater(() -> verify(dialog).info(eq(message), eq(errorMessage)));
         verify(e).getMessage();
         sleep(60); // await verification
         verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
