@@ -6,17 +6,20 @@ import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
 import static org.mockito.Mockito.*;
 
 import de.vogel612.helper.ui.jfx.JFXDialog;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 import org.junit.Before;
 import org.junit.Test;
 import de.vogel612.helper.data.FilesetOverviewModel;
 import de.vogel612.helper.data.Translation;
+import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
-public class OverviewPresenterTest {
+public class OverviewPresenterTest extends ApplicationTest {
 
     private OverviewView overviewView;
     private FilesetOverviewModel filesetOverviewModel;
@@ -69,8 +72,9 @@ public class OverviewPresenterTest {
 
         cut.onException(e, message);
 
-        verify(dialog).info(message, errorMessage);
+        Platform.runLater(() -> verify(dialog).info(message, errorMessage));
         verify(e).getMessage();
+        sleep(60); // await verification
         verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
     }
 
@@ -145,7 +149,13 @@ public class OverviewPresenterTest {
             // shouldn't ever actually happen
             throw new AssertionError("IOException when trying to save", e);
         }
-        verify(dialog).info(any(String.class), any(String.class));
+        Platform.runLater(() -> verify(dialog).info(any(String.class), any(String.class)));
+        sleep(60); // await verification..
         verifyNoMoreInteractions(filesetOverviewModel, overviewView, translationView, localeChooser, dialog);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        // no-op ... probably ...
     }
 }

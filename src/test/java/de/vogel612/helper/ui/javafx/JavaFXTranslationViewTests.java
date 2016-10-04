@@ -36,6 +36,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
     @Override
     public void start(Stage stage) throws Exception {
         cut = new JFXTranslationView(stage, getClass().getResource("/TranslationView.fxml"));
+        stage.setAlwaysOnTop(true);
         cut.addTranslationAbortListener(abortListener);
         cut.addTranslationSubmitListener(submitListener);
         cut.show();

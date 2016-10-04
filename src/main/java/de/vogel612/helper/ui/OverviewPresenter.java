@@ -5,6 +5,7 @@ import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.jfx.JFXDialog;
 import de.vogel612.helper.ui.jfx.JFXLocaleChooserView.LocaleChoiceEvent;
+import javafx.application.Platform;
 import javafx.stage.FileChooser.ExtensionFilter;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class OverviewPresenter {
     }
 
     public void onException(final Exception e, final String message) {
-        JFXDialog.info(message, e.getMessage());
+        Platform.runLater(() -> JFXDialog.info(message, e.getMessage()));
         // FIXME: Allow termination for unrecoverable exception
     }
 
@@ -94,7 +95,8 @@ public class OverviewPresenter {
     public void onSaveRequest() {
         try {
             model.saveAll();
-            JFXDialog.info("Save success!", "Saving your changes to all resx files completed successfully");
+            Platform.runLater(() ->
+                    JFXDialog.info("Save success!", "Saving your changes to all resx files completed successfully"));
         } catch (IOException e) {
             e.printStackTrace(System.err);
             onException(e, "Could not save File");

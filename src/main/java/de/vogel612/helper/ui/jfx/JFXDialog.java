@@ -36,11 +36,14 @@ public class JFXDialog {
         d.initStyle(StageStyle.UNDECORATED);
         return d;
     }
+
     /**
      * Displays an info dialog, which has a title, a message and an OK button. That button doesn't do jack
      *
-     * @param title   The title to use for the dialog
-     * @param message The message of the dialog
+     * @param title
+     *         The title to use for the dialog
+     * @param message
+     *         The message of the dialog
      */
     public static void info(String title, String message) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
@@ -52,9 +55,12 @@ public class JFXDialog {
      * Displays an info dialog, which has a title, a message and an OK button.
      * The given callback is run when the OK button is pressed.
      *
-     * @param title      The title to use for the dialog
-     * @param message    The message of the dialog
-     * @param okCallback Something to run when the user clicks OK
+     * @param title
+     *         The title to use for the dialog
+     * @param message
+     *         The message of the dialog
+     * @param okCallback
+     *         Something to run when the user clicks OK
      */
     public static void info(String title, String message, Runnable okCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
@@ -69,10 +75,14 @@ public class JFXDialog {
      * Displays a warning dialog with title, message and the options "OK" and "Cancel". T
      * The given callbacks are run when the respective buttons are pressed.
      *
-     * @param title          The title to use for the dialog
-     * @param message        The message of the dialog
-     * @param okCallback     Something to run when the user clicks OK
-     * @param cancelCallback Something to run when the user clicks Cancel
+     * @param title
+     *         The title to use for the dialog
+     * @param message
+     *         The message of the dialog
+     * @param okCallback
+     *         Something to run when the user clicks OK
+     * @param cancelCallback
+     *         Something to run when the user clicks Cancel
      */
     public static void warn(String title, String message, Runnable okCallback, Runnable cancelCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
@@ -91,11 +101,16 @@ public class JFXDialog {
      * Displays a warning dialog with title, message and the options "OK", "Cancel" and "Ignore".
      * The given callbacks are run when the respective buttons are pressed.
      *
-     * @param title          The title to use for the dialog
-     * @param message        The message of the dialog
-     * @param okCallback     Something to run when the user clicks OK
-     * @param cancelCallback Something to run when the user clicks Cancel
-     * @param ignoreCallback Something to run when the user clicks Ignore
+     * @param title
+     *         The title to use for the dialog
+     * @param message
+     *         The message of the dialog
+     * @param okCallback
+     *         Something to run when the user clicks OK
+     * @param cancelCallback
+     *         Something to run when the user clicks Cancel
+     * @param ignoreCallback
+     *         Something to run when the user clicks Ignore
      */
     public static void warn(String title, String message, Runnable okCallback, Runnable cancelCallback, Runnable ignoreCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);

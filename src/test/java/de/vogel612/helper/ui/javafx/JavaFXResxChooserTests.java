@@ -6,9 +6,13 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -16,7 +20,10 @@ import java.util.function.Consumer;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.testfx.api.FxAssert.verifyThat;
+import static org.testfx.service.query.impl.NodeQueryUtils.hasText;
 
+@Ignore("Currently under a complete rewrite ...")
 public class JavaFXResxChooserTests extends ApplicationTest {
 
     private JFXLocaleChooserView cut;
@@ -31,11 +38,13 @@ public class JavaFXResxChooserTests extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         cut = new JFXLocaleChooserView(stage, getClass().getResource("/LocaleChooser.fxml"));
         cut.addCompletionListener(listener);
+        stage.setAlwaysOnTop(true);
+        stage.show();
     }
 
-   /* @Before
+    @Before
     public void before() throws URISyntaxException {
-        cut.setFileset(Paths.get(getClass().getResource("/RubberduckUI.resx").toURI()));
+//        cut.setFileset(Paths.get(getClass().getResource("/RubberduckUI.resx").toURI()));
         cut.show();
         sleep(700, TimeUnit.MILLISECONDS);
     }
@@ -43,7 +52,7 @@ public class JavaFXResxChooserTests extends ApplicationTest {
 
     @Test
     public void setFileset_updatesUiLabel() throws URISyntaxException {
-        cut.setFileset(Paths.get(getClass().getResource("/RubberduckUI.resx").toURI()));
+//        cut.setFileset(Paths.get(getClass().getResource("/RubberduckUI.resx").toURI()));
 
         sleep(300, TimeUnit.MILLISECONDS);
         verifyThat("#fileset", hasText("RubberduckUI"));
@@ -51,7 +60,7 @@ public class JavaFXResxChooserTests extends ApplicationTest {
         verifyThat("#rightTranslation", hasText("(none)"));
 
         verifyNoMoreInteractions(listener);
-    }*/
+    }
 
     @Test
     public void chooseLeft_opensDialog() {
@@ -77,19 +86,19 @@ public class JavaFXResxChooserTests extends ApplicationTest {
         verifyNoMoreInteractions(listener);
     }
 
-/*
+
     @Test(expected = IllegalArgumentException.class)
     public void submitButton_withUnselectedPath_doesNothing() {
-        cut.setFileset(null);
+//        cut.setFileset(null);
         verifyNoMoreInteractions(listener);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void setFileset_withInexistantFile_throws() {
-        cut.setFileset(Paths.get("/", "some", "stupid", "file", "that", "does", "not", "exist.resx"));
+//        cut.setFileset(Paths.get("/", "some", "stupid", "file", "that", "does", "not", "exist.resx"));
         verifyNoMoreInteractions(listener);
     }
-*/
+
 
     @After
     public void cleanupIsh() {
