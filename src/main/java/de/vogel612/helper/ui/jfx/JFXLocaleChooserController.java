@@ -1,6 +1,5 @@
 package de.vogel612.helper.ui.jfx;
 
-
 import de.vogel612.helper.ui.LocaleChooser;
 import de.vogel612.helper.ui.jfx.JFXLocaleChooserView.LocaleChoiceEvent;
 import javafx.application.Platform;
@@ -15,26 +14,14 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Encapsulates common functionality for {@link LocaleChooser Resx Choosers} into an abstract class.<br/>
  * <p>
- * Encapsulated is the fields necessary to store data, namely {@link #left}, {@link #right} and {@link
- * #filesetBacking}.
- * Additionally there is an automatic reparsing functionality of the encapsulated {@link #localeOptionCache}, given
- * implementing classes call {@link #onFilesetChange()} when the Fileset changes. That triggers a recheck for the
- * locale
- * options. Additionally {@link #onFilesetChange()} will call {@link #onFilesetChangeInternal()} upon completion to
- * notify the implementing class.
- * </p>
- * <p>
- * There even is a method for internal use, that handles listener notification, namely {@link #completeChoice()}. It
- * will access the fields in the current class to build a {@link LocaleChooserCommon.ResxChooserEvent}
- * with the relevant information
+ * Encapsulated is the fields necessary to store data, namely {@link #left} and {@link #right}
  * </p>
  */
 public class JFXLocaleChooserController implements Initializable {
 
-    private final Set<String> localeOptionCache = new HashSet<>();
-    private final Set<Consumer<LocaleChoiceEvent>> resxChoiceCompletionListener = new HashSet<>();
+    private final Set<String> localeOptionCache = new TreeSet<>();
+    private final Set<Consumer<LocaleChoiceEvent>> localeChoiceCompletionListener = new HashSet<>();
     protected String left;
     protected String right;
     @FXML
@@ -54,6 +41,7 @@ public class JFXLocaleChooserController implements Initializable {
 
     private void showLocaleDialog(Consumer<String> callback) {
         final String[] localeChoices = localeOptionCache.toArray(new String[localeOptionCache.size()]);
+        Arrays.sort(localeChoices);
         ChoiceDialog<String> dialog = new ChoiceDialog<>(localeChoices[0], localeChoices);
         dialog.setHeaderText("Choose a Language");
         dialog.setContentText("");
@@ -64,7 +52,12 @@ public class JFXLocaleChooserController implements Initializable {
         });
     }
 
-
+    /**
+     * Updates the currently available locales to the given collection of Strings
+     *
+     * @param locales
+     *         The "new" currently available locales
+     */
     public void updateAvailableLocales(final Collection<String> locales) {
         localeOptionCache.clear();
         localeOptionCache.addAll(locales);
@@ -91,14 +84,14 @@ public class JFXLocaleChooserController implements Initializable {
         }));
     }
 
-    public final void addCompletionListener(Consumer<LocaleChoiceEvent> listener) {
-        resxChoiceCompletionListener.add(listener);
+    public void addCompletionListener(Consumer<LocaleChoiceEvent> listener) {
+        localeChoiceCompletionListener.add(listener);
     }
 
-    protected final void completeChoice() {
+    private void completeChoice() {
         if (left != null && right != null) {
             final LocaleChoiceEvent evt = new LocaleChoiceEvent(left, right);
-            resxChoiceCompletionListener.forEach(l -> l.accept(evt));
+            localeChoiceCompletionListener.forEach(l -> l.accept(evt));
         }
     }
 }

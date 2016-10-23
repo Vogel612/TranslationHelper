@@ -2,13 +2,10 @@ package de.vogel612.helper.ui.jfx;
 
 import de.vogel612.helper.data.NotableData;
 import de.vogel612.helper.data.Translation;
-import de.vogel612.helper.ui.common.OverviewViewCommon;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javafx.beans.value.ObservableValueBase;
@@ -25,10 +22,14 @@ import javafx.util.Callback;
 /**
  * Created by vogel612 on 01.03.16.
  */
-public class JFXFilesetOverviewController extends OverviewViewCommon implements Initializable {
+public class JFXFilesetOverviewController implements Initializable {
+    private final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
+    private final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
+    private final Set<Runnable> fileChoiceRequestListeners = new HashSet<>();
+    private final Set<Runnable> saveRequestListeners = new HashSet<>();
 
     @FXML
-    private Label fileset;
+    protected Label fileset;
 
     @FXML
     private Button save;
@@ -42,21 +43,6 @@ public class JFXFilesetOverviewController extends OverviewViewCommon implements 
     @FXML
     private TableView<TranslationPair> table;
 
-    public JFXFilesetOverviewController() {
-
-    }
-
-    @Override
-    public void initialize() {
-        // empty?
-    }
-
-    @Override
-    public void show() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void rebuildWith(List<Translation> left, List<Translation> right) {
         if (left.isEmpty() || right.isEmpty()) {
             return;
@@ -67,19 +53,13 @@ public class JFXFilesetOverviewController extends OverviewViewCommon implements 
     }
 
     private static ObservableList<TranslationPair> buildObservableList(List<Translation> left,
-      List<Translation> right) {
+                                                                       List<Translation> right) {
         List<TranslationPair> result = new ArrayList<>();
         final int limit = Math.min(left.size(), right.size());
         for (int i = 0; i < limit; i++) {
             result.add(new TranslationPair(left.get(i), right.get(i)));
         }
         return FXCollections.observableList(result);
-    }
-
-
-    @Override
-    public void hide() {
-        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -96,7 +76,7 @@ public class JFXFilesetOverviewController extends OverviewViewCommon implements 
 
         table.setEditable(false);
         table.getColumns().clear();
-        Callback<TableColumn<TranslationPair,String>, TableCell<TranslationPair, String>> cellRenderer = createTableCellRenderer();
+        Callback<TableColumn<TranslationPair, String>, TableCell<TranslationPair, String>> cellRenderer = createTableCellRenderer();
         table.getColumns().add(createTableColumn(cellRenderer, data -> data.getLeft().getValue()));
         table.getColumns().add(createTableColumn(cellRenderer, data -> data.getRight().getValue()));
         table.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -160,20 +140,32 @@ public class JFXFilesetOverviewController extends OverviewViewCommon implements 
         return table.getSelectionModel().getSelectedItem().getRight().getKey();
     }
 
-    private static <S,T> TableColumn<S,T> createTableColumn(final Callback<TableColumn<S,T>, TableCell<S,T>> renderer,
-                                                            final Function<S,T> valueFactory) {
-        TableColumn<S,T> result = new TableColumn<>("");
+    private static <S, T> TableColumn<S, T> createTableColumn(final Callback<TableColumn<S, T>, TableCell<S, T>> renderer,
+                                                              final Function<S, T> valueFactory) {
+        TableColumn<S, T> result = new TableColumn<>("");
         result.setCellValueFactory(data -> new ObservableValueBase<T>() {
             @Override
-            public T getValue() { return valueFactory.apply(data.getValue()); }
+            public T getValue() {
+                return valueFactory.apply(data.getValue());
+            }
         });
         result.setCellFactory(renderer);
         return result;
     }
 
+    public final void addLangChoiceListener(Runnable listener) {
+        langChoiceRequestListeners.add(listener);
+    }
 
-    // FIXME this is fugly
-    void triggerCloseRequest() {
-        windowCloseListeners.forEach(Runnable::run);
+    public final void addFileRequestListener(Runnable listener) {
+        fileChoiceRequestListeners.add(listener);
+    }
+
+    public void addSaveRequestListener(Runnable listener) {
+        saveRequestListeners.add(listener);
+    }
+
+    public void addTranslationRequestListener(Consumer<String> listener) {
+        translationRequestListeners.add(listener);
     }
 }

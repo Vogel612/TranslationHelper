@@ -42,13 +42,12 @@ public class TranslationHelper extends Application {
         translationStage.initOwner(primaryStage);
         TranslationView tv = new JFXTranslationView(translationStage, getClass().getResource("/TranslationView.fxml"));
 
-        OverviewView v = new JFXFilesetOverviewView(primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
         FilesetOverviewModel m = new FilesetOverviewModel();
-        OverviewPresenter p = new OverviewPresenter(m, v, tv, rc);
+        OverviewView v = new JFXFilesetOverviewView(rc, m, tv, primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
 
         ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
-        // Wire up all the crap
-        DependencyRoot.inject(m, v, p, tv, rc);
+
+        OverviewPresenter p = new OverviewPresenter(v);
 
         Platform.runLater(p::show);
         Platform.runLater(p::fileChoosing);

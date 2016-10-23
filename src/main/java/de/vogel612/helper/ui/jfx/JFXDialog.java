@@ -18,17 +18,23 @@ import static javafx.scene.control.ButtonType.OK;
  */
 public class JFXDialog {
 
+    public static final JFXDialog DIALOG = new JFXDialog();
+
     private static final ButtonType IGNORE = new ButtonType("Ignore", ButtonBar.ButtonData.RIGHT);
     private static final FileChooser fileChooser = new FileChooser();
 
-    public static Path chooseFile(final String title, final FileChooser.ExtensionFilter... extensions) {
+    private JFXDialog() {
+        // fuck it we'll do singleton now...
+    }
+
+    public Path chooseFile(final String title, final FileChooser.ExtensionFilter... extensions) {
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(extensions);
         return fileChooser.showOpenDialog(null).toPath();
     }
 
-    private static Dialog<ButtonType> createBasicDialog(final String title, final String message) {
+    private Dialog<ButtonType> createBasicDialog(final String title, final String message) {
         Dialog<ButtonType> d = new Dialog<>();
         d.setTitle(title);
         d.setContentText(message);
@@ -45,7 +51,7 @@ public class JFXDialog {
      * @param message
      *         The message of the dialog
      */
-    public static void info(String title, String message) {
+    public void info(String title, String message) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
         d.getDialogPane().getButtonTypes().addAll(OK);
         d.show();
@@ -62,7 +68,7 @@ public class JFXDialog {
      * @param okCallback
      *         Something to run when the user clicks OK
      */
-    public static void info(String title, String message, Runnable okCallback) {
+    public void info(String title, String message, Runnable okCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
         d.getDialogPane().getButtonTypes().addAll(OK);
         Optional<ButtonType> result = d.showAndWait();
@@ -84,7 +90,7 @@ public class JFXDialog {
      * @param cancelCallback
      *         Something to run when the user clicks Cancel
      */
-    public static void warn(String title, String message, Runnable okCallback, Runnable cancelCallback) {
+    public void warn(String title, String message, Runnable okCallback, Runnable cancelCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
         d.getDialogPane().getButtonTypes().addAll(OK, CANCEL);
         Optional<ButtonType> result = d.showAndWait();
@@ -112,7 +118,7 @@ public class JFXDialog {
      * @param ignoreCallback
      *         Something to run when the user clicks Ignore
      */
-    public static void warn(String title, String message, Runnable okCallback, Runnable cancelCallback, Runnable ignoreCallback) {
+    public void warn(String title, String message, Runnable okCallback, Runnable cancelCallback, Runnable ignoreCallback) {
         Dialog<ButtonType> d = createBasicDialog(title, message);
 
         d.getDialogPane().getButtonTypes().addAll(OK, CANCEL, IGNORE);

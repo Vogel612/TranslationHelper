@@ -4,6 +4,7 @@ import de.vogel612.helper.ui.LocaleChooser;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
@@ -45,6 +46,10 @@ public class JFXLocaleChooserView implements LocaleChooser {
         controller.addCompletionListener(listener);
     }
 
+    @Override
+    public void updateAvailableLocales(Collection<String> locales) {
+        controller.updateAvailableLocales(locales);
+    }
 
     /**
      * An event signaling the choice of fileset and locale is completed

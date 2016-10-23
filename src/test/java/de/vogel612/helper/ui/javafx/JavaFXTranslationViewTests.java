@@ -47,7 +47,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
     public void before() {
         cut.setRequestedTranslation(new Translation("", "", ""), new Translation("", "", ""));
         cut.show();
-        sleep(700, TimeUnit.MILLISECONDS);
+        sleep(400, TimeUnit.MILLISECONDS);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
     public void abortButton_firesAbortListener() {
         clickOn("#cancel");
 
-        verify(abortListener).run();
+        verify(abortListener, after(200)).run();
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 
@@ -74,7 +74,6 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
         verifyThat("#input", TextInputControl::isEditable);
         verifyThat("#original", hasText("original"));
         verifyThat("#original", TextInputControl::isEditable);
-        // FIXME verify title
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 
@@ -82,8 +81,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
     public void submitButton_firesSubmitListener() {
         clickOn("#submit");
 
-
-        verify(submitListener, times(2)).accept(any());
+        verify(submitListener, after(200).times(2)).accept(any());
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 
@@ -95,8 +93,8 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
 
         verifyThat("#input", TextInputControl::isEditable);
         verifyThat("#original", TextInputControl::isEditable);
-        verify(submitListener).accept(eq(new Translation("", "", "test")));
-        verify(submitListener).accept(eq(new Translation("", "", "")));
+        verify(submitListener, after(200)).accept(eq(new Translation("", "", "test")));
+        verify(submitListener, after(200)).accept(eq(new Translation("", "", "")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 
@@ -107,8 +105,8 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
 
         verifyThat("#input", TextInputControl::isEditable);
         verifyThat("#original", TextInputControl::isEditable);
-        verify(submitListener).accept(eq(new Translation("", "", "test")));
-        verify(submitListener).accept(eq(new Translation("", "", "")));
+        verify(submitListener, after(200)).accept(eq(new Translation("", "", "test")));
+        verify(submitListener, after(200)).accept(eq(new Translation("", "", "")));
         verifyNoMoreInteractions(submitListener, abortListener);
     }
 
@@ -118,7 +116,7 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
         type(KeyCode.ESCAPE);
         sleep(200, TimeUnit.MILLISECONDS);
 
-        verify(abortListener).run();
+        verify(abortListener, after(200)).run();
         verifyNoMoreInteractions(abortListener, submitListener);
     }
 

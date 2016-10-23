@@ -2,6 +2,7 @@ package de.vogel612.helper.ui;
 
 import de.vogel612.helper.ui.jfx.JFXLocaleChooserView.LocaleChoiceEvent;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public interface LocaleChooser {
@@ -11,4 +12,6 @@ public interface LocaleChooser {
     void show();
 
     void addCompletionListener(Consumer<LocaleChoiceEvent> listener);
+
+    void updateAvailableLocales(Collection<String> locales);
 }

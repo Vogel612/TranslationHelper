@@ -17,6 +17,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
+
 /**
  * Created by vogel612 on 29.07.16.
  */
@@ -55,9 +57,9 @@ public class JFXProjectController implements Initializable {
             }
             try {
                 ProjectSerializer.serialize(project, projectFilePath);
-                JFXDialog.info("Success", "Successfully saved TranslationHelper Project Configuration to " + projectFilePath);
+                DIALOG.info("Success", "Successfully saved TranslationHelper Project Configuration to " + projectFilePath);
             } catch (IOException e) {
-                JFXDialog.info("Error during saving!", "Could not save project due to following exception: " + e.getMessage());
+                DIALOG.info("Error during saving!", "Could not save project due to following exception: " + e.getMessage());
             }
         });
     }
@@ -86,6 +88,7 @@ public class JFXProjectController implements Initializable {
                 setSubpaneConstraints(subPane);
 
                 resourcePane.add(subPane, 0, 1, 2, 1);
+                // FIXME add translation button / double click
                 return resourcePane;
             }
 

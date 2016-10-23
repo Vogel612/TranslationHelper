@@ -82,7 +82,7 @@ public class JFXTranslationController extends TranslationViewCommon implements I
                 if (evt.isShiftDown()) {
                     int caret = input.getCaretPosition();
                     String newValue = input.getText();
-                    newValue = newValue.substring(0, caret) + "\r\n"
+                    newValue = newValue.substring(0, caret) + "\r\n" // fixed because windows
                       + newValue.substring(caret);
                     input.setText(newValue);
                     input.positionCaret(caret + 1);
