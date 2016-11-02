@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -19,12 +20,13 @@ public class ResourceSet {
     private final String name;
     private final Set<String> locales = new HashSet<>();
 
-    public static ResourceSet create(final Path file) {
+    public static ResourceSet create(final Path file) throws IOException {
         Objects.requireNonNull(file, "file");
         final Path folder = file.getParent();
         final String name = DataUtilities.getFileIdentifier(file);
-        // TODO get locales
-        return new ResourceSet(name, folder, Collections.emptySet());
+        final Set<String> locales = DataUtilities.streamFileset(folder, name)
+                .map(DataUtilities::getFileLocale).collect(Collectors.toSet());
+        return new ResourceSet(name, folder, locales);
     }
 
     public ResourceSet(String name, Path folder, Set<String> locales) {
@@ -57,7 +59,8 @@ public class ResourceSet {
     }
 
     public Stream<Path> files() throws IOException {
-        return DataUtilities.streamFileset(folder, name).filter(path -> locales.contains(DataUtilities.getFileLocale(path)));
+        return DataUtilities.streamFileset(folder, name)
+                .filter(path -> locales.contains(DataUtilities.getFileLocale(path)));
     }
 
     @Override

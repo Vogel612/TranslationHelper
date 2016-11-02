@@ -35,15 +35,16 @@ public final class ProjectSerializer {
 
         Document resultDocument = new Document();
         resultDocument.setRootElement(getRoot(project.getName()));
-        project.getAssociatedResources().stream().map(ProjectSerializer::getResourceSetEl)
+        project.getAssociatedResources().stream()
+                .map(set -> ProjectSerializer.getResourceSetEl(set, file))
                 .forEach(resultDocument.getRootElement()::addContent);
         Serialization.serializeDocument(resultDocument, file);
     }
 
-    private static Element getResourceSetEl(ResourceSet resourceSet) {
+    private static Element getResourceSetEl(ResourceSet resourceSet, Path projectFile) {
         Element el = new Element("resource-set");
         el.setAttribute("name", resourceSet.getName());
-        el.setAttribute("folder", resourceSet.getFolder().toString());
+        el.setAttribute("folder", projectFile.relativize(resourceSet.getFolder()).toString());
         for (String locale : resourceSet.getLocales()) {
             Element localeEl = new Element("locale");
             localeEl.setAttribute("name", locale);
@@ -70,19 +71,20 @@ public final class ProjectSerializer {
         Document projectDocument = Serialization.parseFile(file);
         Element root = projectDocument.getRootElement();
         final String projectName = root.getAttribute("name").getValue();
-        List<ResourceSet> declaredResources = root.getChildren().stream().map(ProjectSerializer::deserializeResourceSet)
+        List<ResourceSet> declaredResources = root.getChildren().stream()
+                .map(el -> ProjectSerializer.deserializeResourceSet(el, file))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
         return new Project(projectName, declaredResources);
     }
 
-    private static ResourceSet deserializeResourceSet(Element element) {
+    private static ResourceSet deserializeResourceSet(Element element, Path projectFile) {
         final String name = element.getAttributeValue("name");
         final Path folder = Paths.get(element.getAttributeValue("folder"));
         final Set<String> locales = element.getChildren().stream()
                 .map(el -> el.getAttributeValue("name"))
                 .collect(Collectors.toSet());
-        return new ResourceSet(name, folder, locales);
+        return new ResourceSet(name, projectFile.resolve(folder), locales);
     }
 }
