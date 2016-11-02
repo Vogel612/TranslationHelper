@@ -8,10 +8,14 @@ jdk:
  - oraclejdk8
 
 # TODO: remove script and sudo-requirements (including dist and install) when Travis-CI updates their env.
+#script:
+# - sudo apt-get update && sudo apt-get install oracle-java8-installer
+# - java -version
+# - ./gradlew check jacocoTestReport
+
 script:
- - sudo apt-get update && sudo apt-get install oracle-java8-installer
- - java -version
- - ./gradlew check jacocoTestReport
+  - sudo apt-get update && sudo apt-get install oracle-java8-installer
+  - java -version
 
 #UI tests need UI
 before_script:
