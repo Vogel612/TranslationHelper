@@ -5,13 +5,16 @@ import de.vogel612.helper.data.ResourceSet;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by vogel612 on 25.07.16.
@@ -26,17 +29,18 @@ public class ProjectSerializerTests {
         Project result = ProjectSerializer.deserialize(canonicalFile);
         assertEquals("Testproject", result.getName());
         assertEquals(1, result.getAssociatedResources().size());
-        ResourceSet check = new ResourceSet("Set1", Paths.get("path/to/somewhere"), new HashSet<>(Arrays.asList("de-DE", "fr-CA", "en-EN")));
-        assertEquals(check, result.getAssociatedResources().get(0));
+        ResourceSet check = new ResourceSet("Set1", canonicalFile.getParent().resolve(Paths.get("path/to/somewhere")), new HashSet<>(Arrays.asList("de-DE", "fr-CA", "en-EN")));
+        assertEquals(check,result.getAssociatedResources().get(0));
     }
 
     @Test
     public void testProjectSerialization() throws IOException {
 
-        ResourceSet resourceSet = new ResourceSet("Set1", Paths.get("path/to/somewhere"), new HashSet<>(Arrays.asList("de-DE", "fr-CA", "en-EN")));
+        ResourceSet resourceSet = new ResourceSet("Set1", canonicalFile.getParent().resolve(Paths.get("path/to/somewhere")), new HashSet<>(Arrays.asList("de-DE", "fr-CA", "en-EN")));
         Project toSerialize = new Project("Testproject", Collections.singletonList(resourceSet));
 
         ProjectSerializer.serialize(toSerialize, tempFile);
         assertEquals(toSerialize, ProjectSerializer.deserialize(tempFile));
+        assertEquals(Files.lines(canonicalFile).collect(Collectors.joining()), Files.lines(tempFile).collect(Collectors.joining()));
     }
 }

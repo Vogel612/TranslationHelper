@@ -44,7 +44,7 @@ public final class ProjectSerializer {
     private static Element getResourceSetEl(ResourceSet resourceSet, Path projectFile) {
         Element el = new Element("resource-set");
         el.setAttribute("name", resourceSet.getName());
-        el.setAttribute("folder", projectFile.relativize(resourceSet.getFolder()).toString());
+        el.setAttribute("folder", projectFile.getParent().relativize(resourceSet.getFolder()).toString());
         for (String locale : resourceSet.getLocales()) {
             Element localeEl = new Element("locale");
             localeEl.setAttribute("name", locale);
@@ -85,6 +85,6 @@ public final class ProjectSerializer {
         final Set<String> locales = element.getChildren().stream()
                 .map(el -> el.getAttributeValue("name"))
                 .collect(Collectors.toSet());
-        return new ResourceSet(name, projectFile.resolve(folder), locales);
+        return new ResourceSet(name, projectFile.getParent().resolve(folder), locales);
     }
 }

@@ -14,6 +14,7 @@ public class OverviewPresenterTest extends ApplicationTest {
 
     private OverviewView overviewView;
     private JFXDialog dialog;
+    private ProjectView projectView;
 
     private OverviewPresenter cut;
 
@@ -21,7 +22,9 @@ public class OverviewPresenterTest extends ApplicationTest {
     public void beforeTest() {
         overviewView = mock(OverviewView.class);
         dialog = mock(JFXDialog.class);
-        cut = new OverviewPresenter(overviewView, pv);
+        projectView = mock(ProjectView.class);
+
+        cut = new OverviewPresenter(overviewView, projectView);
         reset(overviewView);
     }
 
