@@ -47,7 +47,7 @@ public class TranslationHelper extends Application {
 
         ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
 
-        OverviewPresenter p = new OverviewPresenter(v);
+        OverviewPresenter p = new OverviewPresenter(v, pv);
 
         Platform.runLater(p::show);
         Platform.runLater(p::fileChoosing);

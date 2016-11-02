@@ -13,9 +13,9 @@ import javafx.scene.layout.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
 
@@ -24,6 +24,7 @@ import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
  */
 public class JFXProjectController implements Initializable {
 
+    private final Set<Consumer<ResourceSet>> resourceSetRequests = new HashSet<>();
     @FXML
     public Button save;
 
@@ -64,7 +65,11 @@ public class JFXProjectController implements Initializable {
         });
     }
 
-    private static TableColumn<ResourceSet, Pane> createTableColumn() {
+    public void addResourceSetListener(Consumer<ResourceSet> listener) {
+        resourceSetRequests.add(listener);
+    }
+
+    private TableColumn<ResourceSet, Pane> createTableColumn() {
         TableColumn<ResourceSet, Pane> column = new TableColumn<>("Resource Sets");
         column.setCellValueFactory(resourceSet -> new ObservableValueBase<Pane>() {
             @Override
@@ -72,9 +77,9 @@ public class JFXProjectController implements Initializable {
                 final ResourceSet set = resourceSet.getValue();
                 final GridPane resourcePane = new GridPane();
                 setResourcePaneConstraints(resourcePane);
-
                 resourcePane.setGridLinesVisible(false);
                 resourcePane.setPrefWidth(Double.MAX_VALUE);
+
                 TextField name = new TextField();
                 resourcePane.add(name, 0, 0);
                 name.setText(set.getName());
@@ -86,8 +91,11 @@ public class JFXProjectController implements Initializable {
                 GridPane subPane = new GridPane();
                 updateResourceLocale(set, subPane);
                 setSubpaneConstraints(subPane);
-
                 resourcePane.add(subPane, 0, 1, 2, 1);
+
+                Button translateButton = new Button("Translate");
+                translateButton.setOnAction(evt -> resourceSetRequests.forEach(listener -> listener.accept(set)));
+                resourcePane.add(translateButton, 0, 2);
                 // FIXME add translation button / double click
                 return resourcePane;
             }

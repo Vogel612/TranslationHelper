@@ -1,11 +1,9 @@
 package de.vogel612.helper.ui;
 
-import de.vogel612.helper.data.Side;
-import de.vogel612.helper.data.Translation;
 import javafx.application.Platform;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-import java.io.IOException;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.nio.file.Path;
 
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
@@ -16,9 +14,18 @@ public class OverviewPresenter {
     public static final String DEFAULT_ROOT_LOCALE = "";
 
     private final OverviewView view;
+    private final ProjectView project;
 
-    public OverviewPresenter(final OverviewView v) {
+    public OverviewPresenter(final OverviewView v, ProjectView pv) {
         view = v;
+        project = pv;
+        pv.addResourceSetListener(resourceSet -> {
+            project.hide();
+            view.loadFiles(resourceSet);
+            view.show();
+            view.selectLocale();
+        });
+        view.addFileRequestListener(this::fileChoosing);
     }
 
 
@@ -37,14 +44,17 @@ public class OverviewPresenter {
      * and Right in the view.
      */
     public void fileChoosing() {
+        project.hide();
+        view.hide();
         final Path chosenFile = DIALOG.chooseFile("Select a resx or thp file",
-                new ExtensionFilter("Resource file", "resx"),
-                new ExtensionFilter("TranslationHelper Project file", "thp"));
+                new ExtensionFilter("Resource file", "*.resx"),
+                new ExtensionFilter("TranslationHelper Project file", "*.thp"));
         if (chosenFile.endsWith(".thp")) {
-            // FIXME show project view in case this is a thp file,
-            // FIXME show the overview and trigger locale chooser otherwise
+            project.loadProject(chosenFile);
+            project.show();
         } else {
             view.loadFiles(chosenFile);
+            view.show();
             view.selectLocale();
         }
     }

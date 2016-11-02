@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -70,9 +71,9 @@ public class JFXFilesetOverviewController implements Initializable {
         Objects.requireNonNull(fileset, "fileset was not FXML-injected correctly");
         Objects.requireNonNull(chooseFile, "chooseFile was not FXML-injected correctly");
 
-        save.setOnAction(evt -> saveRequestListeners.forEach(Runnable::run));
-        chooseLang.setOnAction(evt -> langChoiceRequestListeners.forEach(Runnable::run));
-        chooseFile.setOnAction(evt -> fileChoiceRequestListeners.forEach(Runnable::run));
+        save.setOnAction(evt -> Platform.runLater(() ->  saveRequestListeners.forEach(Runnable::run)));
+        chooseLang.setOnAction(evt -> Platform.runLater(() -> langChoiceRequestListeners.forEach(Runnable::run)));
+        chooseFile.setOnAction(evt -> Platform.runLater(() -> fileChoiceRequestListeners.forEach(Runnable::run)));
 
         table.setEditable(false);
         table.getColumns().clear();

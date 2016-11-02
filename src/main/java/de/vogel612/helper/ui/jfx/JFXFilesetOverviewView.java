@@ -2,6 +2,7 @@ package de.vogel612.helper.ui.jfx;
 
 
 import de.vogel612.helper.data.FilesetOverviewModel;
+import de.vogel612.helper.data.ResourceSet;
 import de.vogel612.helper.data.Side;
 import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.LocaleChooser;
@@ -165,6 +166,15 @@ public class JFXFilesetOverviewView implements OverviewView {
                     "Could not access %s due to %s", resxFile, ex);
             System.err.println(errorMessage);
             // FIXME onException(ex, errorMessage);
+        }
+    }
+
+    @Override
+    public void loadFiles(ResourceSet resourceSet) {
+        try {
+            model.loadResxFileset(resourceSet);
+        } catch (IOException e) {
+            e.printStackTrace(System.err);
         }
     }
 

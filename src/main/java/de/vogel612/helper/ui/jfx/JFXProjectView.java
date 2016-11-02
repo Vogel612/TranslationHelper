@@ -1,5 +1,6 @@
 package de.vogel612.helper.ui.jfx;
 
+import de.vogel612.helper.data.ResourceSet;
 import de.vogel612.helper.ui.ProjectView;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.function.Consumer;
 
 /**
  * Created by vogel612 on 29.07.16.
@@ -27,16 +29,19 @@ public class JFXProjectView implements ProjectView {
         ui.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
         controller = loader.getController();
+
+    }
+
+
+    @Override
+    public void addResourceSetListener(Consumer<ResourceSet> listener) {
+        controller.addResourceSetListener(listener);
     }
 
     @Override
     public void loadProject(final Path file) {
         controller.loadProject(file);
     }
-
-//    public void addOverviewRequestListener(Consumer<OverviewRequest> listener) {
-//        controller.addOverviewRequestListener(listener);
-//    }
 
 
     @Override

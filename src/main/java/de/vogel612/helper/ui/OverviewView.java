@@ -1,5 +1,6 @@
 package de.vogel612.helper.ui;
 
+import de.vogel612.helper.data.ResourceSet;
 import de.vogel612.helper.data.Translation;
 
 import java.nio.file.Path;
@@ -21,6 +22,8 @@ public interface OverviewView {
     void rebuild();
 
     void loadFiles(Path resxFile);
+
+    void loadFiles(ResourceSet resourceSet);
 
     void selectLocale();
 }
