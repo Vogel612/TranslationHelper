@@ -1,9 +1,7 @@
 package de.vogel612.helper.ui;
 
-import javafx.application.Platform;
 import javafx.stage.FileChooser.ExtensionFilter;
 
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.nio.file.Path;
 
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
@@ -31,11 +29,6 @@ public class OverviewPresenter {
 
     public void show() {
         view.show();
-    }
-
-    public void onException(final Exception e, final String message) {
-        Platform.runLater(() -> DIALOG.info(message, e.getMessage()));
-        // FIXME: Allow termination for unrecoverable exception
     }
 
     /**
