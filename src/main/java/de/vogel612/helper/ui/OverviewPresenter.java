@@ -18,7 +18,6 @@ public class OverviewPresenter {
         view = v;
         project = pv;
         pv.addResourceSetListener(resourceSet -> {
-            project.hide();
             view.loadFiles(resourceSet);
             view.show();
             view.selectLocale();

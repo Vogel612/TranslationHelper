@@ -29,7 +29,6 @@ public class JFXProjectView implements ProjectView {
         ui.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
         controller = loader.getController();
-
     }
 
 
