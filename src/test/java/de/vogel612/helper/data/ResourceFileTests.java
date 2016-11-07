@@ -26,7 +26,7 @@ public class ResourceFileTests {
 
     private static final Translation[] normalized = {
             new Translation("ts", "TestKey1", "Second Test"),
-            new Translation("ts", "TestKey3", "Normalized")
+            new Translation("ts", "TestKey4", "Normalized")
     };
 
     private ResourceFile cut;
@@ -79,11 +79,12 @@ public class ResourceFileTests {
     public void normalization() {
         ResourceFile test = new ResourceFile(testPath);
         ResourceFile canonicalMock = mock(ResourceFile.class);
-        when(canonicalMock.getTranslation("TestKey3")).thenReturn("Normalized");
-        Set<String> canonicalKeys = new HashSet<>(Arrays.asList("TestKey1", "TestKey3"));
+        when(canonicalMock.getTranslation("TestKey4")).thenReturn("Normalized");
+        Set<String> canonicalKeys = new HashSet<>(Arrays.asList("TestKey1", "TestKey4"));
+
         test.normalize(canonicalKeys, canonicalMock);
 
-        verify(canonicalMock).getTranslation("TestKey3");
+        verify(canonicalMock).getTranslation("TestKey4");
         assertArrayEquals(normalized, test.orderedTranslations().toArray(new Translation[0]));
     }
     // test normalization
