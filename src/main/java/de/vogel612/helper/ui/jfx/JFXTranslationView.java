@@ -48,13 +48,15 @@ public class JFXTranslationView implements TranslationView {
     }
 
     @Override
-    public void hide(){
-        Platform.runLater(stage::hide);
-        controller.hide();
+    public void hide() {
+        Platform.runLater(() -> {
+            stage.hide();
+            controller.hide();
+        });
     }
 
     @Override
     public void setRequestedTranslation(Translation left, Translation right) {
-        controller.setRequestedTranslation(left, right);
+        Platform.runLater(() -> controller.setRequestedTranslation(left, right));
     }
 }

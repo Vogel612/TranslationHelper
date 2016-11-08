@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Consumer;
 
 import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
 import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
@@ -30,23 +29,23 @@ public class JFXFilesetOverviewView implements OverviewView {
     private final Map<Side, String> chosenLocale = new EnumMap<>(Side.class);
     private final LocaleChooser localeChooser;
     private final FilesetOverviewModel model;
-    private final TranslationView translationPresenter;
+    private final TranslationView translationView;
 
     private final JFXFilesetOverviewController controller;
     private final Scene ui;
     private final Stage stage;
     private final Set<Runnable> fileRequestListeners = new HashSet<>();
 
-    public JFXFilesetOverviewView(LocaleChooser localeChooser, FilesetOverviewModel model, TranslationView translationPresenter, Stage stage, URL fxml) throws IOException {
+    public JFXFilesetOverviewView(LocaleChooser localeChooser, FilesetOverviewModel model, TranslationView translationView, Stage stage, URL fxml) throws IOException {
         this.localeChooser = localeChooser;
         this.model = model;
-        this.translationPresenter = translationPresenter;
+        this.translationView = translationView;
         this.stage = stage;
 
         this.stage.setOnCloseRequest(evt -> windowCloseListeners.forEach(Runnable::run));
 
-        this.translationPresenter.addTranslationSubmitListener(this::onTranslationSubmit);
-        this.translationPresenter.addTranslationAbortListener(this::onTranslationAbort);
+        this.translationView.addTranslationSubmitListener(this::onTranslationSubmit);
+        this.translationView.addTranslationAbortListener(this::onTranslationAbort);
         this.localeChooser.addCompletionListener(this::fileChoiceCompletion);
         this.model.addParseCompletionListener(this::onParseCompletion);
 
@@ -82,22 +81,22 @@ public class JFXFilesetOverviewView implements OverviewView {
     }
 
     public void onTranslationAbort() {
-        translationPresenter.hide();
+        translationView.hide();
         show();
     }
 
     public void onTranslationSubmit(final Translation t) {
-        translationPresenter.hide();
+        translationView.hide();
         model.updateTranslation(t.getLocale(), t.getKey(), t.getValue());
         rebuild();
     }
 
     public void onTranslateRequest(final String key) {
-        translationPresenter.setRequestedTranslation(
+        translationView.setRequestedTranslation(
                 model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
                 model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
         );
-        translationPresenter.show();
+        translationView.show();
     }
 
     public void onSaveRequest() {
@@ -153,8 +152,10 @@ public class JFXFilesetOverviewView implements OverviewView {
     public void rebuild() {
         List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE));
         List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE));
-        controller.rebuildWith(left, right);
-        show();
+        Platform.runLater(() -> {
+            controller.rebuildWith(left, right);
+            show();
+        });
     }
 
     @Override
@@ -180,8 +181,10 @@ public class JFXFilesetOverviewView implements OverviewView {
 
     @Override
     public void selectLocale() {
-        localeChooser.updateAvailableLocales(model.getAvailableLocales());
-        localeChooser.show();
+        Platform.runLater(() -> {
+            localeChooser.updateAvailableLocales(model.getAvailableLocales());
+            localeChooser.show();
+        });
     }
 
 }
