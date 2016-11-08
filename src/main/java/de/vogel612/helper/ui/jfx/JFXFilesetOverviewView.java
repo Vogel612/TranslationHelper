@@ -180,7 +180,7 @@ public class JFXFilesetOverviewView implements OverviewView {
 
     @Override
     public void selectLocale() {
-        localeChooser.updateAvailableLocales(/* FIXME get abailable locales */ Collections.emptySet());
+        localeChooser.updateAvailableLocales(model.getAvailableLocales());
         localeChooser.show();
     }
 

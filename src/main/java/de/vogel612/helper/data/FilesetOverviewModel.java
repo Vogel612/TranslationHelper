@@ -75,6 +75,15 @@ public class FilesetOverviewModel {
     }
 
     /**
+     * Returns a set of all available locales for translation
+     *
+     * @return an unordered Set of available locales
+     */
+    public Set<String> getAvailableLocales() {
+        return resources.keySet();
+    }
+
+    /**
      * Returns an ordered list of the translations for a given Locale.
      *
      * @param locale
