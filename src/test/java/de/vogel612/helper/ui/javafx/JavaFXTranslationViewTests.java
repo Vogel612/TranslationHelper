@@ -5,6 +5,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.control.TextInputControlMatchers.hasText;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 import de.vogel612.helper.data.Translation;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 /**
  * Created by vogel612 on 11.04.16.
  */
+@Ignore("Apparently those refuse to actually bring meaningful value")
 public class JavaFXTranslationViewTests extends ApplicationTest {
 
     private JFXTranslationView cut;
