@@ -96,7 +96,11 @@ public class JFXProjectController implements Initializable {
                 Button translateButton = new Button("Translate");
                 translateButton.setOnAction(evt -> resourceSetRequests.forEach(listener -> listener.accept(set)));
                 resourcePane.add(translateButton, 0, 2);
-                // FIXME add translation button / double click
+                resourcePane.setOnMouseClicked(mouseEvent -> {
+                    if (mouseEvent.getClickCount() == 2) {
+                        resourceSetRequests.forEach(listener -> listener.accept(set));
+                    }
+                });
                 return resourcePane;
             }
 
