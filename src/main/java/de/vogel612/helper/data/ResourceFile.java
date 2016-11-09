@@ -101,6 +101,7 @@ public class ResourceFile {
     }
 
     public static Stream<ResourceFile> getResourceFiles(ResourceSet resourceSet) throws IOException {
+        resourceSet.files().filter(p -> !p.toFile().exists()).forEach(DataUtilities::createEmptyResourceFile);
         return resourceSet.files().map(ResourceFile::new);
     }
 }

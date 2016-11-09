@@ -15,6 +15,69 @@ import java.util.stream.Stream;
  * benefit from the abstraction
  */
 public class DataUtilities {
+
+    private static final String EMPTY_RESOURCE_FILE = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+            "<root>\n" +
+            "  <xsd:schema id=\"root\" xmlns=\"\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:msdata=\"urn:schemas-microsoft-com:xml-msdata\">\n" +
+            "    <xsd:import namespace=\"http://www.w3.org/XML/1998/namespace\" />\n" +
+            "    <xsd:element name=\"root\" msdata:IsDataSet=\"true\">\n" +
+            "      <xsd:complexType>\n" +
+            "        <xsd:choice maxOccurs=\"unbounded\">\n" +
+            "          <xsd:element name=\"metadata\">\n" +
+            "            <xsd:complexType>\n" +
+            "              <xsd:sequence>\n" +
+            "                <xsd:element name=\"value\" type=\"xsd:string\" minOccurs=\"0\" />\n" +
+            "              </xsd:sequence>\n" +
+            "              <xsd:attribute name=\"name\" use=\"required\" type=\"xsd:string\" />\n" +
+            "              <xsd:attribute name=\"type\" type=\"xsd:string\" />\n" +
+            "              <xsd:attribute name=\"mimetype\" type=\"xsd:string\" />\n" +
+            "              <xsd:attribute ref=\"xml:space\" />\n" +
+            "            </xsd:complexType>\n" +
+            "          </xsd:element>\n" +
+            "          <xsd:element name=\"assembly\">\n" +
+            "            <xsd:complexType>\n" +
+            "              <xsd:attribute name=\"alias\" type=\"xsd:string\" />\n" +
+            "              <xsd:attribute name=\"name\" type=\"xsd:string\" />\n" +
+            "            </xsd:complexType>\n" +
+            "          </xsd:element>\n" +
+            "          <xsd:element name=\"data\">\n" +
+            "            <xsd:complexType>\n" +
+            "              <xsd:sequence>\n" +
+            "                <xsd:element name=\"value\" type=\"xsd:string\" minOccurs=\"0\" msdata:Ordinal=\"1\" />\n" +
+            "                <xsd:element name=\"comment\" type=\"xsd:string\" minOccurs=\"0\" msdata:Ordinal=\"2\" />\n" +
+            "              </xsd:sequence>\n" +
+            "              <xsd:attribute name=\"name\" type=\"xsd:string\" use=\"required\" msdata:Ordinal=\"1\" />\n" +
+            "              <xsd:attribute name=\"type\" type=\"xsd:string\" msdata:Ordinal=\"3\" />\n" +
+            "              <xsd:attribute name=\"mimetype\" type=\"xsd:string\" msdata:Ordinal=\"4\" />\n" +
+            "              <xsd:attribute ref=\"xml:space\" />\n" +
+            "            </xsd:complexType>\n" +
+            "          </xsd:element>\n" +
+            "          <xsd:element name=\"resheader\">\n" +
+            "            <xsd:complexType>\n" +
+            "              <xsd:sequence>\n" +
+            "                <xsd:element name=\"value\" type=\"xsd:string\" minOccurs=\"0\" msdata:Ordinal=\"1\" />\n" +
+            "              </xsd:sequence>\n" +
+            "              <xsd:attribute name=\"name\" type=\"xsd:string\" use=\"required\" />\n" +
+            "            </xsd:complexType>\n" +
+            "          </xsd:element>\n" +
+            "        </xsd:choice>\n" +
+            "      </xsd:complexType>\n" +
+            "    </xsd:element>\n" +
+            "  </xsd:schema>\n" +
+            "  <resheader name=\"resmimetype\">\n" +
+            "    <value>text/microsoft-resx</value>\n" +
+            "  </resheader>\n" +
+            "  <resheader name=\"version\">\n" +
+            "    <value>2.0</value>\n" +
+            "  </resheader>\n" +
+            "  <resheader name=\"reader\">\n" +
+            "    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>\n" +
+            "  </resheader>\n" +
+            "  <resheader name=\"writer\">\n" +
+            "    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>\n" +
+            "  </resheader>\n" +
+            "</data>";
+
     public static final String SINGLE_TRUTH_LOCALE = "";
 
     private static final String FILE_NAME_FORMAT = "%s%s.resx";
@@ -91,6 +154,24 @@ public class DataUtilities {
             return filesetMatcher.group(1); // group is not optional
         } else {
             throw new IllegalArgumentException("The resx file does not match our permissive regex");
+        }
+    }
+
+    /**
+     * Creates an empty resource file at the given path, assuming the file does not exist already
+     *
+     * @param path
+     *         The Path where the resource file needs to be created.
+     */
+    public static void createEmptyResourceFile(Path path) {
+        if (path.toFile().exists()) {
+            return;
+        }
+        try {
+            Files.createFile(path);
+            Files.write(path, EMPTY_RESOURCE_FILE.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
