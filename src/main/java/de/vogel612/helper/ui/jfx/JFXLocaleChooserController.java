@@ -61,6 +61,8 @@ public class JFXLocaleChooserController implements Initializable {
     public void updateAvailableLocales(final Collection<String> locales) {
         localeOptionCache.clear();
         localeOptionCache.addAll(locales);
+        leftTranslation.setText("(none)");
+        rightTranslation.setText("(none)");
     }
 
     @Override
@@ -71,8 +73,6 @@ public class JFXLocaleChooserController implements Initializable {
         Objects.requireNonNull(rightChoose, "rightChoose was not correctly FXML-injected");
         Objects.requireNonNull(submit, "submit was not correctly FXML-injected");
 
-        leftChoose.setDisable(true);
-        rightChoose.setDisable(true);
         submit.setOnAction(evt -> completeChoice());
         leftChoose.setOnAction(evt -> showLocaleDialog(result -> {
             left = result;

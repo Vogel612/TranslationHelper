@@ -61,6 +61,7 @@ public class JFXFilesetOverviewView implements OverviewView {
         controller.addSaveRequestListener(this::onSaveRequest);
         controller.addTranslationRequestListener(this::onTranslateRequest);
         controller.addFileRequestListener(this::onFileRequest);
+        controller.addLangChoiceListener(this::selectLocale);
     }
 
     @Override
