@@ -4,10 +4,12 @@ import de.vogel612.helper.data.Project;
 import de.vogel612.helper.data.ResourceSet;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -68,14 +70,22 @@ public final class ProjectSerializer {
      * @return A Project-instance that's equivalent to the Project instance originally serialized into the file
      */
     public static Project deserialize(Path file) throws IOException {
-        Document projectDocument = Serialization.parseFile(file);
-        Element root = projectDocument.getRootElement();
-        final String projectName = root.getAttribute("name").getValue();
-        List<ResourceSet> declaredResources = root.getChildren().stream()
-                .map(el -> ProjectSerializer.deserializeResourceSet(el, file))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
+        String projectName;
+        List<ResourceSet> declaredResources;
+        try {
+            Document projectDocument = Serialization.parseFile(file);
+            Element root = projectDocument.getRootElement();
+            projectName = root.getAttribute("name").getValue();
+            declaredResources = root.getChildren().stream()
+                    .map(el -> ProjectSerializer.deserializeResourceSet(el, file))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        } catch (JDOMException e) {
+            // probably an empty file
+            // log a warning
+            projectName = file.getFileName().toString().replace(".thp", "");
+            declaredResources = new ArrayList<>();
+        }
         return new Project(projectName, declaredResources);
     }
 

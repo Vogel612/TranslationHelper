@@ -32,15 +32,8 @@ public class Serialization {
      * @throws IllegalStateException
      *         When the file could not be parsed into a document
      */
-    public static Document parseFile(final Path file) throws IOException {
-        final Path xmlFile = file.getFileName();
-        final SAXBuilder documentBuilder = new SAXBuilder();
-
-        try {
-            return documentBuilder.build(file.toFile());
-        } catch (JDOMException e) {
-            throw new IllegalStateException("Unable to parse " + xmlFile, e);
-        }
+    public static Document parseFile(final Path file) throws IOException, JDOMException {
+        return new SAXBuilder().build(file.toFile());
     }
 
     /**
