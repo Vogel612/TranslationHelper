@@ -4,6 +4,7 @@ import de.vogel612.helper.data.util.DataUtilities;
 import de.vogel612.helper.data.util.ResourceFileSerializer;
 import de.vogel612.helper.data.util.Serialization;
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -35,9 +36,9 @@ public class ResourceFile {
         locale = DataUtilities.getFileLocale(filePath);
         try {
             associatedDocument = Serialization.parseFile(filePath);
-        } catch (IOException e) {
+        } catch (IOException | JDOMException e) {
             e.printStackTrace(System.err);
-            throw new UncheckedIOException(e);
+            throw new RuntimeException(e);
         }
         entries.putAll(ResourceFileSerializer.deserializeToMap(associatedDocument));
     }
