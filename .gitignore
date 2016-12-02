@@ -1,4 +1,5 @@
 #derived resources / settings
+/out/
 /bin/
 /dist/
 /build/
