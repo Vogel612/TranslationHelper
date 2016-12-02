@@ -18,8 +18,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
 
-import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
-import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
+import static de.vogel612.helper.data.util.DataUtilities.FALLBACK_LOCALE;
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
 import static de.vogel612.helper.ui.jfx.JFXLocaleChooserView.*;
 
@@ -94,8 +93,8 @@ public class JFXFilesetOverviewView implements OverviewView {
 
     public void onTranslateRequest(final String key) {
         translationView.setRequestedTranslation(
-                model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE), key),
-                model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE), key)
+                model.getSingleTranslation(chosenLocale.getOrDefault(Side.LEFT, FALLBACK_LOCALE), key),
+                model.getSingleTranslation(chosenLocale.getOrDefault(Side.RIGHT, FALLBACK_LOCALE), key)
         );
         translationView.show();
     }
@@ -151,8 +150,8 @@ public class JFXFilesetOverviewView implements OverviewView {
 
     @Override
     public void rebuild() {
-        List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, DEFAULT_ROOT_LOCALE));
-        List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, DEFAULT_TARGET_LOCALE));
+        List<Translation> left = model.getTranslations(chosenLocale.getOrDefault(Side.LEFT, FALLBACK_LOCALE));
+        List<Translation> right = model.getTranslations(chosenLocale.getOrDefault(Side.RIGHT, FALLBACK_LOCALE));
         Platform.runLater(() -> {
             controller.rebuildWith(left, right);
             show();

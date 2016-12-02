@@ -1,7 +1,6 @@
 package de.vogel612.helper.ui.javafx;
 
-import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_ROOT_LOCALE;
-import static de.vogel612.helper.ui.OverviewPresenter.DEFAULT_TARGET_LOCALE;
+import static de.vogel612.helper.data.util.DataUtilities.FALLBACK_LOCALE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -94,14 +93,14 @@ public class JavaFXOverviewViewTests extends ApplicationTest {
     @Test
     public void onParseCompletion_rebuildsView() {
         List<Translation> rootList = Collections.singletonList(new Translation("", "", ""));
-        doReturn(rootList).when(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        doReturn(rootList).when(filesetOverviewModel).getTranslations(FALLBACK_LOCALE);
         List<Translation> targetList = Collections.singletonList(new Translation("", "", ""));
-        doReturn(targetList).when(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        doReturn(targetList).when(filesetOverviewModel).getTranslations("de");
 
         cut.onParseCompletion();
 
-        verify(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
-        verify(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
+        verify(filesetOverviewModel).getTranslations(FALLBACK_LOCALE);
+        verify(filesetOverviewModel).getTranslations("de");
         verifyNoMoreInteractions(filesetOverviewModel, translationView, localeChooser, dialog);
     }
 
@@ -123,14 +122,14 @@ public class JavaFXOverviewViewTests extends ApplicationTest {
     public void onTranslateRequest_delegatesToTranslationPresenter() {
         final String key = "Key";
         Translation fakeRoot = mock(Translation.class);
-        doReturn(fakeRoot).when(filesetOverviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
+        doReturn(fakeRoot).when(filesetOverviewModel).getSingleTranslation(FALLBACK_LOCALE, key);
         Translation fakeTarget = mock(Translation.class);
-        doReturn(fakeTarget).when(filesetOverviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        doReturn(fakeTarget).when(filesetOverviewModel).getSingleTranslation("de", key);
 
         cut.onTranslateRequest(key);
 
-        verify(filesetOverviewModel).getSingleTranslation(DEFAULT_ROOT_LOCALE, key);
-        verify(filesetOverviewModel).getSingleTranslation(DEFAULT_TARGET_LOCALE, key);
+        verify(filesetOverviewModel).getSingleTranslation(FALLBACK_LOCALE, key);
+        verify(filesetOverviewModel).getSingleTranslation("de", key);
         verify(translationView).setRequestedTranslation(fakeRoot, fakeTarget);
         verify(translationView).show();
         verifyNoMoreInteractions(filesetOverviewModel, translationView, localeChooser, dialog);
@@ -138,17 +137,17 @@ public class JavaFXOverviewViewTests extends ApplicationTest {
 
     @Test
     public void onTranslationSubmit_hidesTranslationView_propagatesEdit_updatesView() {
-        final Translation t = new Translation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
+        final Translation t = new Translation("de", "Key", "Translation");
         final List<Translation> list = Collections.singletonList(new Translation("", "", ""));
         final List<Translation> leftSide = Collections.singletonList(new Translation("", "", ""));
-        doReturn(list).when(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
-        doReturn(leftSide).when(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        doReturn(list).when(filesetOverviewModel).getTranslations("de");
+        doReturn(leftSide).when(filesetOverviewModel).getTranslations(FALLBACK_LOCALE);
 
         cut.onTranslationSubmit(t);
 
-        verify(filesetOverviewModel).updateTranslation(DEFAULT_TARGET_LOCALE, "Key", "Translation");
-        verify(filesetOverviewModel).getTranslations(DEFAULT_TARGET_LOCALE);
-        verify(filesetOverviewModel).getTranslations(DEFAULT_ROOT_LOCALE);
+        verify(filesetOverviewModel).updateTranslation("de", "Key", "Translation");
+        verify(filesetOverviewModel).getTranslations("de");
+        verify(filesetOverviewModel).getTranslations(FALLBACK_LOCALE);
         verify(translationView).hide();
         verifyNoMoreInteractions(filesetOverviewModel, translationView, localeChooser, dialog);
     }

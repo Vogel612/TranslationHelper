@@ -8,9 +8,6 @@ import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
 
 public class OverviewPresenter {
 
-    public static final String DEFAULT_TARGET_LOCALE = "de";
-    public static final String DEFAULT_ROOT_LOCALE = "";
-
     private final OverviewView view;
     private final ProjectView project;
 

@@ -69,8 +69,8 @@ public class FilesetOverviewModel {
     }
 
     private void normalizeResourceFiles() {
-        final Set<String> singleTruth = resources.get(SINGLE_TRUTH_LOCALE).getKeys();
-        resources.values().forEach(file -> file.normalize(singleTruth, resources.get(SINGLE_TRUTH_LOCALE)));
+        final Set<String> singleTruth = resources.get(FALLBACK_LOCALE).getKeys();
+        resources.values().forEach(file -> file.normalize(singleTruth, resources.get(FALLBACK_LOCALE)));
         saved.lazySet(false);
     }
 

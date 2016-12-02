@@ -78,7 +78,7 @@ public class DataUtilities {
             "  </resheader>\n" +
             "</data>";
 
-    public static final String SINGLE_TRUTH_LOCALE = "";
+    public static final String FALLBACK_LOCALE = "";
 
     private static final String FILE_NAME_FORMAT = "%s%s.resx";
     private static final String FILENAME_REGEX = "^.*?([a-z]*)\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
@@ -98,7 +98,7 @@ public class DataUtilities {
         final Matcher localeMatcher = FILENAME_PATTERN.matcher(path.getFileName().toString());
         if (localeMatcher.find()) { // should always be true, since we check beforehand
             return localeMatcher.group(2) == null
-                    ? SINGLE_TRUTH_LOCALE
+                    ? FALLBACK_LOCALE
                     : localeMatcher.group(2);
         }
         throw new IllegalArgumentException("Argument was not a conform resx file");

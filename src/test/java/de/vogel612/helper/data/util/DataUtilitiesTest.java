@@ -34,7 +34,7 @@ public class DataUtilitiesTest {
     @Test
     public void parseFileName_noLanguageOrLocale_returnsSingleTruth() {
         String result = DataUtilities.getFileLocale(Paths.get("/", "set.resx"));
-        assertSame(DataUtilities.SINGLE_TRUTH_LOCALE, result);
+        assertSame(DataUtilities.FALLBACK_LOCALE, result);
     }
 
     @Test
