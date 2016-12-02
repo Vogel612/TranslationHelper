@@ -48,7 +48,9 @@ public class ResourceSet {
     }
 
     public Set<String> getLocales() {
-        return new HashSet<>(locales);
+        Set<String> result = new HashSet<>(locales);
+        result.add(DataUtilities.FALLBACK_LOCALE);
+        return result;
     }
 
     public String getName() {
@@ -57,7 +59,9 @@ public class ResourceSet {
 
     public Stream<Path> files() throws IOException {
         return DataUtilities.streamFileset(folder, name)
-                .filter(path -> locales.contains(DataUtilities.getFileLocale(path)));
+                .filter(path -> getLocales().contains(DataUtilities.getFileLocale(path)));
+    }
+
     @Override
     public String toString() {
         return "ResourceSet{" +
