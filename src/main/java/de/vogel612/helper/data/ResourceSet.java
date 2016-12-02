@@ -4,10 +4,7 @@ import de.vogel612.helper.data.util.DataUtilities;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,6 +58,13 @@ public class ResourceSet {
     public Stream<Path> files() throws IOException {
         return DataUtilities.streamFileset(folder, name)
                 .filter(path -> locales.contains(DataUtilities.getFileLocale(path)));
+    @Override
+    public String toString() {
+        return "ResourceSet{" +
+                "folder=" + folder +
+                ", name='" + name + '\'' +
+                ", locales=" + Arrays.toString(locales.toArray()) +
+                '}';
     }
 
     @Override

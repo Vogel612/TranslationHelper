@@ -1,9 +1,6 @@
 package de.vogel612.helper.data;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by vogel612 on 12.07.16.
@@ -33,12 +30,12 @@ public class Project {
         associatedResources.remove(resource);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public List<ResourceSet> getAssociatedResources() {
-        return new ArrayList<>(associatedResources);
+    @Override
+    public String toString() {
+        return "Project{" +
+                "name='" + name + '\'' +
+                ", associatedResources=" + Arrays.toString(associatedResources.toArray()) +
+                '}';
     }
 
     @Override
@@ -56,5 +53,13 @@ public class Project {
         Project project = (Project) o;
 
         return name.equals(project.name) && associatedResources.equals(project.associatedResources);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<ResourceSet> getAssociatedResources() {
+        return new ArrayList<>(associatedResources);
     }
 }
