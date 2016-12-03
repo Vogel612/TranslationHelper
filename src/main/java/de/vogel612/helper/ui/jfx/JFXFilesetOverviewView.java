@@ -146,6 +146,7 @@ public class JFXFilesetOverviewView implements OverviewView {
 
         chosenLocale.put(Side.LEFT, evt.getLeftLocale());
         chosenLocale.put(Side.RIGHT, evt.getRightLocale());
+        rebuild();
     }
 
     @Override
