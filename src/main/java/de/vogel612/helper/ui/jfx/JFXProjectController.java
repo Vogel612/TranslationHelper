@@ -19,6 +19,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
+import static java.lang.System.*;
 
 /**
  * Created by vogel612 on 29.07.16.
@@ -26,6 +27,8 @@ import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
 public class JFXProjectController implements Initializable {
 
     private final Set<Consumer<ResourceSet>> resourceSetRequests = new HashSet<>();
+    private final Set<Runnable> fileChoiceRequestListeners = new HashSet<>();
+
     @FXML
     public Button save;
 
@@ -64,6 +67,8 @@ public class JFXProjectController implements Initializable {
                 DIALOG.info("Error during saving!", "Could not save project due to following exception: " + e.getMessage());
             }
         });
+
+        chooser.setOnAction(evt -> fileChoiceRequestListeners.forEach(Runnable::run));
     }
 
     public void addResourceSetListener(Consumer<ResourceSet> listener) {
@@ -86,8 +91,7 @@ public class JFXProjectController implements Initializable {
                     });
                     return resourceSetPane;
                 } catch (IOException e) {
-                    // FIXME Log this
-                    e.printStackTrace(System.err);
+                    e.printStackTrace(err);
                     return null;
                 }
             }
@@ -115,5 +119,9 @@ public class JFXProjectController implements Initializable {
         }
         name.setText(project.getName());
         table.getItems().addAll(project.getAssociatedResources());
+    }
+
+    public final void addFileRequestListener(Runnable listener) {
+        fileChoiceRequestListeners.add(listener);
     }
 }

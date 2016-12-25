@@ -10,6 +10,8 @@ import java.util.function.Consumer;
  */
 public interface ProjectView {
 
+    void addFileRequestListener(Runnable listener);
+
     void addResourceSetListener(Consumer<ResourceSet> listener);
 
     void loadProject(Path file);

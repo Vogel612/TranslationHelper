@@ -20,6 +20,7 @@ public class OverviewPresenter {
             view.selectLocale();
         });
         view.addFileRequestListener(this::fileChoosing);
+        pv.addFileRequestListener(this::fileChoosing);
     }
 
 

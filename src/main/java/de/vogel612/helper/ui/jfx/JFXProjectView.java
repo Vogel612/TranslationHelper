@@ -33,6 +33,11 @@ public class JFXProjectView implements ProjectView {
 
 
     @Override
+    public void addFileRequestListener(Runnable listener) {
+        controller.addFileRequestListener(listener);
+    }
+
+    @Override
     public void addResourceSetListener(Consumer<ResourceSet> listener) {
         controller.addResourceSetListener(listener);
     }
