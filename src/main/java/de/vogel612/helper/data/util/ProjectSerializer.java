@@ -46,7 +46,7 @@ public final class ProjectSerializer {
     private static Element getResourceSetEl(ResourceSet resourceSet, Path projectFile) {
         Element el = new Element("resource-set");
         el.setAttribute("name", resourceSet.getName());
-        el.setAttribute("folder", projectFile.getParent().relativize(resourceSet.getFolder()).toString());
+        el.setAttribute("folder", projectFile.getParent().relativize(resourceSet.getFolder()).toString().replace('\\', '/'));
         for (String locale : resourceSet.getLocales()) {
             if (locale.equals(DataUtilities.FALLBACK_LOCALE)) {
                 continue;
