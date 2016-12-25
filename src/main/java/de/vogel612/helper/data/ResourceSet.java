@@ -17,15 +17,6 @@ public class ResourceSet {
     private final String name;
     private final Set<String> locales = new HashSet<>();
 
-    public static ResourceSet create(final Path file) throws IOException {
-        Objects.requireNonNull(file, "file");
-        final Path folder = file.getParent();
-        final String name = DataUtilities.getFileIdentifier(file);
-        final Set<String> locales = DataUtilities.streamFileset(folder, name)
-                .map(DataUtilities::getFileLocale).collect(Collectors.toSet());
-        return new ResourceSet(name, folder, locales);
-    }
-
     public ResourceSet(String name, Path folder, Set<String> locales) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(folder, "folder");
@@ -73,8 +64,12 @@ public class ResourceSet {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ResourceSet that = (ResourceSet) o;
 

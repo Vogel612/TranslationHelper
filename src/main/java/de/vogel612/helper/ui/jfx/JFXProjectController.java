@@ -5,6 +5,7 @@ import de.vogel612.helper.data.ResourceSet;
 import de.vogel612.helper.data.util.ProjectSerializer;
 import javafx.beans.value.ObservableValueBase;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -74,96 +75,21 @@ public class JFXProjectController implements Initializable {
         column.setCellValueFactory(resourceSet -> new ObservableValueBase<Pane>() {
             @Override
             public Pane getValue() {
-                final ResourceSet set = resourceSet.getValue();
-                final GridPane resourcePane = new GridPane();
-                setResourcePaneConstraints(resourcePane);
-                resourcePane.setGridLinesVisible(false);
-                resourcePane.setPrefWidth(Double.MAX_VALUE);
-
-                TextField name = new TextField();
-                resourcePane.add(name, 0, 0);
-                name.setText(set.getName());
-
-                TextField path = new TextField();
-                resourcePane.add(path, 1, 0);
-                path.setText(set.getFolder().toString());
-
-                GridPane subPane = new GridPane();
-                updateResourceLocale(set, subPane);
-                setSubpaneConstraints(subPane);
-                resourcePane.add(subPane, 0, 1, 2, 1);
-
-                Button translateButton = new Button("Translate");
-                translateButton.setOnAction(evt -> resourceSetRequests.forEach(listener -> listener.accept(set)));
-                resourcePane.add(translateButton, 0, 2);
-                resourcePane.setOnMouseClicked(mouseEvent -> {
-                    if (mouseEvent.getClickCount() == 2) {
-                        resourceSetRequests.forEach(listener -> listener.accept(set));
-                    }
-                });
-                return resourcePane;
-            }
-
-            private void updateResourceLocale(ResourceSet set, GridPane subPane) {
-                subPane.getChildren().clear();
-                subPane.setGridLinesVisible(true);
-                subPane.setPadding(new Insets(5,5,5,5));
-                subPane.add(new Label("Locales"), 0, 0);
-                Button addLocale = new Button("+");
-                addLocale.setOnAction(evt -> {
-                    Dialog<ButtonType> dialog = new Dialog<>();
-                    dialog.setTitle("Add Locale");
-                    dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-                    dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-                    TextField localeField = new TextField();
-                    dialog.setGraphic(localeField);
-                    Optional<ButtonType> button = dialog.showAndWait();
-                    if (button.isPresent() && button.get().equals(ButtonType.OK)) {
-                        set.addLocale(localeField.getText());
-                        updateResourceLocale(set, subPane);
-                    }
-                });
-                addLocale.setMinWidth(40);
-                subPane.add(addLocale, 1, 0);
-                int currentRow = 1;
-                for (String locale : set.getLocales()) {
-                    Label label = new Label(locale);
-                    label.setPadding(new Insets(0,0,0,10));
-                    subPane.add(label, 0, currentRow);
-
-                    Button removeButton = new Button("-");
-                    removeButton.setOnAction(evt -> {
-                        set.removeLocale(locale);
-                        updateResourceLocale(set, subPane);
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResourceSetPane.fxml"));
+                loader.setController(new JFXResourceSetController(resourceSet.getValue(), resourceSetRequests));
+                try {
+                    final Pane resourceSetPane = (Pane) loader.load();
+                    resourceSetPane.setOnMouseClicked(evt -> {
+                        if (evt.getClickCount() == 2) {
+                            resourceSetRequests.forEach(l -> l.accept(resourceSet.getValue()));
+                        }
                     });
-                    removeButton.setMinWidth(40);
-                    subPane.add(removeButton, 1, currentRow);
-
-                    currentRow++;
+                    return resourceSetPane;
+                } catch (IOException e) {
+                    // FIXME Log this
+                    e.printStackTrace(System.err);
+                    return null;
                 }
-                subPane.requestLayout();
-            }
-
-            private void setResourcePaneConstraints(GridPane resourcePane) {
-                ColumnConstraints left = new ColumnConstraints();
-                left.setHgrow(Priority.SOMETIMES);
-                ColumnConstraints right = new ColumnConstraints();
-                right.setHgrow(Priority.SOMETIMES);
-                resourcePane.getColumnConstraints().clear();
-                resourcePane.getColumnConstraints().add(left);
-                resourcePane.getColumnConstraints().add(right);
-            }
-
-            private void setSubpaneConstraints(GridPane subPane) {
-                subPane.getColumnConstraints().clear();
-                ColumnConstraints left = new ColumnConstraints();
-                left.setFillWidth(true);
-                left.setHgrow(Priority.ALWAYS);
-                subPane.getColumnConstraints().add(left);
-                ColumnConstraints right = new ColumnConstraints();
-                right.setMinWidth(40);
-                right.setHgrow(Priority.NEVER);
-                subPane.getColumnConstraints().add(right);
             }
         });
         column.setCellFactory(col -> new TableCell<ResourceSet, Pane>() {
