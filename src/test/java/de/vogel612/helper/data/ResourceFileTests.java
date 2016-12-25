@@ -70,8 +70,8 @@ public class ResourceFileTests {
 
     @Test
     public void translationsAreReturnedCorrectly() {
-        for (int i = 0; i < expected.length; i++) {
-            assertEquals(expected[i].getValue(), cut.getTranslation(expected[i].getKey()));
+        for (Translation anExpected : expected) {
+            assertEquals(anExpected.getValue(), cut.getTranslation(anExpected.getKey()));
         }
     }
 

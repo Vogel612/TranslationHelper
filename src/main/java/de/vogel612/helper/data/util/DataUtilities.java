@@ -82,7 +82,7 @@ public class DataUtilities {
 
     private static final String FILE_NAME_FORMAT = "%s%s.resx";
     private static final String FILENAME_REGEX = "^.*?([a-z]*)\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
-    public static final Pattern FILENAME_PATTERN = Pattern.compile(FILENAME_REGEX,
+    private static final Pattern FILENAME_PATTERN = Pattern.compile(FILENAME_REGEX,
             Pattern.CASE_INSENSITIVE | Pattern.CANON_EQ);
     private static final String FILESET_REGEX = "%s\\.?([a-zA-Z]{2}(?:-[a-zA-Z]{2})?)?\\.resx";
 

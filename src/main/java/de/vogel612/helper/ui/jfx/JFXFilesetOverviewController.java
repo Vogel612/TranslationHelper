@@ -30,7 +30,7 @@ public class JFXFilesetOverviewController implements Initializable {
     private final Set<Runnable> saveRequestListeners = new HashSet<>();
 
     @FXML
-    protected Label fileset;
+    private Label fileset;
 
     @FXML
     private Button save;
@@ -129,9 +129,7 @@ public class JFXFilesetOverviewController implements Initializable {
                 if (evt.getButton() != MouseButton.PRIMARY || evt.getClickCount() != 2) {
                     return;
                 }
-                translationRequestListeners.forEach(listener -> {
-                    listener.accept(selectedKey(table));
-                });
+                translationRequestListeners.forEach(listener -> listener.accept(selectedKey(table)));
             });
             return cell;
         };

@@ -67,10 +67,8 @@ public class JavaFXTranslationViewTests extends ApplicationTest {
 
     @Test
     public void settingTranslation_fillsRelevantUI() {
-        Platform.runLater(() -> {
-            cut.setRequestedTranslation(new Translation("src", "key", "original"),
-              new Translation("target", "key", "current"));
-        });
+        Platform.runLater(() -> cut.setRequestedTranslation(new Translation("src", "key", "original"),
+          new Translation("target", "key", "current")));
         sleep(200, TimeUnit.MILLISECONDS);
         verifyThat("#input", hasText("current"));
         verifyThat("#input", TextInputControl::isEditable);

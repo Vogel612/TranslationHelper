@@ -25,10 +25,6 @@ public class FilesetOverviewModelTest {
       new Translation("", "TestKey1", "New Translation"),
       new Translation("", "TestKey2", "Another Test Value")
     };
-    private static final Translation[] expectedNormalized = {
-      new Translation("test", "TestKey1", "Second Test"),
-      new Translation("test", "TestKey2", "")
-    };
 
     private FilesetOverviewModel cut;
     private Runnable parseCallback;

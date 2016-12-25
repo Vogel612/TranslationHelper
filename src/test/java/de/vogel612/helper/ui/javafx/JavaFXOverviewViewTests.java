@@ -2,10 +2,7 @@ package de.vogel612.helper.ui.javafx;
 
 import static de.vogel612.helper.data.util.DataUtilities.FALLBACK_LOCALE;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.base.NodeMatchers.hasText;
 
@@ -73,9 +70,7 @@ public class JavaFXOverviewViewTests extends ApplicationTest {
         final List<Translation> left = Arrays.asList(new Translation("","key","value"), new Translation("", "key2", "value2"));
         final List<Translation> right = Arrays.asList(new Translation("de", "key", "wert"), new Translation("", "key2", "wert2"));
 
-        Platform.runLater(() -> {
-            cut.rebuildWith(left, right);
-        });
+        Platform.runLater(() -> cut.rebuildWith(left, right));
         sleep(200, TimeUnit.MILLISECONDS);
 
         TableView<TranslationPair> table = lookup("#table").queryFirst();

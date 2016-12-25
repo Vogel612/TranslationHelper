@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  */
 public class NotableData {
 
-    private static final String FORMAT_FINDER = "(?<!\\{)\\{(?:\\{\\{)*((?:\\d+)(?::.*?)?)\\}(?:\\}\\})*(?!\\})";
+    private static final String FORMAT_FINDER = "(?<!\\{)\\{(?:\\{\\{)*((?:\\d+)(?::.*?)?)}(?:}})*(?!})";
     private static final Pattern FORMAT_PATTERN = Pattern.compile(FORMAT_FINDER, Pattern.MULTILINE);
 
     public enum Notability {

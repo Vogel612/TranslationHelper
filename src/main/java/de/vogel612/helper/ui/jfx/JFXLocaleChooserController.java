@@ -1,6 +1,5 @@
 package de.vogel612.helper.ui.jfx;
 
-import de.vogel612.helper.ui.LocaleChooser;
 import de.vogel612.helper.ui.jfx.JFXLocaleChooserView.LocaleChoiceEvent;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -22,8 +21,8 @@ public class JFXLocaleChooserController implements Initializable {
 
     private final Set<String> localeOptionCache = new TreeSet<>();
     private final Set<Consumer<LocaleChoiceEvent>> localeChoiceCompletionListener = new HashSet<>();
-    protected String left;
-    protected String right;
+    private String left;
+    private String right;
     @FXML
     private Label leftTranslation;
 

@@ -7,7 +7,6 @@ import javafx.beans.value.ObservableValueBase;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
@@ -30,16 +28,16 @@ public class JFXProjectController implements Initializable {
     private final Set<Runnable> fileChoiceRequestListeners = new HashSet<>();
 
     @FXML
-    public Button save;
+    private Button save;
 
     @FXML
-    public Button chooser;
+    private Button chooser;
 
     @FXML
-    public TableView<ResourceSet> table;
+    private TableView<ResourceSet> table;
 
     @FXML
-    public TextField name;
+    private TextField name;
 
     private Project project;
     private Path projectFilePath;
@@ -83,7 +81,7 @@ public class JFXProjectController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/ResourceSetPane.fxml"));
                 loader.setController(new JFXResourceSetController(resourceSet.getValue(), resourceSetRequests));
                 try {
-                    final Pane resourceSetPane = (Pane) loader.load();
+                    final Pane resourceSetPane = loader.load();
                     resourceSetPane.setOnMouseClicked(evt -> {
                         if (evt.getClickCount() == 2) {
                             resourceSetRequests.forEach(l -> l.accept(resourceSet.getValue()));

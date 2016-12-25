@@ -20,15 +20,6 @@ public abstract class TranslationViewCommon implements TranslationView {
     protected final Set<Consumer<Translation>> translationSubmitListeners = new HashSet<>();
 
     @Override
-    public abstract void show();
-
-    @Override
-    public abstract void hide();
-
-    @Override
-    public abstract void setRequestedTranslation(Translation left, Translation right);
-
-    @Override
     public final void addTranslationSubmitListener(Consumer<Translation> listener) {
         translationSubmitListeners.add(listener);
     }

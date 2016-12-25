@@ -19,21 +19,27 @@ import javafx.scene.input.KeyCode;
 public class JFXTranslationController extends TranslationViewCommon implements Initializable {
 
     @FXML
+    private
     Label header;
 
     @FXML
+    private
     TextArea original;
 
     @FXML
+    private
     TextArea input;
 
     @FXML
+    private
     Button cancel;
 
     @FXML
+    private
     Button submit;
 
     @FXML
+    private
     SplitPane pane;
 
     private Translation translation;

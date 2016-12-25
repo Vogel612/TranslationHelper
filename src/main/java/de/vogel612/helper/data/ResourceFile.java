@@ -7,7 +7,6 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -59,12 +58,7 @@ public class ResourceFile {
         if (canonical == this) {
             return;
         }
-        for (Iterator<String> it = entries.keySet().iterator(); it.hasNext(); ) {
-            final String key = it.next();
-            if (!keys.contains(key)) {
-                it.remove();
-            }
-        }
+        entries.keySet().removeIf(key -> !keys.contains(key));
         keys.stream().filter(key -> !entries.containsKey(key))
                 .forEach(missing -> {
                     final String canonicalTranslation = canonical.getTranslation(missing);

@@ -7,7 +7,6 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by vogel612 on 20.07.16.
@@ -79,13 +78,5 @@ public class ResourceFileSerializer {
     public static Element getValueElement(final Document doc, final String key) {
         VALUE_EXPRESSION.setVariable("key", key);
         return VALUE_EXPRESSION.evaluateFirst(doc);
-    }
-
-    public static Set<String> extractKeys(final Document doc) {
-        return doc.getRootElement()
-                .getChildren(ResourceFileSerializer.ELEMENT_NAME)
-                .stream()
-                .map(el -> el.getAttribute(ResourceFileSerializer.KEY_NAME).getValue())
-                .collect(Collectors.toSet());
     }
 }

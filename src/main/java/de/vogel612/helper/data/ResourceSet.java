@@ -5,7 +5,6 @@ import de.vogel612.helper.data.util.DataUtilities;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**

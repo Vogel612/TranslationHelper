@@ -79,7 +79,7 @@ public class JFXResourceSetController implements Initializable {
         subPane.requestLayout();
     }
 
-    public void fireResourceSetRequests() {
+    private void fireResourceSetRequests() {
         resourceSetRequests.forEach(listener -> listener.accept(resourceSet));
     }
 }

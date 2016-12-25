@@ -8,7 +8,7 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
+@SuppressWarnings({"ThrowableResultOfMethodCallIgnored", "FieldCanBeLocal"})
 public class OverviewPresenterTest extends ApplicationTest {
 
     private OverviewView overviewView;
