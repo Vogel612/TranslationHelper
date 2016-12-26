@@ -3,12 +3,15 @@ package de.vogel612.helper.ui.jfx;
 import de.vogel612.helper.data.Project;
 import de.vogel612.helper.data.ResourceSet;
 import de.vogel612.helper.data.util.ProjectSerializer;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValueBase;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,7 +20,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static de.vogel612.helper.ui.jfx.JFXDialog.DIALOG;
-import static java.lang.System.*;
+import static java.lang.System.err;
 
 /**
  * Created by vogel612 on 29.07.16.
@@ -42,7 +45,6 @@ public class JFXProjectController implements Initializable {
     private Project project;
     private Path projectFilePath;
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Objects.requireNonNull(save, "save was not injected correctly");
@@ -52,6 +54,7 @@ public class JFXProjectController implements Initializable {
 
         table.getColumns().clear();
         table.getColumns().add(createTableColumn());
+        table.getColumns().add(createActionColumn());
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         save.setOnAction(evt -> {
@@ -66,7 +69,46 @@ public class JFXProjectController implements Initializable {
             }
         });
 
-        chooser.setOnAction(evt -> fileChoiceRequestListeners.forEach(Runnable::run));
+        chooser.setOnAction(evt -> fileChoiceRequestListeners.forEach(Platform::runLater));
+    }
+
+    private TableColumn<ResourceSet, Button> createActionColumn() {
+        TableColumn<ResourceSet, Button> column = new TableColumn<>("");
+        Button addNewButton = new Button("+");
+        addNewButton.setOnAction(evt -> {
+            resourceSetInput().ifPresent(project::associate);
+            table.setItems(FXCollections.observableList(project.getAssociatedResources()));
+        });
+        addNewButton.setMinWidth(40);
+        column.setGraphic(addNewButton);
+        column.setCellValueFactory(resourceSet -> new ObservableValueBase<Button>() {
+            @Override
+            public Button getValue() {
+                Button removeButton = new Button("-");
+                removeButton.setOnAction(evt -> {
+                    project.disassociate(resourceSet.getValue());
+                    table.setItems(FXCollections.observableList(project.getAssociatedResources()));
+                });
+                removeButton.setMinWidth(40);
+                return removeButton;
+            }
+        });
+        column.setCellFactory(col -> new TableCell<ResourceSet, Button>() {
+            @Override
+            public void updateItem(Button item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(item);
+            }
+        });
+        column.setMaxWidth(40);
+        column.setMinWidth(40);
+        return column;
+    }
+
+    private Optional<ResourceSet> resourceSetInput() {
+        final Path resxFile = DIALOG.chooseFile("Choose a resx file part of the resource set you wish to add",
+                new FileChooser.ExtensionFilter("Resource file", "*.resx"));
+        return resxFile == null ? Optional.empty() : Optional.ofNullable(ResourceSet.create(resxFile));
     }
 
     public void addResourceSetListener(Consumer<ResourceSet> listener) {
@@ -116,7 +158,7 @@ public class JFXProjectController implements Initializable {
             return;
         }
         name.setText(project.getName());
-        table.getItems().addAll(project.getAssociatedResources());
+        table.setItems(FXCollections.observableList(project.getAssociatedResources()));
     }
 
     public final void addFileRequestListener(Runnable listener) {

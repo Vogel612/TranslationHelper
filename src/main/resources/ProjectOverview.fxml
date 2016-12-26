@@ -24,6 +24,6 @@
         </HBox>
     </top>
     <center>
-        <TableView fx:id="table"/>
+        <TableView fx:id="table" />
     </center>
 </BorderPane>

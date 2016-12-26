@@ -5,7 +5,10 @@ import de.vogel612.helper.data.util.DataUtilities;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static de.vogel612.helper.data.util.DataUtilities.FALLBACK_LOCALE;
 
 /**
  * Created by vogel612 on 12.07.16.
@@ -15,6 +18,26 @@ public class ResourceSet {
     private final Path folder;
     private final String name;
     private final Set<String> locales = new HashSet<>();
+
+    public static ResourceSet create(final Path file) {
+        Objects.requireNonNull(file, "file");
+        if (file.toFile().isDirectory()) {
+            return null;
+        }
+
+        try {
+            final Path folder = file.getParent();
+            final String name = DataUtilities.getFileIdentifier(file);
+            final Set<String> locales = DataUtilities.streamFileset(folder, name)
+                    .map(DataUtilities::getFileLocale)
+                    .filter(l -> !l.equals(FALLBACK_LOCALE))
+                    .collect(Collectors.toSet());
+            return new ResourceSet(name, folder, locales);
+        } catch (Exception e) { // gotta catch em all!
+            // FIXME shout at user
+            return null;
+        }
+    }
 
     public ResourceSet(String name, Path folder, Set<String> locales) {
         Objects.requireNonNull(name, "name");
@@ -39,7 +62,7 @@ public class ResourceSet {
 
     public Set<String> getLocales() {
         Set<String> result = new HashSet<>(locales);
-        result.add(DataUtilities.FALLBACK_LOCALE);
+        result.add(FALLBACK_LOCALE);
         return result;
     }
 

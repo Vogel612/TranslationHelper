@@ -7,6 +7,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Optional;
 
@@ -31,7 +32,8 @@ public class JFXDialog {
         fileChooser.setTitle(title);
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().addAll(extensions);
-        return fileChooser.showOpenDialog(null).toPath();
+        File result = fileChooser.showOpenDialog(null);
+        return result == null ?  null : result.toPath();
     }
 
     private Dialog<ButtonType> createBasicDialog(final String title, final String message) {
