@@ -34,7 +34,7 @@ public class JFXResourceSetController implements Initializable {
 
     public JFXResourceSetController(ResourceSet containedSet, Set<Consumer<ResourceSet>> resourceSetRequests) {
         this.resourceSet = containedSet;
-        this.resourceSetRequests = resourceSetRequests; // no def. copy
+        this.resourceSetRequests = resourceSetRequests; // no def. copy to also be notified of changes
     }
 
     @Override
@@ -61,6 +61,7 @@ public class JFXResourceSetController implements Initializable {
     private void renderLocales() {
         // keep label and add button
         subPane.getChildren().retainAll(subPane.getChildren().get(0), subPane.getChildren().get(1));
+        // FIXME this would be significantly cleaner with a TableView, as in ProjectOverview
         int currentRow = 1;
         for (String locale : resourceSet.getLocales()) {
             Label label = new Label(locale);

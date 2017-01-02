@@ -29,7 +29,7 @@ public class OverviewPresenter {
     }
 
     /**
-     * Allows the user to choose an arbitrary *.regex file and asks them to choose out of the available locales for
+     * Allows the user to choose an arbitrary *.resx file and asks them to choose out of the available locales for
      * Left
      * and Right in the view.
      */
