@@ -43,6 +43,9 @@ public class ResourceFile {
     }
 
     public void updateTranslation(String key, String value) {
+        if (!entries.containsKey(key)) {
+            return;
+        }
         entries.put(key, value);
         backgroundPropagator.submit(() -> ResourceFileSerializer.getValueElement(associatedDocument, key).setText(value));
     }
