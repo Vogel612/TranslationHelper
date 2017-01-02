@@ -77,6 +77,7 @@ public class JFXProjectController implements Initializable {
         Button addNewButton = new Button("+");
         addNewButton.setOnAction(evt -> {
             resourceSetInput().ifPresent(project::associate);
+            // FIXME crutch for actually using Properties in the model-classes
             table.setItems(FXCollections.observableList(project.getAssociatedResources()));
         });
         addNewButton.setMinWidth(40);

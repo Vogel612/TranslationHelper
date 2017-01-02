@@ -19,6 +19,18 @@ public class ResourceSet {
     private final String name;
     private final Set<String> locales = new HashSet<>();
 
+    /**
+     * Attempts to create a ResourceSet from the given path.
+     * To that end the given Path is assumed to be a resx file. All similarly named resx files in the same folder are
+     * assumed to belong to it's resource set.
+     *
+     * @param file
+     *         The Path to a resx-file belonging to the resource set to be created. Passing in <tt>null</tt> results in
+     *         a NullPointerException
+     *
+     * @return A ResourceSet instance encapsulating all relevant data that could be extracted from the given Path.
+     * <tt>null</tt> if the given Path was a directory or anything at all went wrong during the object creation.
+     */
     public static ResourceSet create(final Path file) {
         Objects.requireNonNull(file, "file");
         if (file.toFile().isDirectory()) {
@@ -34,7 +46,7 @@ public class ResourceSet {
                     .collect(Collectors.toSet());
             return new ResourceSet(name, folder, locales);
         } catch (Exception e) { // gotta catch em all!
-            // FIXME shout at user
+            // FIXME shout at user?
             return null;
         }
     }
@@ -62,7 +74,7 @@ public class ResourceSet {
 
     public Set<String> getLocales() {
         Set<String> result = new HashSet<>(locales);
-        result.add(FALLBACK_LOCALE);
+        result.add(FALLBACK_LOCALE); // is this an evil assumption?
         return result;
     }
 
