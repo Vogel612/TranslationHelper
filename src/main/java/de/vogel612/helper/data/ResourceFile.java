@@ -94,10 +94,39 @@ public class ResourceFile {
         return entries.keySet();
     }
 
+    /**
+     * Crates a Stream of all ResourceFiles with a given name in a given folder. This assumes the filesystem is the
+     * source of single truth, as such only the files present in the filesystem at the instant of invocation can be
+     * returned.
+     *
+     * @param folder
+     *         The "parent folder" of a ResourceSet. All files under the folder matching {@link
+     *         DataUtilities#FILE_NAME_FORMAT} with any locale are returned.
+     * @param name
+     *         The "name" of the ResourceSet.
+     *
+     * @return A <tt>Stream&lt;ResourceFile&gt;</tt> containing all ResourceFiles of the given ResourceSet specification
+     * on the filesystem.
+     *
+     * @throws IOException
+     *         In case access to the filesystem results in an IOException, said exception is propagated
+     */
     public static Stream<ResourceFile> getResourceFiles(Path folder, String name) throws IOException {
         return DataUtilities.streamFileset(folder, name).map(ResourceFile::new);
     }
 
+    /**
+     * Creates a Stream of all ResourceFiles belonging to a given ResourceSet. In case some files are missing on the
+     * file system, they will be created as empty files.
+     *
+     * @param resourceSet
+     *         The resource set to obtain the files of
+     *
+     * @return A <tt>Stream&lt;ResourceFile&gt;</tt> containing all ResourceFiles belonging to the given ResourceSet
+     *
+     * @throws IOException
+     *         If any of the intermediate operations results in an IOException, said exception is propagated.
+     */
     public static Stream<ResourceFile> getResourceFiles(ResourceSet resourceSet) throws IOException {
         resourceSet.files().filter(p -> !p.toFile().exists()).forEach(DataUtilities::createEmptyResourceFile);
         return resourceSet.files().map(ResourceFile::new);
