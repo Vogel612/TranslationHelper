@@ -81,10 +81,10 @@ public class DataUtilities {
     public static final String FALLBACK_LOCALE = "";
 
     private static final String FILE_NAME_FORMAT = "%s%s.resx";
-    private static final String FILENAME_REGEX = "^.*?([a-z]*)\\.?([a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
+    private static final String FILENAME_REGEX = "^([^.]*)(\\.[a-z]{2}(?:-[a-z]{2})?)?\\.resx$";
     private static final Pattern FILENAME_PATTERN = Pattern.compile(FILENAME_REGEX,
             Pattern.CASE_INSENSITIVE | Pattern.CANON_EQ);
-    private static final String FILESET_REGEX = "%s\\.?([a-zA-Z]{2}(?:-[a-zA-Z]{2})?)?\\.resx";
+    private static final String FILESET_REGEX = "%s(\\.[a-zA-Z]{2}(?:-[a-zA-Z]{2})?)?\\.resx";
 
     /**
      * Parses the Language-Locale combination out of a given filename
@@ -99,7 +99,7 @@ public class DataUtilities {
         if (localeMatcher.find()) { // should always be true, since we check beforehand
             return localeMatcher.group(2) == null
                     ? FALLBACK_LOCALE
-                    : localeMatcher.group(2);
+                    : localeMatcher.group(2).substring(1);
         }
         throw new IllegalArgumentException("Argument was not a conform resx file");
     }
