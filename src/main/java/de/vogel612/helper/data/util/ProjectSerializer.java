@@ -94,7 +94,7 @@ public final class ProjectSerializer {
 
     private static ResourceSet deserializeResourceSet(Element element, Path projectFile) {
         final String name = element.getAttributeValue("name");
-        final Path folder = Paths.get(element.getAttributeValue("folder"));
+        final Path folder = Paths.get(".", element.getAttributeValue("folder").split("[\\\\/]")).normalize();
         final Set<String> locales = element.getChildren().stream()
                 .map(el -> el.getAttributeValue("name"))
                 .collect(Collectors.toSet());
