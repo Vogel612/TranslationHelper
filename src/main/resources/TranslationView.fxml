@@ -12,8 +12,8 @@
     </top>
     <center>
         <SplitPane fx:id="pane" orientation="HORIZONTAL">
-            <TextArea fx:id="original"/>
-            <TextArea fx:id="input"/>
+            <TextArea fx:id="original" wrapText="true"/>
+            <TextArea fx:id="input" wrapText="true"/>
         </SplitPane>
     </center>
     <bottom>
