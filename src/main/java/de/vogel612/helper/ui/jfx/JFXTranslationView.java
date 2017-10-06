@@ -5,6 +5,8 @@ import de.vogel612.helper.ui.TranslationView;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javafx.application.Platform;
@@ -12,9 +14,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- * Created by vogel612 on 02.03.16.
- */
 public class JFXTranslationView implements TranslationView {
 
     private final Stage stage;
