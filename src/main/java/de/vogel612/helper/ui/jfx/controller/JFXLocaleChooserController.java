@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui.jfx;
+package de.vogel612.helper.ui.jfx.controller;
 
 import de.vogel612.helper.ui.jfx.JFXLocaleChooserView.LocaleChoiceEvent;
 import javafx.application.Platform;

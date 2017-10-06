@@ -2,6 +2,7 @@ package de.vogel612.helper.ui.jfx;
 
 import de.vogel612.helper.data.ResourceSet;
 import de.vogel612.helper.ui.ProjectView;
+import de.vogel612.helper.ui.jfx.controller.JFXProjectController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

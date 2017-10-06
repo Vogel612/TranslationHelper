@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import de.vogel612.helper.ui.jfx.controller.JFXLocaleChooserController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

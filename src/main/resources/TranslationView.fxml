@@ -1,7 +1,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:controller="de.vogel612.helper.ui.jfx.JFXTranslationController"
+<BorderPane fx:controller="de.vogel612.helper.ui.jfx.controller.JFXTranslationController"
             xmlns:fx="http://javafx.com/fxml"
             minWidth="400" minHeight="200">
     <padding>

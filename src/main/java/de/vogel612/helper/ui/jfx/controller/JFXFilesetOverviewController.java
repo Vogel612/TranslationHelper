@@ -1,4 +1,4 @@
-package de.vogel612.helper.ui.jfx;
+package de.vogel612.helper.ui.jfx.controller;
 
 import de.vogel612.helper.data.NotableData;
 import de.vogel612.helper.data.Translation;
@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import de.vogel612.helper.ui.jfx.TranslationPair;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;

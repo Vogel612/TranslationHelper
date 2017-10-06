@@ -8,6 +8,7 @@ import de.vogel612.helper.data.Translation;
 import de.vogel612.helper.ui.LocaleChooser;
 import de.vogel612.helper.ui.OverviewView;
 import de.vogel612.helper.ui.TranslationView;
+import de.vogel612.helper.ui.jfx.controller.JFXFilesetOverviewController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
