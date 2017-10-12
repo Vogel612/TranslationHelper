@@ -39,6 +39,10 @@ public class OverviewPresenter {
         final Path chosenFile = DIALOG.chooseFile("Select a resx or thp file",
                 new ExtensionFilter("Resource file", "*.resx"),
                 new ExtensionFilter("TranslationHelper Project file", "*.thp"));
+        if (chosenFile == null) {
+            project.show();
+            return;
+        }
         if (chosenFile.getFileName().toString().endsWith(".thp")) {
             project.loadProject(chosenFile);
             project.show();

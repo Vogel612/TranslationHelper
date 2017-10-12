@@ -116,7 +116,7 @@ public class JFXTranslationOverviewView implements OverviewView {
             DIALOG.warn("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
                     this::onSaveRequest, () -> {
                         hide();
-                        System.exit(0);
+                        System.exit(0); // wonder why stuff still blows up?
                     }
             );
         }
