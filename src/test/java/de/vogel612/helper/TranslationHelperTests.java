@@ -15,7 +15,7 @@ public class TranslationHelperTests {
     @Before
     public void setup() {
         outMock = mock(PrintStream.class);
-        System.setOut(outMock);
+        System.setErr(outMock);
         reset(outMock);
     }
 
