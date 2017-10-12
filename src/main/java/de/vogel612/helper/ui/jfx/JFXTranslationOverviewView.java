@@ -71,9 +71,14 @@ public class JFXTranslationOverviewView implements OverviewView {
         if (model.isDirty()) {
             DIALOG.warn("Unsaved Changes",
                     "You have unsaved changes. Do you wish to save them before changing the resx-fileset?",
-                    this::onSaveRequest,
+                    () -> {
+                        this.onSaveRequest();
+                        fileRequestListeners.forEach(Runnable::run);
+                    },
                     () -> fileRequestListeners.forEach(Runnable::run)
             );
+        } else {
+            fileRequestListeners.forEach(Runnable::run);
         }
     }
 
