@@ -24,7 +24,7 @@ import javafx.util.Callback;
 /**
  * Created by vogel612 on 01.03.16.
  */
-public class JFXFilesetOverviewController implements Initializable {
+public class JFXTranslationOverviewController implements Initializable {
     private final Set<Consumer<String>> translationRequestListeners = new HashSet<>();
     private final Set<Runnable> langChoiceRequestListeners = new HashSet<>();
     private final Set<Runnable> fileChoiceRequestListeners = new HashSet<>();

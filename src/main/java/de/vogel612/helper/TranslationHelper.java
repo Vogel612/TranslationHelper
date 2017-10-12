@@ -1,6 +1,6 @@
 package de.vogel612.helper;
 
-import de.vogel612.helper.data.FilesetOverviewModel;
+import de.vogel612.helper.data.FilesetModel;
 import de.vogel612.helper.ui.*;
 import de.vogel612.helper.ui.jfx.*;
 
@@ -42,8 +42,8 @@ public class TranslationHelper extends Application {
         translationStage.initOwner(primaryStage);
         TranslationView tv = new JFXTranslationView(translationStage, getClass().getResource("/TranslationView.fxml"));
 
-        FilesetOverviewModel m = new FilesetOverviewModel();
-        OverviewView v = new JFXFilesetOverviewView(rc, m, tv, primaryStage, getClass().getResource("/FilesetOverviewView.fxml"));
+        FilesetModel m = new FilesetModel();
+        OverviewView v = new JFXTranslationOverviewView(rc, m, tv, primaryStage, getClass().getResource("/TranslationOverviewView.fxml"));
         ProjectView pv = new JFXProjectView(primaryStage, getClass().getResource("/ProjectOverview.fxml"));
         OverviewPresenter p = new OverviewPresenter(v, pv);
 

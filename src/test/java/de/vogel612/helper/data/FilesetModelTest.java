@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class FilesetOverviewModelTest {
+public class FilesetModelTest {
 
     private static final Translation[] expected = {
       new Translation("", "TestKey1", "TestValue"),
@@ -26,12 +26,12 @@ public class FilesetOverviewModelTest {
       new Translation("", "TestKey2", "Another Test Value")
     };
 
-    private FilesetOverviewModel cut;
+    private FilesetModel cut;
     private Runnable parseCallback;
 
     @Before
     public void setup() {
-        cut = new FilesetOverviewModel();
+        cut = new FilesetModel();
         parseCallback = mock(Runnable.class);
         cut.addParseCompletionListener(parseCallback);
     }
@@ -122,13 +122,13 @@ public class FilesetOverviewModelTest {
         reset(parseCallback);
 
         verifyNoMoreInteractions(parseCallback);
-        assertTrue(cut.isNotSaved());
+        assertTrue(cut.isDirty());
         try {
             cut.saveAll();
         } catch (IOException e) {
             throw new AssertionError("Error during saving, failing Unit-Test", e);
         }
-        assertFalse(cut.isNotSaved());
+        assertFalse(cut.isDirty());
         verifyNoMoreInteractions(parseCallback);
     }
 }

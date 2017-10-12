@@ -13,9 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Overview model. Provides in-memory caching, parsing and writing of resx files
+ * Model for a "single fileset". Provides in-memory caching, parsing and writing of resx files belonging to one
+ * "current" fileset classification, especially across Locales.
  */
-public class FilesetOverviewModel {
+public class FilesetModel {
     private final Set<Runnable> parseCompletionListeners = new HashSet<>();
     private final Map<String, ResourceFile> resources = new HashMap<>();
 
@@ -144,7 +145,7 @@ public class FilesetOverviewModel {
      *
      * @return True if the cache has been saved, false otherwise
      */
-    public boolean isNotSaved() {
+    public boolean isDirty() {
         return !saved.get();
     }
 }

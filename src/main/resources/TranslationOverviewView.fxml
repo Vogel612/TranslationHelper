@@ -6,7 +6,7 @@
 <?import javafx.scene.control.Label?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="de.vogel612.helper.ui.jfx.controller.JFXFilesetOverviewController"
+            fx:controller="de.vogel612.helper.ui.jfx.controller.JFXTranslationOverviewController"
             minHeight="300" minWidth="600">
     <padding>
         <Insets top="15" bottom="20" right="15" left="15"/>

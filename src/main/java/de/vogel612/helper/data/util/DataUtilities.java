@@ -1,6 +1,6 @@
 package de.vogel612.helper.data.util;
 
-import de.vogel612.helper.data.FilesetOverviewModel;
+import de.vogel612.helper.data.FilesetModel;
 
 import java.io.IOException;
 import java.nio.file.FileVisitOption;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * Centralizes access to data processing for {@link FilesetOverviewModel} and other classes that
+ * Centralizes access to data processing for {@link FilesetModel} and other classes that
  * benefit from the abstraction
  */
 public class DataUtilities {
