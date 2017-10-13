@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.net.URL;
 import java.util.*;
@@ -23,6 +25,8 @@ public class JFXLocaleChooserController implements Initializable {
     private final Set<Consumer<LocaleChoiceEvent>> localeChoiceCompletionListener = new HashSet<>();
     private String left;
     private String right;
+    private Window owner;
+
     @FXML
     private Label leftTranslation;
 
@@ -42,11 +46,13 @@ public class JFXLocaleChooserController implements Initializable {
         final String[] localeChoices = localeOptionCache.toArray(new String[localeOptionCache.size()]);
         Arrays.sort(localeChoices);
         ChoiceDialog<String> dialog = new ChoiceDialog<>(localeChoices[0], localeChoices);
+        dialog.initOwner(owner);
         dialog.setHeaderText("Choose a Language");
         dialog.setContentText("");
         dialog.show();
         dialog.setOnCloseRequest(evt -> {
             dialog.close();
+            dialog.getOwner().requestFocus();
             callback.accept(dialog.getSelectedItem());
         });
     }
@@ -75,11 +81,18 @@ public class JFXLocaleChooserController implements Initializable {
         submit.setOnAction(evt -> completeChoice());
         leftChoose.setOnAction(evt -> showLocaleDialog(result -> {
             left = result;
-            Platform.runLater(() -> leftTranslation.setText("Left: " + result));
+            Platform.runLater(() ->  {
+                leftTranslation.setText("Left: " + result);
+                leftChoose.requestFocus();
+            });
+
         }));
         rightChoose.setOnAction(evt -> showLocaleDialog(result -> {
             right = result;
-            Platform.runLater(() -> rightTranslation.setText("Right: " + result));
+            Platform.runLater(() -> {
+                rightTranslation.setText("Right: " + result);
+                rightChoose.requestFocus();
+            });
         }));
     }
 
@@ -92,5 +105,9 @@ public class JFXLocaleChooserController implements Initializable {
             final LocaleChoiceEvent evt = new LocaleChoiceEvent(left, right);
             localeChoiceCompletionListener.forEach(l -> l.accept(evt));
         }
+    }
+
+    public void initOwner(Window owner) {
+        this.owner = owner;
     }
 }

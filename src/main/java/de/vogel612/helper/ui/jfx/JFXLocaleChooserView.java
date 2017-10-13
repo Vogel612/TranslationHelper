@@ -27,6 +27,7 @@ public class JFXLocaleChooserView implements LocaleChooser {
         FXMLLoader loader = new FXMLLoader(fxml);
         ui = new Scene(loader.load());
         controller = loader.getController();
+        controller.initOwner(stage);
     }
 
     @Override
@@ -39,6 +40,7 @@ public class JFXLocaleChooserView implements LocaleChooser {
         Platform.runLater(() -> {
             stage.setScene(ui);
             stage.show();
+            stage.requestFocus(); // get to the front!
         });
     }
 
