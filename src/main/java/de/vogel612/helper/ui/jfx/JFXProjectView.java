@@ -24,6 +24,7 @@ public class JFXProjectView implements ProjectView {
 
     public JFXProjectView(Stage stage, URL fxml) throws IOException {
         this.stage = stage;
+
         FXMLLoader loader = new FXMLLoader(fxml);
         ui = new Scene(loader.load());
         ui.getStylesheets().clear();

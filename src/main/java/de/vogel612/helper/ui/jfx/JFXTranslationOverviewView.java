@@ -119,11 +119,15 @@ public class JFXTranslationOverviewView implements OverviewView {
     private void onWindowCloseRequest() {
         if (model.isDirty()) {
             DIALOG.warn("Unsaved Changes", "You have unsaved changes. Do you wish to save before exiting?",
-                    this::onSaveRequest, () -> {
-                        hide();
+                    () -> {
+                        this.onSaveRequest();
+                        System.exit(0);
+                    }, () -> {
                         System.exit(0); // wonder why stuff still blows up?
                     }
             );
+        } else {
+            System.exit(0);
         }
         // FIXME allow preventing to close
     }
