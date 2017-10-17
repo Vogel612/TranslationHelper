@@ -1,17 +1,17 @@
-##What's this?
+## What's this?
 
 This is a small helper for me to translate Rubberduck. 
 
  [![Build Status](https://travis-ci.org/Vogel612/TranslationHelper.svg?branch=master)](https://travis-ci.org/Vogel612/TranslationHelper?branch=master) [![Coverage Status](https://coveralls.io/repos/Vogel612/TranslationHelper/badge.svg?branch=master&service=github)]
 (https://coveralls.io/github/Vogel612/TranslationHelper?branch=master)
 
-##Why?
+## Why?
 
 - Manual XML editing is a royal PITA
 - I want to do some XML parsing.. it seems to be hard
 - I wanted to learn some gradle, MVP
 
-##What does it do?
+## What does it do?
 
 It displays two sets of resx-files side-by-side. There are special highlights for certain conditions:
 
@@ -32,6 +32,6 @@ If you close the Helper with unsaved changes, you will be prompted on whether to
 For any possible bugs I still need to squash and features / changes I'm currently working on,
 check the [issues](https://github.com/Vogel612/TranslationHelper/issues)
 
-##License
+## License
 
 This project is licensed under the MIT License, see also the LICENSE file
