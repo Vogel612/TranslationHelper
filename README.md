@@ -1,9 +1,18 @@
+# DEPRECATION NOTICE:
+
+This project is not under any active development. 
+
+If you want to maintain it, you're highly welcome to fork it for yourself and give me a shout out in an issue.
+
+If you want to use it, consider using the great [ResXResource Manager by Tom Englert](https://github.com/tom-englert/ResXResourceManager) instead.
+It provides significantly more functionality and is actively maintained at the time of writing.
+
 ## What's this?
 
 This is a small helper for me to translate Rubberduck. 
 
- [![Build Status](https://travis-ci.org/Vogel612/TranslationHelper.svg?branch=master)](https://travis-ci.org/Vogel612/TranslationHelper?branch=master) [![Coverage Status](https://coveralls.io/repos/Vogel612/TranslationHelper/badge.svg?branch=master&service=github)]
-(https://coveralls.io/github/Vogel612/TranslationHelper?branch=master)
+ [![Build Status](https://travis-ci.org/Vogel612/TranslationHelper.svg?branch=master)](https://travis-ci.org/Vogel612/TranslationHelper?branch=master)
+ [![Coverage Status](https://coveralls.io/repos/Vogel612/TranslationHelper/badge.svg?branch=master&service=github)](https://coveralls.io/github/Vogel612/TranslationHelper?branch=master)
 
 ## Why?
 
